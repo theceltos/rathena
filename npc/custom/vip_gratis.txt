@@ -1,0 +1,17 @@
+-	script	VIP_GRATIS	-1,{
+
+OnPCLoginEvent:
+    if (#vip_inicial == 1) end;
+
+    mes "Bem-vindo(a) ao ^339966CeltRO^000000, Sr(a). ^0000FF" + strcharinfo(0) + "^000000.";
+    mes "Você acaba de ganhar ^7777777 dias VIP grátis^000000 e ^0000FFPoring saltitante^000000.";
+    getitem 5335,1;
+	atcommand "@vip +7d "+strcharinfo(0)+"";
+	set #vip_inicial, 1;
+	
+    if (#montaria_inicial == 1) end;
+    mes "Você acaba de ganhar ^777777Cx Rédea Experimental [7Dias]^000000.";
+    getitem 17162,1;
+	set #montaria_inicial, 1;
+
+}

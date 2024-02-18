@@ -1,0 +1,428 @@
+//===== rAthena Script =======================================
+//= Mapas Especiais
+//===== Description: =========================================
+//= bRO Official Script
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Pokye]
+//============================================================
+brasilis,196,184,4	script	Nanaru	4_CAT_3COLOR,{
+
+	if ((gettime(DT_YYYYMMDD)==20220612 && gettime(DT_HOUR)==21)) { //Encerramento: ANO-MES-DIA / HORA
+		hideoffnpc strnpcinfo(3);
+		query_sql("DELETE FROM `char_reg_num` WHERE `key` = 'mapas_especiais'");
+		end;
+	}
+
+	if (mapas_especiais == 0) {
+		mes "[Nanaru]";
+		mes "Nyaha! Olá, humano! :3";
+		mes "Já conhece a última novidade da Agência Pata de Gato que vai animar sua vida?";
+		next;
+		switch(select("Não e nem quero saber.", "Conte-me mais sobre isso.")){
+		case 1:
+			mes "[Nanaru]";
+			mes "Aww... D:";
+			next;
+			mes "[Nanaru]";
+			mes "Não sabe o que está perdendo!";
+			close;
+		case 2:
+			mes "[Nanaru]";
+			mes "Eu vou lhe contar!";
+			next;
+			mes "[Nanaru]";
+			mes "Criamos Mapas Secretos e contratamos diversos monstros fortíssimos! Uhuhu! Mal posso esperar!";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "Sério? Eu posso ir? Como??";
+			next;
+			if (BaseLevel < 70) {
+				mes "[Nanaru]";
+				mes "Poxa, me desculpe, mas você precisa ser pelo menos nível 70 para acessar.";
+				mes ":(";
+				close;
+			}
+			mes "[Nanaru]";
+			mes "Nyaa! Vejo que você parece ser um ótimo candidato!";
+			next;
+			mes "[Nanaru]";
+			mes "Criamos esses Mapas com o intuito de ajudar os aventureiros a evoluir tanto em nível como em habilidades.";
+			next;
+			mes "[Nanaru]";
+			mes "Tá afim de entrar? Nesses Mapass há MUITOS monstros fortes, mas não se preocupe, pois você não perde experiência ao ser nocauteado.";
+			next;
+			mes "[Nanaru]";
+			mes "Só pedimos uma pequena contribuição para a manutenção do Mapa e pagamento do salário dos monstros.";
+			next;
+			mes "[Nanaru]";
+			mes "Você pode adquirir o Ingresso dos Mapas Especiais, vendido na Loja de Cash, ou contribuir com 300 Plumas Arredondadas, 50 Certificado do Explorador e 50 Cestas de Frutas.";
+			next;
+			mes "[Nanaru]";
+			mes "Como você prefere contribuir?";
+			next;
+			switch(select("Ingresso dos Mapas Especiais", "Lista de Itens")){
+			case 1:
+				if (countitem(7550) <= 0) {
+					mes "[Nanaru]";
+					mes "Você pode contribuir comprando o Ingresso dos Mapas Especiais na Loja de Cash, assim você terá acesso livre aos mapas.";
+					close;
+				}
+				mes "[Nanaru]";
+				mes "Oh, agradecemos sua contribuição!";
+				mes "Com este Ingresso você terá acesso permanente aos mapas de treinamento até o fim do evento, e poderá entrar quantas vezes quiser.";
+				next;
+				mes "[Nanaru]";
+				mes "Basta falar comigo sempre que quiser entrar nos Mapas Especiais.";
+				delitem 7550,1;
+				mapas_especiais = 1;
+				close;
+			case 2:
+				if (countitem(6393) <= 299 || countitem(6304) <= 49 || countitem(12573) <= 49) {
+					mes "[Nanaru]";
+					mes "Sem a contribuição você não poderá entrar. Se os itens forem difíceis demais para você, você pode comprar um Ingresso dos Mapas Especiais na Loja de Cash.";
+					close;
+				}
+				mes "[Nanaru]";
+				mes "Oh, agradecemos sua contribuição!";
+				mes "Com este Itens você terá acesso permanente aos mapas de treinamento até o fim do evento, e poderá entrar quantas vezes quiser.";
+				next;
+				mes "[Nanaru]";
+				mes "Basta falar comigo sempre que quiser entrar nos Mapas Especiais.";
+				delitem 6393,300;
+				delitem 6304,50;
+				delitem 12573,50;
+				mapas_especiais = 1;
+				close;
+			}
+		}
+	}
+
+	if (mapas_especiais == 1) {
+		mes "[Nanaru]";
+		mes "Nya, você voltou! Em qual mapa você quer entrar?";
+		next;
+		switch(select("Sala 1 - Homunculus+", "Sala 2 - Nível 80+", "Sala 3 - Nível 100+", "Sala 4 - Nível 120+", "Sala 5 - Nível 130+", "Sala 6 - Nível 140+", "Sala 7 - Nível 150+", "Sala 8 - Nível 160+", "Não quero ir agora")){
+		case 1:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 1. A Sala especial para Homunculus.";
+			mes "Você quer ir para o mapa que contém Zenorc, Grove, Orc Esqueleto e Grove Fugaz?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+        		warp "ra_fild09",59,139;
+        		end;
+			case 2:
+				close;
+			}
+		case 2:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 2.";
+			mes "Você quer ir para o mapa que contém Deviruchi, Injustiçado, Ninfa Perversa, Sacerdote Maldito, Mascarado e Sacerdote Maldito Feroz?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "moc_fild14",209,349;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 3:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 3.";
+			mes "Você quer ir para o mapa que contém Múmia Anciã, Zumbi Mestre, Remover Alfa e Zumbi Mestre Alfa?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "moc_fild15",178,344;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 4:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 4.";
+			mes "Você quer ir para o mapa que contém Tatacho, Ferus, Ferus Feroz e Tatacho Brutal?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "moc_fild05",209,354;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 5:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 5.";
+			mes "Você quer ir para o mapa que contém Sacerdote Abissal, Árvore Maldita Decorada, Ursinho Abominável e Esqueleto General Alfa?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "moc_fild04",104,359;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 6:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 6.";
+			mes "Você quer ir para o mapa que contém Basilisco Guerreiro, Basilisco General e Aranha Pomar?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "moc_fild06",175,215;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 7:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 7.";
+			mes "Você quer ir para o mapa que contém Neo Punk, Robô Reparador e Elvira?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "new_zone03",96,169;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 8:
+			mes "[Nanaru]";
+			mes "Você escolheu a Sala 8.";
+			mes "Você quer ir para o mapa que contém Marquês Coruja, Visconde Coruja e General Imortal?";
+			next;
+			switch(select("Sim", "Não")){
+			case 1:
+				mes "[Nanaru]";
+				mes "Ok, boa sorte! :3";
+				close2;
+				warp "moc_fild10",214,289;
+				end;
+			case 2:
+				mes "[Nanaru]";
+				mes "Ok, volte quando mudar de idéia.";
+				close;
+			}
+		case 9:
+			mes "[Nanaru]";
+			mes "Ok, volte quando mudar de idéia.";
+			close;
+		}
+	}
+}
+
+-	script	gerente_mu	-1,{
+
+	mes "[Gerente Mu]";
+	mes "Bem-vindo aos Mapas Especiais da Agência Pata de Gato.";
+	mes "Em que posso ajuda-lo?";
+	next;
+	switch(select("Usar Armazém", "Cancelar")){
+	case 1:
+		if (countitem(7059))
+			delitem 7059,1;
+		else {
+			if ( Zeny <= 149 ){
+				mes "[Gerente Mu]";
+				mes "Desculpe, mas você não tem os 150 zeny para utlizar o Armazém!";
+				close;
+			}
+		}
+		callfunc("F_CheckKafCode");	//check your storage password, if set
+		close2;
+		openstorage;
+		end;
+	case 2:
+		mes "[Gerente Mu]";
+		mes "Muito obrigado. Aproveite a estadia.";
+		close;
+	}
+}
+
+//Duplicates Sala 1 ~ 8
+//============================================================
+ra_fild09,54,132,3	duplicate(gerente_mu)	Gerente Mu#01	4_M_BOSSCAT
+moc_fild14,187,348,3	duplicate(gerente_mu)	Gerente Mu#02	4_M_BOSSCAT
+moc_fild15,183,341,3	duplicate(gerente_mu)	Gerente Mu#03	4_M_BOSSCAT
+moc_fild05,209,349,3	duplicate(gerente_mu)	Gerente Mu#04	4_M_BOSSCAT
+moc_fild04,104,363,3	duplicate(gerente_mu)	Gerente Mu#05	4_M_BOSSCAT
+moc_fild06,175,216,3	duplicate(gerente_mu)	Gerente Mu#06	4_M_BOSSCAT
+new_zone03,106,175,3	duplicate(gerente_mu)	Gerente Mu#07	4_M_BOSSCAT
+moc_fild10,209,285,3	duplicate(gerente_mu)	Gerente Mu#08	4_M_BOSSCAT
+
+//Monstros Sala 1 ~ 8
+//============================================================
+//Sala 1
+ra_fild09,0,0	monster	Orc Esqueleto	1152,100
+ra_fild09,0,0	monster	Zenorc	1177,450
+ra_fild09,0,0	monster	Grove	1687,450
+ra_fild09,0,0	monster	Grove Fugaz	2808,10
+
+//Sala 2
+moc_fild14,0,0	monster	Deviruchi	1109,400
+moc_fild14,0,0	monster	Injustiçado	1257,400
+moc_fild14,0,0	monster	Ninfa Perversa	1416,60
+moc_fild14,0,0	monster	Mascarado	1506,200
+moc_fild14,0,0	monster	Sacerdote Maldito	1198,200
+moc_fild14,0,0	monster	Sacerdote Maldito Feroz	2861,100
+
+//Sala 3
+moc_fild15,0,0	monster	Zumbi Mestre	1298,300
+moc_fild15,0,0	monster	Zumbi Mestre Alfa	2605,200
+moc_fild15,0,0	monster	Múmia Anciã	1297,550
+moc_fild15,0,0	monster	Remover Alfa	2688,200
+
+//Sala 4
+moc_fild05,0,0	monster	Tatacho	1986,800
+moc_fild05,0,0	monster	Ferus	1717,600
+moc_fild05,0,0	monster	Ferus Feroz	2832,25
+moc_fild05,0,0	monster	Tatacho Brutal	2637,25
+
+//Sala 5
+moc_fild04,0,0	monster	Árvore Maldita Decorada	2987,5
+moc_fild04,0,0	monster	Ursinho Abominável	2995,150
+moc_fild04,0,0	monster	Esqueleto General Alfa	2658,150
+moc_fild04,0,0	monster	Sacerdote Abissal	2283,950
+
+//Sala 6
+moc_fild06,0,0	monster	Basilisco General	3504,600
+moc_fild06,0,0	monster	Basilisco Guerreiro	3503,600
+moc_fild06,0,0	monster	Aranha Pomar	3507,50
+
+//Sala 7
+new_zone03,0,0	monster	Neo Punk	2919,250
+new_zone03,0,0	monster	Robô Reparador	3155,250
+new_zone03,0,0	monster	Elvira	2252,10
+
+//Sala 8
+moc_fild10,0,0	monster	Marquês Coruja	2923,625
+moc_fild10,0,0	monster	Marquês Coruja	2923,625
+moc_fild10,0,0	monster	Visconde Coruja	2921,40
+moc_fild10,0,0	monster	General Imortal	3490,40
+
+//Warps Sala 1 ~ 8
+//============================================================
+ra_fild09,27,241,0	warp	me_1-1	1,1,brasilis,200,148
+ra_fild09,21,340,0	warp	me_1-2	1,1,brasilis,200,148
+moc_fild14,196,381,0	warp	me_2-1	1,1,brasilis,200,148
+moc_fild14,17,277,0	warp	me_2-2	1,1,brasilis,200,148
+moc_fild15,159,362,0	warp	me_3-1	1,1,brasilis,200,148
+moc_fild15,347,18,0	warp	me_3-2	1,1,brasilis,200,148
+moc_fild15,367,275,0	warp	me_3-3	1,1,brasilis,200,148
+moc_fild15,38,104,0	warp	me_3-4	1,1,brasilis,200,148
+moc_fild15,103,16,0	warp	me_3-5	1,1,brasilis,200,148
+moc_fild05,325,381,0	warp	me_4-1	1,1,brasilis,200,148
+moc_fild05,144,375,0	warp	me_4-2	1,1,brasilis,200,148
+moc_fild05,268,18,0	warp	me_4-3	1,1,brasilis,200,148
+moc_fild05,379,207,0	warp	me_4-4	1,1,brasilis,200,148
+moc_fild04,94,381,0	warp	me_5-1	1,1,brasilis,200,148
+moc_fild04,175,18,0	warp	me_5-2	1,1,brasilis,200,148
+moc_fild04,322,381,0	warp	me_5-3	1,1,brasilis,200,148
+moc_fild04,18,207,0	warp	me_5-4	1,1,brasilis,200,148
+moc_fild06,211,18,0	warp	me_6-1	1,1,brasilis,200,148
+moc_fild06,377,315,0	warp	me_6-2	1,1,brasilis,200,148
+moc_fild06,18,202,0	warp	me_6-3	1,1,brasilis,200,148
+new_zone03,95,176,0	warp	me_7-1	1,1,brasilis,200,148
+moc_fild10,209,298,0	warp	me_8-1	1,1,brasilis,200,148
+moc_fild10,189,23,0	warp	me_8-2	1,1,brasilis,200,148
+moc_fild10,392,258,0	warp	me_8-3	1,1,brasilis,200,148
+moc_fild10,22,207,0	warp	me_8-4	1,1,brasilis,200,148
+
+//Mapflag Sala 1 ~ 8
+//============================================================
+//Sala 1
+ra_fild09	mapflag	nopenalty
+ra_fild09	mapflag	nomemo
+ra_fild09	mapflag	nosave	SavePoint
+ra_fild09	mapflag	nobranch
+ra_fild09	mapflag	noreturn
+ra_fild09	mapflag	noteleport
+
+//Sala 2
+moc_fild14	mapflag	nopenalty
+moc_fild14	mapflag	nomemo
+moc_fild14	mapflag	nosave	SavePoint
+moc_fild14	mapflag	nobranch
+moc_fild14	mapflag	noreturn
+moc_fild14	mapflag	noteleport
+
+//Sala 3
+moc_fild15	mapflag	nopenalty
+moc_fild15	mapflag	nomemo
+moc_fild15	mapflag	nosave	SavePoint
+moc_fild15	mapflag	nobranch
+moc_fild15	mapflag	noreturn
+moc_fild15	mapflag	noteleport
+
+//Sala 4
+moc_fild05	mapflag	nopenalty
+moc_fild05	mapflag	nomemo
+moc_fild05	mapflag	nosave	SavePoint
+moc_fild05	mapflag	nobranch
+moc_fild05	mapflag	noreturn
+moc_fild05	mapflag	noteleport
+
+//Sala 5
+moc_fild04	mapflag	nopenalty
+moc_fild04	mapflag	nomemo
+moc_fild04	mapflag	nosave	SavePoint
+moc_fild04	mapflag	nobranch
+moc_fild04	mapflag	noreturn
+moc_fild04	mapflag	noteleport
+
+//Sala 6
+moc_fild06	mapflag	nopenalty
+moc_fild06	mapflag	nomemo
+moc_fild06	mapflag	nosave	SavePoint
+moc_fild06	mapflag	nobranch
+moc_fild06	mapflag	noreturn
+moc_fild06	mapflag	noteleport
+
+//Sala 7
+new_zone03	mapflag	nopenalty
+new_zone03	mapflag	nomemo
+new_zone03	mapflag	nosave	SavePoint
+new_zone03	mapflag	nobranch
+new_zone03	mapflag	noreturn
+new_zone03	mapflag	noteleport
+
+//Sala 8
+moc_fild10	mapflag	nopenalty
+moc_fild10	mapflag	nomemo
+moc_fild10	mapflag	nosave	SavePoint
+moc_fild10	mapflag	nobranch
+moc_fild10	mapflag	noreturn
+moc_fild10	mapflag	noteleport

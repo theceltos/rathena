@@ -16,7 +16,7 @@
 //= 2.0 Added 4th class [Lemongrass]
 //============================================================
 
-prontera,153,193,6	script	Job Master	123,{
+prontera,153,192,6	script	Mestra das Classes	856,{
 function Get_Job_Equip;
 // Checks if the Player has the required level.
 // closes if not, returns if yes
@@ -479,7 +479,7 @@ function	Get_Job_Equip	{
 
 OnInit:
 	// Initialisation, do not edit these
-	.NPCName$ = "[Job Master]";
+	.NPCName$ = "[Mestra das Classes]";
 	
 	// Settings
 	.FourthClass = true;				// Enable fourth classes?

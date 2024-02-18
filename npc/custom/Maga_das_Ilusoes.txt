@@ -1,0 +1,38 @@
+//===== rAthena Script =======================================
+//= Maga das Ilusões
+//===== Description: =========================================
+//= bRO Official Script
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Pokye]
+//============================================================
+prontera,87,113,5	script	Maga das Ilusões	CLEAR_NPC,{
+
+	mes "[Maga das Ilusões]";
+	mes "Estou vendendo combinadores para as armas ilusionais.";
+	mes "Você pode escolher a forma de pagamento";
+	next;
+	switch(select("Pagar com Zeny", "Pagar com Pedra Ilusional")){
+	case 1:
+		mes "[Maga das Ilusões]";
+		mes "Espero que você goste.";
+		close2;
+		callshop "Loja#MdI", 1;
+		end;
+	case 2:
+		mes "[Maga das Ilusões]";
+		mes "Espero que você goste.";
+		close2;
+		callshop "MagaDasIlusoes", 1;
+		end;
+	}
+OnInit:
+	setunitdata (getnpcid(0),UNPC_SEX,SEX_FEMALE);
+	setunitdata (getnpcid(0),UNPC_CLASS,JOB_MAGE);
+	setunitdata (getnpcid(0),UNPC_HAIRSTYLE,4);
+	setunitdata (getnpcid(0),UNPC_HAIRCOLOR,2);
+	setunitdata (getnpcid(0),UNPC_HEADMIDDLE,142);
+	setunitdata (getnpcid(0),UNPC_HEADBOTTOM,92);
+end;
+}
+
+-	shop	Loja#MdI	-1,100003:2000000,100004:2000000

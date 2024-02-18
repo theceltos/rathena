@@ -1,0 +1,14 @@
+prontera,133,189,6	script	Loja Grace#ext162	455,{
+	mes "[Operadora Grace]";
+	mes "Olá.";
+	mes "Temos equipamentos ^4d4dffGrace^000000 que podem ser trocados por " + mesitemlink( 25723 ) + ".";
+	mes "Vou orientar você sobre como trocar os itens de acordo com a sua classe.";
+	close2;
+	callshop "shop_grace";
+	end;
+	OnInit:
+	while(1) {
+        showscript "Loja Grace", getnpcid(0);
+        sleep 100;
+    }
+}

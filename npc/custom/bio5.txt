@@ -1,0 +1,19 @@
+prontera,145,177,4	script	Bio 5#1	3220,{
+	mes "[Sombra]";
+	mes "Existe um lugar cheio de almas de antigos.";
+	mes "Chama-se ^DE3163Bio 5^000000 e";
+	mes "Vai encarar o desafio?";
+	next;
+	switch(select("Entrar em Bio 5 [ ^FF0000"+getmapusers("lhz_dun_n")+"^000000 ]")){
+	case 1:
+		warp "lhz_dun_n",139,263;
+		end;
+
+	}
+	OnInit:
+		while(1) {
+        showscript "Bio 5", getnpcid(0);
+        sleep 100;
+    }
+
+}

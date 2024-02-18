@@ -1,0 +1,26 @@
+-	script	DoubleXP	-1,{
+OnInit:
+OnClock0001: // horario que inicia
+    if(gettime(4)==0 ) { // dias do evento  0 domingo // 1 segunda // 2 terça // 3 quarta // 4 quinta // 5 sexta // 6 sábado 
+        set .br,getbattleflag("base_exp_rate")*4;
+        set .jr,getbattleflag("job_exp_rate")*4;
+        setbattleflag("base_exp_rate"), .br;
+        setbattleflag("job_exp_rate"), .jr;
+        atcommand "@reloadmobdb";
+        end;
+    }
+    if(gettime(4) == 1)
+    {
+        announce "O evento Double Exp terminou",bc_all,0xFF6060;
+        atcommand "@reloadbattleconf";
+        atcommand "@reloadmobdb";
+    }
+    end;
+
+OnMinute02: // aviso que double xp está ativo a cada 2minutos
+    if(gettime(4)==0 )
+    {
+        announce "Evento Super Exp está ativo!! => (Base:"+.br/100+"x, Job:"+.jr/100+"x) ",bc_all,0xFF6060;
+    }
+    end;
+}

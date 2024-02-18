@@ -1,0 +1,10 @@
+-	script	REDEA_GRATIS	-1,{
+
+OnPCLoginEvent:
+	
+    if (#montaria_inicial == 1) end;
+    mes "Você acaba de ganhar ^777777Cx Rédea Experimental [7Dias]^000000.";
+    getitem 17162,1;
+	set #montaria_inicial, 1;
+
+}

@@ -1,0 +1,32 @@
+prontera,139,173,6	script	Cleitin#ext162	572,{
+	mes "[Cleitin]";
+	mes "Olá.";
+	mes "Temos equipamentos ^4d4dffEspeciais Celtin^000000 que podem ser trocados por " + mesitemlink( 42015 ) + ".";
+	switch(select("Farmar Moedas:Loja Especial")){
+	case 1:
+		switch(select("Level 100~150 [ ^FF0000"+getmapusers("veil")+"^000000 ]:Level 150~250 [ ^FF0000"+getmapusers("halloween")+"^000000 ]")){
+		case 1:
+			mes "[Cleitin]";
+			mes "Cuide-se, jovem.";
+			close2;
+			warp "veil",0,0;
+			end;
+		case 2:
+			mes "[Cleitin]";
+			mes "Cuide-se, jovem.";
+			close2;
+			warp "halloween",0,0;
+			end;
+		}
+	case 2:
+		close2;
+	callshop "loja_turnin";
+		end;
+	}
+	OnInit:
+	while(1) {
+        showscript "Loja Especial - CeltCoin", getnpcid(0);
+        sleep 100;
+    }
+end;
+}

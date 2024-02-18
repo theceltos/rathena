@@ -1,0 +1,502 @@
+//===== rAthena Script =======================================
+//= Cheffênia
+//===== Description: =========================================
+//= bRO Official Script
+//===== Changelogs: ==========================================
+//= 1.0 First version. [Pokye]
+//============================================================
+
+// Viajante - Riss
+//============================================================
+prontera,143,179,4	script	Viajante#1	4_M_PHILMAN,{
+	mes "[Riss]";
+	mes "Existe um lugar cheio de MVPs.";
+	mes "Chama-se ^DE3163Cheffênia^000000 e";
+	mes "Você pode acessá-la se tiver";
+	mes "1 <ITEM>Passe para Cheffênia<INFO>7227</INFO></ITEM>.";
+	next;
+	if (!countitem(7227)) {
+		mes "[Riss]";
+		mes "O Passe é adquirido na Loja de Cash.";
+		mes "1 Passe dá direito a entrar 1 vez no mapa.";
+		mes "Depois, será necessário comprar outro passe para retornar.";
+		close;
+	}
+	mes "[Riss]";
+	mes "Vai encarar o desafio?";
+	mes "Faça sua escolha.";
+	next;
+	switch(select("Sala 1:Sala 2:Sala 3:Sala 4")){
+	case 1:
+		switch(select("Entrada A:Entrada B:Entrada C:Entrada D")){
+		case 1:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_01",202,204;
+			end;
+		case 2:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_01",40,204;
+			end;
+		case 3:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_01",34,35;
+			end;
+		case 4:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_01",202,35;
+			end;
+		}
+	case 2:
+		switch(select("Entrada A:Entrada B:Entrada C:Entrada D")){
+		case 1:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_02",202,204;
+			end;
+		case 2:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_02",40,204;
+			end;
+		case 3:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_02",34,35;
+			end;
+		case 4:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_02",202,35;
+			end;
+		}
+	case 3:
+		switch(select("Entrada A:Entrada B:Entrada C:Entrada D")){
+		case 1:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_03",202,204;
+			end;
+		case 2:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_03",40,204;
+			end;
+		case 3:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_03",34,35;
+			end;
+		case 4:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_03",202,35;
+			end;
+		}
+	case 4:
+		switch(select("Entrada A:Entrada B:Entrada C:Entrada D")){
+		case 1:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_04",202,204;
+			end;
+		case 2:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_04",40,204;
+			end;
+		case 3:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_04",34,35;
+			end;
+		case 4:
+			mes "[Riss]";
+			mes "Cuide-se, jovem.";
+			close2;
+			delitem 7227,1;
+			warp "bossnia_04",202,35;
+			end;
+		}
+	}
+
+OnInit:
+	questinfo QTYPE_EVENT,QMARK_GREEN,"cheffenia == 0";
+	while(1) {
+        showscript "Cheffênia", getnpcid(0);
+        sleep 100;
+    }
+	end;
+	
+}
+
+// Duplicates
+//============================================================
+rachel,132,144,4	duplicate(Viajante#1)	Viajante#2	4_M_PHILMAN
+lighthalzen,146,96,4	duplicate(Viajante#1)	Viajante#3	4_M_PHILMAN
+yuno,159,180,4	duplicate(Viajante#1)	Viajante#4	4_M_PHILMAN
+
+// Lista de MVPs
+//============================================================
+dewata,209,180,4	script	Lista de MVPs#1	4_BOARD3,{
+	mes "[^9B59B6Exclusivos da Sala 1^000000]";
+	mes "Arquimaga Kathryne, Mestre-Ferreiro Howard, Atiradora Cecil, Mestre Chen Liu, Paladino Randel Lawrence, Professora Celia Alde, Arcana Kathryne, Mecânico Howard, Shura Chen, Guardião Real Randel e Feiticeira Celia.";
+	next;
+	mes "[^E74C3CExclusivos da Sala 2^000000]";
+	mes "Menestrel Alphoccio, Algoz Eremes, Sumo Margaretha, Musa Trentini, Bioquímico Flamel, Acerbispa Margaretha.";
+	next;
+	mes "[^7D3C98Exclusivos da Sala 3^000000]";
+	mes "Desordeira Gertie Wie, Criador Flamel Emul, Lorde Seyren, Sumo Margaretha, Cavaleiro Rúnico Seyren e Renegada Gertie.";
+	next;
+	mes "[^D35400Exclusivos da Sala 4^000000]";
+	mes "Algoz Eremes, Atiradora de Elite Cecil, Cigana Trentini, Sicário Eremes, Sentinela Cecil e Trovador Alphoccio.";
+	close;
+}
+
+// Duplicates
+//============================================================
+rachel,135,144,4	duplicate(Lista de MVPs#1)	Lista de MVPs#2	4_BOARD3
+lighthalzen,148,96,4	duplicate(Lista de MVPs#1)	Lista de MVPs#3	4_BOARD3
+yuno,157,180,4	duplicate(Lista de MVPs#1)	Lista de MVPs#4	4_BOARD3
+
+// Monstros
+//============================================================
+//----------------------------------------------------------------------------
+// Cheffênia - Sala 1
+//----------------------------------------------------------------------------
+bossnia_01,0,0	monster	Abelha-Rainha	1059,5,120000
+bossnia_01,0,0	monster	Amon Ra	1511,5,120000
+bossnia_01,0,0	monster	Amon Ra do Pesadelo	2362,5,120000
+bossnia_01,0,0	monster	Atroce	1785,5,120000
+bossnia_01,0,0	monster	Bafomé	1039,5,120000
+bossnia_01,0,0	monster	Belzebu	1873,5,120000
+bossnia_01,0,0	monster	Besouro-Ladrão Dourado	1086,1,15000000
+bossnia_01,0,0	monster	Bispo Decadente	1871,5,120000
+bossnia_01,0,0	monster	Boitatá	2068,5,120000
+bossnia_01,0,0	monster	Cavaleiro da Tempestade	1251,5,120000
+bossnia_01,0,0	monster	Celacanto Sombrio	2187,3,120000
+bossnia_01,0,0	monster	Celacanto Estranho	2188,3,120000
+bossnia_01,0,0	monster	Celacanto Mutante	2189,3,120000
+bossnia_01,0,0	monster	Celacanto Violento	2190,3,120000
+bossnia_01,0,0	monster	Detardeurus	1719,3,120000
+bossnia_01,0,0	monster	Doppelganger	1046,5,120000
+bossnia_01,0,0	monster	Drake	1112,5,120000
+bossnia_01,0,0	monster	Drácula	1389,5,120000
+bossnia_01,0,0	monster	Eddga	1115,3,120000
+bossnia_01,0,0	monster	Espadachim Egnigem	1658,5,120000
+bossnia_01,0,0	monster	Faraó	1157,5,120000
+bossnia_01,0,0	monster	Flor do Luar	1150,5,120000
+bossnia_01,0,0	monster	Freeoni	1159,5,120000
+bossnia_01,0,0	monster	General Daehyun	2253,5,120000
+bossnia_01,0,0	monster	General Tartaruga	1312,5,120000
+bossnia_01,0,0	monster	Gioia	2251,2,120000
+bossnia_01,0,0	monster	Gorynych	1885,5,120000
+bossnia_01,0,0	monster	Guardião Morto Kades	2255,7,120000
+bossnia_01,0,0	monster	Hatii	1252,5,120000
+bossnia_01,0,0	monster	Ifrit	1832,5,120000
+bossnia_01,0,0	monster	Kiel D-01	1734,7,120000
+bossnia_01,0,0	monster	Kraken	2202,5,120000
+bossnia_01,0,0	monster	Ktullanux	1779,5,120000
+bossnia_01,0,0	monster	Lady Branca	1660,5,120000
+bossnia_01,0,0	monster	Lady Tanee	1688,5,120000
+bossnia_01,0,0	monster	Leak	2156,5,120000
+bossnia_01,0,0	monster	Maya	1147,5,120000
+bossnia_01,0,0	monster	Memória de Thanatos	1708,5,120000
+bossnia_01,0,0	monster	Morroc Ferido	1917,3,120000
+bossnia_01,0,0	monster	Orc Herói	1087,3,120000
+bossnia_01,0,0	monster	Osíris	1038,5,120000
+bossnia_01,0,0	monster	Pesar Noturno	1768,5,120000
+bossnia_01,0,0	monster	Pyuriel Furiosa	2249,5,120000
+bossnia_01,0,0	monster	Quimera Venenosa	3633,5,120000
+bossnia_01,0,0	monster	Rainha Scaraba	2087,5,120000
+bossnia_01,0,0	monster	Rainha Scaraba Dourada	2165,5,120000
+bossnia_01,0,0	monster	RSX-0806	1623,5,120000
+bossnia_01,0,0	monster	Samurai Encarnado	1492,5,120000
+bossnia_01,0,0	monster	Senhor das Trevas	1272,5,120000
+bossnia_01,0,0	monster	Senhor dos Mortos	1373,5,120000
+bossnia_01,0,0	monster	Senhor dos Orcs	1190,5,120000
+bossnia_01,0,0	monster	Serpente Suprema	1418,5,120000
+bossnia_01,0,0	monster	Tao Gunka	1583,5,120000
+bossnia_01,0,0	monster	Valquíria Randgris	1751,5,120000
+bossnia_01,0,0	monster	Vesper	1685,7,120000
+bossnia_01,0,0	monster	Vigia do Tempo	3074,5,120000
+// Exclusivos
+bossnia_01,0,0	monster	Arquimaga Kathryne	1651,3,120000
+bossnia_01,0,0	monster	Mestre-ferreiro Harword	1648,7,120000
+bossnia_01,0,0	monster	Atiradora Cecil	1650,1,120000
+bossnia_01,0,0	monster	Mestre Chen	2238,1,120000
+bossnia_01,0,0	monster	Paladino Randel	2235,3,120000
+bossnia_01,0,0	monster	Professora Celia	2237,3,120000
+bossnia_01,0,0	monster	Arcana Kathryne	3224,1,900000
+bossnia_01,0,0	monster	Mecânico Harword	3223,1,120000
+bossnia_01,0,0	monster	Shura Chen	3243,1,900000
+bossnia_01,0,0	monster	Guardião Real Randel	3240,1,900000
+bossnia_01,0,0	monster	Feiticeira Celia	3242,1,900000
+
+//----------------------------------------------------------------------------
+// Cheffênia - Sala 2
+//----------------------------------------------------------------------------
+bossnia_02,0,0	monster	Abelha-Rainha	1059,5,120000
+bossnia_02,0,0	monster	Amon Ra	1511,5,120000
+bossnia_02,0,0	monster	Amon Ra do Pesadelo	2362,5,120000
+bossnia_02,0,0	monster	Atroce	1785,5,120000
+bossnia_02,0,0	monster	Bafomé	1039,5,120000
+bossnia_02,0,0	monster	Belzebu	1873,5,120000
+bossnia_02,0,0	monster	Besouro-Ladrão Dourado	1086,1,15000000
+bossnia_02,0,0	monster	Bispo Decadente	1871,5,120000
+bossnia_02,0,0	monster	Boitatá	2068,5,120000
+bossnia_02,0,0	monster	Cavaleiro da Tempestade	1251,5,120000
+bossnia_02,0,0	monster	Celacanto Sombrio	2187,3,120000
+bossnia_02,0,0	monster	Celacanto Estranho	2188,3,120000
+bossnia_02,0,0	monster	Celacanto Mutante	2189,3,120000
+bossnia_02,0,0	monster	Celacanto Violento	2190,3,120000
+bossnia_02,0,0	monster	Detardeurus	1719,3,120000
+bossnia_02,0,0	monster	Doppelganger	1046,5,120000
+bossnia_02,0,0	monster	Drake	1112,5,120000
+bossnia_02,0,0	monster	Drácula	1389,5,120000
+bossnia_02,0,0	monster	Eddga	1115,3,120000
+bossnia_02,0,0	monster	Espadachim Egnigem	1658,5,120000
+bossnia_02,0,0	monster	Faraó	1157,5,120000
+bossnia_02,0,0	monster	Flor do Luar	1150,5,120000
+bossnia_02,0,0	monster	Freeoni	1159,5,120000
+bossnia_02,0,0	monster	General Daehyun	2253,5,120000
+bossnia_02,0,0	monster	General Tartaruga	1312,5,120000
+bossnia_02,0,0	monster	Gioia	2251,2,120000
+bossnia_02,0,0	monster	Gorynych	1885,5,120000
+bossnia_02,0,0	monster	Guardião Morto Kades	2255,7,120000
+bossnia_02,0,0	monster	Hatii	1252,5,120000
+bossnia_02,0,0	monster	Ifrit	1832,5,120000
+bossnia_02,0,0	monster	Kiel D-01	1734,7,120000
+bossnia_02,0,0	monster	Kraken	2202,5,120000
+bossnia_02,0,0	monster	Ktullanux	1779,5,120000
+bossnia_02,0,0	monster	Lady Branca	1660,5,120000
+bossnia_02,0,0	monster	Lady Tanee	1688,5,120000
+bossnia_02,0,0	monster	Leak	2156,5,120000
+bossnia_02,0,0	monster	Maya	1147,5,120000
+bossnia_02,0,0	monster	Memória de Thanatos	1708,5,120000
+bossnia_02,0,0	monster	Morroc Ferido	1917,3,120000
+bossnia_02,0,0	monster	Orc Herói	1087,3,120000
+bossnia_02,0,0	monster	Osíris	1038,5,120000
+bossnia_02,0,0	monster	Pesar Noturno	1768,5,120000
+bossnia_02,0,0	monster	Pyuriel Furiosa	2249,5,120000
+bossnia_02,0,0	monster	Quimera Venenosa	3633,5,120000
+bossnia_02,0,0	monster	Rainha Scaraba	2087,5,120000
+bossnia_02,0,0	monster	Rainha Scaraba Dourada	2165,5,120000
+bossnia_02,0,0	monster	RSX-0806	1623,5,120000
+bossnia_02,0,0	monster	Samurai Encarnado	1492,5,120000
+bossnia_02,0,0	monster	Senhor das Trevas	1272,5,120000
+bossnia_02,0,0	monster	Senhor dos Mortos	1373,5,120000
+bossnia_02,0,0	monster	Senhor dos Orcs	1190,5,120000
+bossnia_02,0,0	monster	Serpente Suprema	1418,5,120000
+bossnia_02,0,0	monster	Tao Gunka	1583,5,120000
+bossnia_02,0,0	monster	Valquíria Randgris	1751,5,120000
+bossnia_02,0,0	monster	Vesper	1685,7,120000
+bossnia_02,0,0	monster	Vigia do Tempo	3074,5,120000
+// Exclusivos
+bossnia_02,0,0	monster	Menestrel Alphoccio	2240,7,120000
+bossnia_02,0,0	monster	Algoz Eremes	1647,1,120000
+bossnia_02,0,0	monster	Sumo Margaretha	1649,1,120000
+bossnia_02,0,0	monster	Musa Trentini	3246,1,900000
+bossnia_02,0,0	monster	Bioquímico Flamel	3241,1,900000
+bossnia_02,0,0	monster	Arcebispa Margaretha	3221,1,900000
+
+//----------------------------------------------------------------------------
+// Cheffênia - Sala 3
+//----------------------------------------------------------------------------
+bossnia_03,0,0	monster	Abelha-Rainha	1059,5,120000
+bossnia_03,0,0	monster	Amon Ra	1511,5,120000
+bossnia_03,0,0	monster	Amon Ra do Pesadelo	2362,5,120000
+bossnia_03,0,0	monster	Atroce	1785,5,120000
+bossnia_03,0,0	monster	Bafomé	1039,5,120000
+bossnia_03,0,0	monster	Belzebu	1873,5,120000
+bossnia_03,0,0	monster	Besouro-Ladrão Dourado	1086,1,15000000
+bossnia_03,0,0	monster	Bispo Decadente	1871,5,120000
+bossnia_03,0,0	monster	Boitatá	2068,5,120000
+bossnia_03,0,0	monster	Cavaleiro da Tempestade	1251,5,120000
+bossnia_03,0,0	monster	Celacanto Sombrio	2187,3,120000
+bossnia_03,0,0	monster	Celacanto Estranho	2188,3,120000
+bossnia_03,0,0	monster	Celacanto Mutante	2189,3,120000
+bossnia_03,0,0	monster	Celacanto Violento	2190,3,120000
+bossnia_03,0,0	monster	Detardeurus	1719,3,120000
+bossnia_03,0,0	monster	Doppelganger	1046,5,120000
+bossnia_03,0,0	monster	Drake	1112,5,120000
+bossnia_03,0,0	monster	Drácula	1389,5,120000
+bossnia_03,0,0	monster	Eddga	1115,3,120000
+bossnia_03,0,0	monster	Espadachim Egnigem	1658,5,120000
+bossnia_03,0,0	monster	Faraó	1157,5,120000
+bossnia_03,0,0	monster	Flor do Luar	1150,5,120000
+bossnia_03,0,0	monster	Freeoni	1159,5,120000
+bossnia_03,0,0	monster	General Daehyun	2253,5,120000
+bossnia_03,0,0	monster	General Tartaruga	1312,5,120000
+bossnia_03,0,0	monster	Gioia	2251,2,120000
+bossnia_03,0,0	monster	Gorynych	1885,5,120000
+bossnia_03,0,0	monster	Guardião Morto Kades	2255,7,120000
+bossnia_03,0,0	monster	Hatii	1252,5,120000
+bossnia_03,0,0	monster	Ifrit	1832,5,120000
+bossnia_03,0,0	monster	Kiel D-01	1734,7,120000
+bossnia_03,0,0	monster	Kraken	2202,5,120000
+bossnia_03,0,0	monster	Ktullanux	1779,5,120000
+bossnia_03,0,0	monster	Lady Branca	1660,5,120000
+bossnia_03,0,0	monster	Lady Tanee	1688,5,120000
+bossnia_03,0,0	monster	Leak	2156,5,120000
+bossnia_03,0,0	monster	Maya	1147,5,120000
+bossnia_03,0,0	monster	Memória de Thanatos	1708,5,120000
+bossnia_03,0,0	monster	Morroc Ferido	1917,3,120000
+bossnia_03,0,0	monster	Orc Herói	1087,3,120000
+bossnia_03,0,0	monster	Osíris	1038,5,120000
+bossnia_03,0,0	monster	Pesar Noturno	1768,5,120000
+bossnia_03,0,0	monster	Pyuriel Furiosa	2249,5,120000
+bossnia_03,0,0	monster	Quimera Venenosa	3633,5,120000
+bossnia_03,0,0	monster	Rainha Scaraba	2087,5,120000
+bossnia_03,0,0	monster	Rainha Scaraba Dourada	2165,5,120000
+bossnia_03,0,0	monster	RSX-0806	1623,5,120000
+bossnia_03,0,0	monster	Samurai Encarnado	1492,5,120000
+bossnia_03,0,0	monster	Senhor das Trevas	1272,5,120000
+bossnia_03,0,0	monster	Senhor dos Mortos	1373,5,120000
+bossnia_03,0,0	monster	Senhor dos Orcs	1190,5,120000
+bossnia_03,0,0	monster	Serpente Suprema	1418,5,120000
+bossnia_03,0,0	monster	Tao Gunka	1583,5,120000
+bossnia_03,0,0	monster	Valquíria Randgris	1751,5,120000
+bossnia_03,0,0	monster	Vesper	1685,7,120000
+bossnia_03,0,0	monster	Vigia do Tempo	3074,5,120000
+// Exclusivos
+bossnia_03,0,0	monster	Desordeira Gertie	2239,2,120000
+bossnia_03,0,0	monster	Criador Flamer	2236,2,120000
+bossnia_03,0,0	monster	Lorde Seyren	1646,1,120000
+bossnia_03,0,0	monster	Sumo Margaretha	1649,3,120000
+bossnia_03,0,0	monster	Cavaleiro Rúnico Seyren	3225,1,900000
+bossnia_03,0,0	monster	Renegada Gertie	3244,1,900000
+
+//----------------------------------------------------------------------------
+// Cheffênia - Sala 4
+//----------------------------------------------------------------------------
+bossnia_04,0,0	monster	Abelha-Rainha	1059,5,120000
+bossnia_04,0,0	monster	Amon Ra	1511,5,120000
+bossnia_04,0,0	monster	Amon Ra do Pesadelo	2362,5,120000
+bossnia_04,0,0	monster	Atroce	1785,5,120000
+bossnia_04,0,0	monster	Bafomé	1039,5,120000
+bossnia_04,0,0	monster	Belzebu	1873,5,120000
+bossnia_04,0,0	monster	Besouro-Ladrão Dourado	1086,1,15000000
+bossnia_04,0,0	monster	Bispo Decadente	1871,5,120000
+bossnia_04,0,0	monster	Boitatá	2068,5,120000
+bossnia_04,0,0	monster	Cavaleiro da Tempestade	1251,5,120000
+bossnia_04,0,0	monster	Celacanto Sombrio	2187,3,120000
+bossnia_04,0,0	monster	Celacanto Estranho	2188,3,120000
+bossnia_04,0,0	monster	Celacanto Mutante	2189,3,120000
+bossnia_04,0,0	monster	Celacanto Violento	2190,3,120000
+bossnia_04,0,0	monster	Detardeurus	1719,3,120000
+bossnia_04,0,0	monster	Doppelganger	1046,5,120000
+bossnia_04,0,0	monster	Drake	1112,5,120000
+bossnia_04,0,0	monster	Drácula	1389,5,120000
+bossnia_04,0,0	monster	Eddga	1115,3,120000
+bossnia_04,0,0	monster	Espadachim Egnigem	1658,5,120000
+bossnia_04,0,0	monster	Faraó	1157,5,120000
+bossnia_04,0,0	monster	Flor do Luar	1150,5,120000
+bossnia_04,0,0	monster	Freeoni	1159,5,120000
+bossnia_04,0,0	monster	General Daehyun	2253,5,120000
+bossnia_04,0,0	monster	General Tartaruga	1312,5,120000
+bossnia_04,0,0	monster	Gioia	2251,2,120000
+bossnia_04,0,0	monster	Gorynych	1885,5,120000
+bossnia_04,0,0	monster	Guardião Morto Kades	2255,7,120000
+bossnia_04,0,0	monster	Hatii	1252,5,120000
+bossnia_04,0,0	monster	Ifrit	1832,5,120000
+bossnia_04,0,0	monster	Kiel D-01	1734,7,120000
+bossnia_04,0,0	monster	Kraken	2202,5,120000
+bossnia_04,0,0	monster	Ktullanux	1779,5,120000
+bossnia_04,0,0	monster	Lady Branca	1660,5,120000
+bossnia_04,0,0	monster	Lady Tanee	1688,5,120000
+bossnia_04,0,0	monster	Leak	2156,5,120000
+bossnia_04,0,0	monster	Maya	1147,5,120000
+bossnia_04,0,0	monster	Memória de Thanatos	1708,5,120000
+bossnia_04,0,0	monster	Morroc Ferido	1917,3,120000
+bossnia_04,0,0	monster	Orc Herói	1087,3,120000
+bossnia_04,0,0	monster	Osíris	1038,5,120000
+bossnia_04,0,0	monster	Pesar Noturno	1768,5,120000
+bossnia_04,0,0	monster	Pyuriel Furiosa	2249,5,120000
+bossnia_04,0,0	monster	Quimera Venenosa	3633,5,120000
+bossnia_04,0,0	monster	Rainha Scaraba	2087,5,120000
+bossnia_04,0,0	monster	Rainha Scaraba Dourada	2165,5,120000
+bossnia_04,0,0	monster	RSX-0806	1623,5,120000
+bossnia_04,0,0	monster	Samurai Encarnado	1492,5,120000
+bossnia_04,0,0	monster	Senhor das Trevas	1272,5,120000
+bossnia_04,0,0	monster	Senhor dos Mortos	1373,5,120000
+bossnia_04,0,0	monster	Senhor dos Orcs	1190,5,120000
+bossnia_04,0,0	monster	Serpente Suprema	1418,5,120000
+bossnia_04,0,0	monster	Tao Gunka	1583,5,120000
+bossnia_04,0,0	monster	Valquíria Randgris	1751,5,120000
+bossnia_04,0,0	monster	Vesper	1685,7,120000
+bossnia_04,0,0	monster	Vigia do Tempo	3074,5,120000
+// Exclusivos
+bossnia_04,0,0	monster	Algoz Eremes	1647,1,120000
+bossnia_04,0,0	monster	Atiradora Cecil	1650,1,120000
+bossnia_04,0,0	monster	Cigana Trentini	2241,7,120000
+bossnia_04,0,0	monster	Sicário Eremes	3220,1,900000
+bossnia_04,0,0	monster	Sentinela Cecil	3222,1,900000
+bossnia_04,0,0	monster	Trovador Alphoccio	3245,1,900000
+
+// Mapflags
+//============================================================
+//Sala 1
+bossnia_01	mapflag	nomemo
+bossnia_01	mapflag	nosave	SavePoint
+bossnia_01	mapflag	noreturn
+bossnia_01	mapflag	restricted	16384
+bossnia_01	mapflag	nopenalty
+bossnia_01	mapflag	noteleport
+
+//Sala 2
+bossnia_02	mapflag	nomemo
+bossnia_02	mapflag	nosave	SavePoint
+bossnia_02	mapflag	noreturn
+bossnia_02	mapflag	restricted	16384
+bossnia_02	mapflag	nopenalty
+bossnia_02	mapflag	noteleport
+
+//Sala 3
+bossnia_03	mapflag	nomemo
+bossnia_03	mapflag	nosave	SavePoint
+bossnia_03	mapflag	noreturn
+bossnia_03	mapflag	restricted	16384
+bossnia_03	mapflag	nopenalty
+bossnia_03	mapflag	noteleport
+
+//Sala 4
+bossnia_04	mapflag	nomemo
+bossnia_04	mapflag	nosave	SavePoint
+bossnia_04	mapflag	noreturn
+bossnia_04	mapflag	restricted	16384
+bossnia_04	mapflag	nopenalty
+bossnia_04	mapflag	noteleport

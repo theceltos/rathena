@@ -1,0 +1,25 @@
+-	script	VIP_STATUS	-1,{
+OnPCLoginEvent:
+	if ( vip_status(1) ) {
+		//sc_start SC_EXPBOOST,1000*60*60*24,0;
+			set .@Timer, vip_status(2);
+			dispbottom "Você é um VIP!";
+			dispbottom "=============================================";
+			dispbottom "Exp & Job Increase +20x";
+			dispbottom "Drop Increase +20x";
+			dispbottom "Tempo de VIP: "+ callfunc("Time2Str",.@Timer);
+			dispbottom "=============================================";
+			dispbottom "Comands Disponíveis";
+			dispbottom "@noks: ^000000(Permite que ninguem dê KS em seus monstros)";
+			dispbottom "@warp: ^000000(Teleporta para qualquer mapa do jogo)";
+			dispbottom "@alootid: ^000000(Escolhe qual ID de item você deseja coletar automaticamente)";
+			dispbottom "@autoloottype: ^000000(Escolhe o tipo de item você deseja coletar automaticamente)";
+			dispbottom "@autotrade: ^000000(Deixa seu mercador logado com a loja enquanto você pode se desconectar)";
+			dispbottom "@storage: ^000000(Abre o storage em qualquer lugar)";
+			dispbottom "@iteminfo: (Pega informações de um item especifico)";
+			dispbottom "@mobinfo: (Pega informações sobre um mob especifico)";
+			dispbottom "@whodrops: (Pega informações de quem dropa aquele item)";
+			dispbottom "============================================";
+		end;
+	}
+}
