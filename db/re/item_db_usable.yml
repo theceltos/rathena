@@ -3607,7 +3607,7 @@ Body:
     AegisName: Red_Potion_B
     Name: "[Not For Sale] Red Potion"
     Type: Healing
-    Weight: 70
+    Weight: 0
     Trade:
       NoDrop: true
       NoTrade: true

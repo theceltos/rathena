@@ -25882,6 +25882,10 @@ Body:
     DamageMotion: 288
     Ai: 19
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Armlet_Of_Prisoner
         Rate: 1500
       - Item: Imma_Arrow_Container
@@ -25932,6 +25936,10 @@ Body:
     DamageMotion: 288
     Ai: 20
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Armlet_Of_Prisoner
         Rate: 1500
       - Item: Carnium
@@ -26018,6 +26026,10 @@ Body:
     Ai: 21
     Class: Boss
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Carnium
         Rate: 50
       - Item: Old_Violet_Box
@@ -81603,6 +81615,10 @@ Body:
     Ai: 21
     Class: Boss
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Soul_Of_Acolyte
         Rate: 500
       - Item: C_Blazing_Soul
@@ -81654,6 +81670,10 @@ Body:
     Ai: 21
     Class: Boss
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Soul_Of_Thief
         Rate: 500
       - Item: C_Shadow_Handicraft
@@ -81705,6 +81725,10 @@ Body:
     Ai: 21
     Class: Boss
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Soul_Of_Archer
         Rate: 500
       - Item: C_Minstrel_Song_Hat
@@ -81756,6 +81780,10 @@ Body:
     Ai: 21
     Class: Boss
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Soul_Of_Archer
         Rate: 500
       - Item: C_Dying_Swan
@@ -82025,6 +82053,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Crystal_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82077,6 +82109,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Pieces_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82129,6 +82165,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Pieces_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82181,6 +82221,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Pieces_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82233,6 +82277,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Pieces_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82285,6 +82333,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Pieces_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82337,6 +82389,10 @@ Body:
     Modes:
       Mvp: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Pieces_Of_Grudge
         Rate: 3000
       - Item: Manteau_Of_Fallen
@@ -82387,6 +82443,10 @@ Body:
     Modes:
       CanMove: true
     Drops:
+      - Item: Enriched_Oridecon
+        Rate: 200
+      - Item: Enriched_Elunium
+        Rate: 200
       - Item: Dustball
         Rate: 5000
       - Item: Poisonous_Gas

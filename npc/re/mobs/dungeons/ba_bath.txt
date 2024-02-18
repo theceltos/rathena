@@ -12,3 +12,5 @@ ba_bath,0,0	monster	Boiling Water Phen	20643,70,5000
 ba_bath,0,0	monster	Boiling Water Marc	20644,50,5000
 ba_bath,0,0	monster	Boiling Water Swordfish	20645,50,5000
 ba_bath,0,0	monster	Boiling Water Piranha	20646,70,5000
+ba_bath,0,0	monster	Cleaning Robot	20635,70,1000
+ba_bath,0,0	monster	Cleaning Robot	20636,70,1000

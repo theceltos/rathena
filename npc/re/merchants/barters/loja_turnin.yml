@@ -628,3 +628,36 @@ Body:
           - Index: 1
             Item: EP17_1_EVT39
             Amount: 100
+      - Index: 85
+        Item: Guarantee_Weapon_7Up
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 86
+        Item: Guarantee_Armor_7Up
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 87
+        Item: blacksmith_blessing
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 1000
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 20
+      - Index: 88
+        Item: silvervine_fruit_box40
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 4000
