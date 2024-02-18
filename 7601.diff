@@ -1,0 +1,1649 @@
+diff --git a/db/re/item_randomopt_group.yml b/db/re/item_randomopt_group.yml
+index 4455cbea8d8..73abeeba8be 100644
+--- a/db/re/item_randomopt_group.yml
++++ b/db/re/item_randomopt_group.yml
+@@ -13118,3 +13118,667 @@ Body:
+             MinValue: 5
+             MaxValue: 20
+             Chance: 666
++  - Id: 152
++    Group: ABYSS_DDBOX
++    Slots:
++      - Slot: 1
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 500
++            MaxValue: 1500
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 100
++            MaxValue: 300
++            Chance: 10000
++          - Option: VAR_MAXHPPERCENT
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: VAR_MAXSPPERCENT
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++      - Slot: 2
++        Options:
++          - Option: VAR_HPACCELERATION
++            MinValue: 20
++            MaxValue: 60
++            Chance: 10000
++          - Option: VAR_SPACCELERATION
++            MinValue: 20
++            MaxValue: 60
++            Chance: 10000
++          - Option: VAR_AVOIDSUCCESSVALUE
++            MinValue: 3
++            MaxValue: 25
++            Chance: 10000
++          - Option: VAR_ITEMDEFPOWER
++            MinValue: 20
++            MaxValue: 50
++            Chance: 10000
++          - Option: VAR_MDEFPOWER
++            MinValue: 2
++            MaxValue: 6
++            Chance: 10000
++          - Option: DEC_SPELL_CAST_TIME
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: HEAL_MODIFY_PERCENT
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_NOTHING_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_WATER_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_GROUND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_FIRE_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_WIND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_POISON_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_SAINT_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_DARKNESS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_TELEKINESIS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_UNDEAD_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_NOTHING_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_WATER_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_GROUND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_FIRE_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_WIND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_POISON_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_SAINT_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_DARKNESS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_TELEKINESIS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_UNDEAD_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++      - Slot: 3
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 500
++            MaxValue: 1500
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 100
++            MaxValue: 300
++            Chance: 10000
++          - Option: RACE_TOLERACE_NOTHING
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_UNDEAD
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANIMAL
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_PLANT
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_INSECT
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_FISHS
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DEVIL
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_HUMAN
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANGEL
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DRAGON
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++  - Id: 153
++    Group: ABYSS_DDBOX2
++    Slots:
++      - Slot: 1
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 750
++            MaxValue: 2000
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 200
++            MaxValue: 500
++            Chance: 10000
++          - Option: VAR_MAXHPPERCENT
++            MinValue: 5
++            MaxValue: 13
++            Chance: 10000
++          - Option: VAR_MAXSPPERCENT
++            MinValue: 5
++            MaxValue: 13
++            Chance: 10000
++      - Slot: 2
++        Options:
++          - Option: VAR_HPACCELERATION
++            MinValue: 30
++            MaxValue: 65
++            Chance: 10000
++          - Option: VAR_SPACCELERATION
++            MinValue: 30
++            MaxValue: 65
++            Chance: 10000
++          - Option: VAR_AVOIDSUCCESSVALUE
++            MinValue: 3
++            MaxValue: 30
++            Chance: 10000
++          - Option: VAR_ITEMDEFPOWER
++            MinValue: 25
++            MaxValue: 55
++            Chance: 10000
++          - Option: VAR_MDEFPOWER
++            MinValue: 3
++            MaxValue: 8
++            Chance: 10000
++          - Option: HEAL_MODIFY_PERCENT
++            MinValue: 7
++            MaxValue: 15
++            Chance: 10000
++          - Option: DEC_SPELL_CAST_TIME
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_NOTHING_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_WATER_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_GROUND_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_FIRE_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_WIND_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_POISON_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_SAINT_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_DARKNESS_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_TELEKINESIS_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_UNDEAD_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_NOTHING_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_WATER_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_GROUND_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_FIRE_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_WIND_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_POISON_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_SAINT_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_DARKNESS_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_TELEKINESIS_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_UNDEAD_USER
++            MinValue: 6
++            MaxValue: 10
++            Chance: 10000
++      - Slot: 3
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 550
++            MaxValue: 1700
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 150
++            MaxValue: 400
++            Chance: 10000
++          - Option: RACE_TOLERACE_NOTHING
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_UNDEAD
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANIMAL
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_PLANT
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_INSECT
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_FISHS
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DEVIL
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_HUMAN
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANGEL
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DRAGON
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++  - Id: 154
++    Group: ABYSS_DDBOX3
++    Slots:
++      - Slot: 1
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 300
++            MaxValue: 1000
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 50
++            MaxValue: 300
++            Chance: 10000
++          - Option: VAR_MAXHPPERCENT
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: VAR_MAXSPPERCENT
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++      - Slot: 2
++        Options:
++          - Option: VAR_AVOIDSUCCESSVALUE
++            MinValue: 3
++            MaxValue: 18
++            Chance: 10000
++          - Option: VAR_ITEMDEFPOWER
++            MinValue: 12
++            MaxValue: 55
++            Chance: 10000
++          - Option: VAR_MDEFPOWER
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: HEAL_MODIFY_PERCENT
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DEC_SPELL_CAST_TIME
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_NOTHING_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_WATER_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_GROUND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_FIRE_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_WIND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_POISON_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_SAINT_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_DARKNESS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_TELEKINESIS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: DAMAGE_PROPERTY_UNDEAD_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_NOTHING_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_WATER_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_GROUND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_FIRE_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_WIND_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_POISON_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_SAINT_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_DARKNESS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_TELEKINESIS_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: MDAMAGE_PROPERTY_UNDEAD_USER
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: ATTR_TOLERACE_WATER
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_GROUND
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_FIRE
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_WIND
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_POISON
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_SAINT
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_DARKNESS
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_TELEKINESIS
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: ATTR_TOLERACE_UNDEAD
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++      - Slot: 3
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 200
++            MaxValue: 800
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 50
++            MaxValue: 300
++            Chance: 10000
++          - Option: RACE_TOLERACE_NOTHING
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_UNDEAD
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANIMAL
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_PLANT
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_INSECT
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_FISHS
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DEVIL
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_HUMAN
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANGEL
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DRAGON
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++  - Id: 155
++    Group: ABYSS_DDBOX4
++    Slots:
++      - Slot: 1
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 200
++            MaxValue: 800
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 50
++            MaxValue: 200
++            Chance: 10000
++          - Option: VAR_MAXHPPERCENT
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++          - Option: VAR_MAXSPPERCENT
++            MinValue: 1
++            MaxValue: 5
++            Chance: 10000
++      - Slot: 2
++        Options:
++          - Option: VAR_AVOIDSUCCESSVALUE
++            MinValue: 8
++            MaxValue: 18
++            Chance: 10000
++          - Option: VAR_ITEMDEFPOWER
++            MinValue: 12
++            MaxValue: 55
++            Chance: 10000
++          - Option: VAR_MDEFPOWER
++            MinValue: 3
++            MaxValue: 7
++            Chance: 10000
++          - Option: HEAL_MODIFY_PERCENT
++            MinValue: 5
++            MaxValue: 10
++            Chance: 10000
++          - Option: VAR_HITSUCCESSVALUE
++            MinValue: 3
++            MaxValue: 20
++            Chance: 10000
++      - Slot: 3
++        Options:
++          - Option: VAR_MAXHPAMOUNT
++            MinValue: 200
++            MaxValue: 600
++            Chance: 10000
++          - Option: VAR_MAXSPAMOUNT
++            MinValue: 50
++            MaxValue: 200
++            Chance: 10000
++          - Option: RACE_TOLERACE_NOTHING
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_UNDEAD
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANIMAL
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_PLANT
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_INSECT
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_FISHS
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DEVIL
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_HUMAN
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_ANGEL
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
++          - Option: RACE_TOLERACE_DRAGON
++            MinValue: 4
++            MaxValue: 7
++            Chance: 10000
+diff --git a/db/re/laphine_upgrade.yml b/db/re/laphine_upgrade.yml
+index 2da4f930020..5b17e12e857 100644
+--- a/db/re/laphine_upgrade.yml
++++ b/db/re/laphine_upgrade.yml
+@@ -2397,14 +2397,15 @@ Body:
+       - Item: S_R_Bearers_Earring
+       - Item: S_Mega_Blitz_Shield
+       - Item: S_Mega_Blitz_Weapon
+-#  - Item: Abyss_Ddbox
+-#    TargetItems:
+-#      - Item: DragonA_Red
+-#      - Item: DragonA_Green
+-#      - Item: DragonA_Gold
+-#      - Item: DragonA_Purple
+-#      - Item: DragonA_Blue
+-#      - Item: DragonA_Silver
++  - Item: Abyss_Ddbox
++    RandomOptionGroup: ABYSS_DDBOX
++    TargetItems:
++      - Item: DragonA_Red
++      - Item: DragonA_Green
++      - Item: DragonA_Gold
++      - Item: DragonA_Purple
++      - Item: DragonA_Blue
++      - Item: DragonA_Silver
+   - Item: ILL_Piece_A
+     RandomOptionGroup: ILL_PIECE_A
+     TargetItems:
+@@ -3042,20 +3043,23 @@ Body:
+       - Item: Grace_Tiger_Suit
+       - Item: Grace_Snovice_Suit
+       - Item: Grace_Snovice_Robe
+-#  - Item: Abyss_Ddbox2
+-#    TargetItems:
+-#      - Item: DragonA_Red
+-#      - Item: DragonA_Green
+-#      - Item: DragonA_Gold
+-#      - Item: DragonA_Purple
+-#      - Item: DragonA_Blue
+-#      - Item: DragonA_Silver
+-#  - Item: Abyss_Ddbox3
+-#    TargetItems:
+-#      - Item: Drag_Manteau
+-#  - Item: Abyss_Ddbox4
+-#    TargetItems:
+-#      - Item: Dragon_Boots
++  - Item: Abyss_Ddbox2
++    RandomOptionGroup: ABYSS_DDBOX2
++    TargetItems:
++      - Item: DragonA_Red
++      - Item: DragonA_Green
++      - Item: DragonA_Gold
++      - Item: DragonA_Purple
++      - Item: DragonA_Blue
++      - Item: DragonA_Silver
++  - Item: Abyss_Ddbox3
++    RandomOptionGroup: ABYSS_DDBOX3
++    TargetItems:
++      - Item: Drag_Manteau
++  - Item: Abyss_Ddbox4
++    RandomOptionGroup: ABYSS_DDBOX4
++    TargetItems:
++      - Item: Dragon_Boots
+ #  - Item: Auto_Imp_Melee_1
+ #    TargetItems:
+ #      - Item: Ep172_1h_Sword
+diff --git a/db/re/mob_db.yml b/db/re/mob_db.yml
+index 59d285e56b8..d53f38b8cee 100644
+--- a/db/re/mob_db.yml
++++ b/db/re/mob_db.yml
+@@ -95705,10 +95705,60 @@ Body:
+ #    AegisName: REGINLEIF_MJ
+ #  - Id: 20515
+ #    AegisName: INGRID_MJ
+-#  - Id: 20516
+-#    AegisName: G_BONE_FERUS
+-#  - Id: 20517
+-#    AegisName: G_BONE_ACIDUS
++  - Id: 20516
++    AegisName: G_BONE_FERUS
++    Name: Bone Ferus
++    Level: 206
++    Hp: 3474420
++    Attack: 6732
++    Attack2: 868
++    Defense: 285
++    MagicDefense: 80
++    Str: 242
++    Agi: 173
++    Vit: 75
++    Int: 122
++    Dex: 173
++    Luk: 67
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Undead
++    Element: Undead
++    ElementLevel: 4
++    WalkSpeed: 120
++    AttackDelay: 108
++    AttackMotion: 576
++    DamageMotion: 432
++    Ai: 21
++  - Id: 20517
++    AegisName: G_BONE_ACIDUS
++    Name: Bone Acidus
++    Level: 207
++    Hp: 3491700
++    Attack: 6917
++    Attack2: 870
++    Defense: 294
++    MagicDefense: 81
++    Str: 248
++    Agi: 175
++    Vit: 78
++    Int: 120
++    Dex: 175
++    Luk: 68
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Undead
++    Element: Undead
++    ElementLevel: 4
++    WalkSpeed: 180
++    AttackDelay: 168
++    AttackMotion: 768
++    DamageMotion: 360
++    Ai: 21
+ #  - Id: 20518
+ #    AegisName: E_MD_LUDE
+ #  - Id: 20519
+@@ -95900,20 +95950,339 @@ Body:
+ #  - Id: 20611
+ #    AegisName: INGRID
+ #    DamageTaken: 10
+-#  - Id: 20612
+-#    AegisName: FERUS_P
+-#  - Id: 20613
+-#    AegisName: TREASURE_MIMIC
+-#  - Id: 20614
+-#    AegisName: ACIDUS_B
+-#  - Id: 20615
+-#    AegisName: ACIDUS_S
+-#  - Id: 20616
+-#    AegisName: BONE_FERUS
+-#  - Id: 20617
+-#    AegisName: BONE_ACIDUS
+-#  - Id: 20618
+-#    AegisName: BONE_DETALE
++  - Id: 20612
++    AegisName: FERUS_P
++    Name: Purple Ferus
++    Level: 202
++    Hp: 3404262
++    BaseExp: 243162
++    JobExp: 170213
++    Attack: 6055
++    Attack2: 821
++    Defense: 275
++    MagicDefense: 78
++    Str: 220
++    Agi: 163
++    Vit: 95
++    Int: 111
++    Dex: 155
++    Luk: 83
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Dragon
++    Element: Poison
++    ElementLevel: 4
++    WalkSpeed: 120
++    AttackDelay: 108
++    AttackMotion: 576
++    DamageMotion: 432
++    Ai: 04
++    Drops:
++      - Item: Shadowdecon
++        Rate: 6
++      - Item: Dragon's_Skin
++        Rate: 750
++      - Item: Dragon_Train
++        Rate: 500
++      - Item: Posionous_Canine
++        Rate: 500
++      - Item: Abyss_itembox
++        Rate: 5
++      - Item: Dragenergy_Purple
++        Rate: 30
++      - Item: Dragenergy_Gold
++        Rate: 30
++      - Item: Ferus_P_Card
++        Rate: 1
++        StealProtected: true
++  - Id: 20613
++    AegisName: TREASURE_MIMIC
++    Name: Treasure Mimic
++    Level: 204
++    Hp: 3436608
++    BaseExp: 245472
++    JobExp: 171830
++    Attack: 5983
++    Attack2: 734
++    Defense: 234
++    MagicDefense: 77
++    Str: 215
++    Agi: 196
++    Vit: 83
++    Int: 110
++    Dex: 213
++    Luk: 96
++    AttackRange: 1
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Formless
++    Element: Neutral
++    ElementLevel: 4
++    WalkSpeed: 100
++    AttackDelay: 168
++    AttackMotion: 480
++    DamageMotion: 360
++    Ai: 04
++    Drops:
++      - Item: Old_Blue_Box
++        Rate: 15
++      - Item: Old_Violet_Box
++        Rate: 1
++      - Item: Gift_Box
++        Rate: 25
++      - Item: Treasure_Box
++        Rate: 50
++      - Item: Abyss_itembox
++        Rate: 50
++      - Item: Crystal_Jewel__
++        Rate: 50
++      - Item: Zelunium
++        Rate: 6
++      - Item: Treasure_Mimic_Card
++        Rate: 1
++        StealProtected: true
++  - Id: 20614
++    AegisName: ACIDUS_B
++    Name: Black Acidus
++    Level: 205
++    Hp: 3455504
++    BaseExp: 246822
++    JobExp: 172775
++    Attack: 6266
++    Attack2: 843
++    Defense: 249
++    MagicDefense: 80
++    Str: 225
++    Agi: 169
++    Vit: 73
++    Int: 122
++    Dex: 166
++    Luk: 73
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Dragon
++    Element: Dark
++    ElementLevel: 4
++    WalkSpeed: 180
++    AttackDelay: 168
++    AttackMotion: 768
++    DamageMotion: 360
++    Ai: 04
++    Drops:
++      - Item: Dragon_Canine
++        Rate: 1200
++      - Item: Dragon_Train
++        Rate: 500
++      - Item: Dragenergy_Green
++        Rate: 30
++      - Item: Dragenergy_Purple
++        Rate: 30
++      - Item: Abyss_itembox
++        Rate: 5
++      - Item: Dragon_Scale
++        Rate: 750
++      - Item: Shadowdecon
++        Rate: 6
++      - Item: Acidus_B_Card
++        Rate: 1
++        StealProtected: true
++  - Id: 20615
++    AegisName: ACIDUS_S
++    Name: Silver Acidus
++    Level: 205
++    Hp: 3456051
++    BaseExp: 246822
++    JobExp: 172775
++    Attack: 6240
++    Attack2: 877
++    Defense: 253
++    MagicDefense: 80
++    Str: 224
++    Agi: 163
++    Vit: 75
++    Int: 125
++    Dex: 157
++    Luk: 80
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Dragon
++    Element: Ghost
++    ElementLevel: 4
++    WalkSpeed: 180
++    AttackDelay: 168
++    AttackMotion: 768
++    DamageMotion: 360
++    Ai: 04
++    Drops:
++      - Item: Dragon_Canine
++        Rate: 1000
++      - Item: Dragon_Train
++        Rate: 500
++      - Item: Dragenergy_Silver
++        Rate: 30
++      - Item: Dragenergy_Gold
++        Rate: 30
++      - Item: Abyss_itembox
++        Rate: 5
++      - Item: Dragon_Scale
++        Rate: 750
++      - Item: Zelunium
++        Rate: 6
++      - Item: Acidus_S_Card
++        Rate: 1
++        StealProtected: true
++  - Id: 20616
++    AegisName: BONE_FERUS
++    Name: Bone Ferus
++    Level: 206
++    Hp: 3474420
++    BaseExp: 248173
++    JobExp: 173721
++    Attack: 6732
++    Attack2: 868
++    Defense: 285
++    MagicDefense: 80
++    Str: 242
++    Agi: 173
++    Vit: 75
++    Int: 122
++    Dex: 173
++    Luk: 67
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Undead
++    Element: Undead
++    ElementLevel: 4
++    WalkSpeed: 120
++    AttackDelay: 108
++    AttackMotion: 576
++    DamageMotion: 432
++    Ai: 21
++    Drops:
++      - Item: Drabone_S
++        Rate: 1250
++      - Item: Drabone_L
++        Rate: 15
++      - Item: Skel_Bone
++        Rate: 3000
++      - Item: Dragenergy_Blue
++        Rate: 40
++      - Item: Dragenergy_Green
++        Rate: 30
++      - Item: Abyss_itembox
++        Rate: 10
++      - Item: Shadowdecon
++        Rate: 6
++      - Item: Bone_Ferus_Card
++        Rate: 1
++        StealProtected: true
++  - Id: 20617
++    AegisName: BONE_ACIDUS
++    Name: Bone Acidus
++    Level: 207
++    Hp: 3491700
++    BaseExp: 249407
++    JobExp: 174585
++    Attack: 6917
++    Attack2: 870
++    Defense: 294
++    MagicDefense: 81
++    Str: 248
++    Agi: 175
++    Vit: 78
++    Int: 120
++    Dex: 175
++    Luk: 68
++    AttackRange: 2
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Undead
++    Element: Undead
++    ElementLevel: 4
++    WalkSpeed: 180
++    AttackDelay: 168
++    AttackMotion: 768
++    DamageMotion: 360
++    Ai: 21
++    Drops:
++      - Item: Drabone_S
++        Rate: 1250
++      - Item: Drabone_L
++        Rate: 15
++      - Item: Skel_Bone
++        Rate: 3000
++      - Item: Dragenergy_Red
++        Rate: 40
++      - Item: Dragenergy_Silver
++        Rate: 30
++      - Item: Abyss_itembox
++        Rate: 10
++      - Item: Zelunium
++        Rate: 6
++      - Item: Bone_Acidus_Card
++        Rate: 1
++        StealProtected: true
++  - Id: 20618
++    AegisName: BONE_DETALE
++    Name: Bone Detardeurus
++    Level: 209
++    Hp: 88466828
++    BaseExp: 6150908
++    JobExp: 4305636
++    Attack: 11752
++    Attack2: 2006
++    Defense: 451
++    MagicDefense: 81
++    Str: 335
++    Agi: 194
++    Vit: 173
++    Int: 288
++    Dex: 203
++    Luk: 55
++    AttackRange: 3
++    SkillRange: 10
++    ChaseRange: 12
++    Size: Large
++    Race: Undead
++    Element: Undead
++    ElementLevel: 4
++    WalkSpeed: 200
++    AttackDelay: 432
++    AttackMotion: 936
++    DamageMotion: 360
++    DamageTaken: 10
++    Ai: 21
++    Class: Boss
++    Modes:
++      Mvp: true
++    Drops:
++      - Item: Drabone_L
++        Rate: 8000
++      - Item: Shadowdecon
++        Rate: 50
++      - Item: Zelunium
++        Rate: 50
++      - Item: Dragenergy_Green
++        Rate: 10000
++      - Item: Dragenergy_Silver
++        Rate: 10000
++      - Item: Dragenergy_Red
++        Rate: 10000
++      - Item: Dragenergy_Blue
++        Rate: 10000
++      - Item: Bone_Detale_Card
++        Rate: 1
++        StealProtected: true
+ #  - Id: 20619
+ #    AegisName: GLOOMUNDERNIGHT2
+ #  - Id: 20620
+diff --git a/db/re/mob_skill_db.txt b/db/re/mob_skill_db.txt
+index b8b9f761cfa..d5abc0c373f 100644
+--- a/db/re/mob_skill_db.txt
++++ b/db/re/mob_skill_db.txt
+@@ -13162,6 +13162,74 @@
+ 20422,DARK_LORD_H@NPC_SUMMONSLAVE,attack,196,1,10000,700,10000,no,self,slavele,3,1605,,,,,,
+ 20422,DARK_LORD_H@AL_TELEPORT,walk,26,1,10000,0,0,yes,self,rudeattacked,0,,,,,,,
+ 
++// Abyss 4
++// 20516,G_BONE_FERUS@NPC_MOVE_COORDINATE,attack,755,1,500,200,30000,yes,target,always,0,,,,,,,
++20516,G_BONE_FERUS@NPC_UNDEADATTACK,attack,347,7,9000,0,4000,yes,target,always,0,,,,,,,
++20516,G_BONE_FERUS@NPC_DARKTHUNDER,attack,341,5,2000,0,5000,yes,target,always,0,,,,,,,
++20516,G_BONE_FERUS@MG_FIREBALL,chase,17,5,4000,300,3000,no,target,always,0,,,,,,,
++20516,G_BONE_FERUS@NPC_CURSEATTACK,chase,181,5,1500,0,60000,yes,target,always,0,,,,,,,
++// 20517,G_BONE_ACIDUS@NPC_MOVE_COORDINATE,attack,755,1,500,200,30000,yes,target,always,0,,,,,,,
++20517,G_BONE_ACIDUS@NPC_UNDEADATTACK,attack,347,7,9000,0,4000,yes,target,always,0,,,,,,,
++20517,G_BONE_ACIDUS@NPC_DARKTHUNDER,attack,341,5,2000,0,5000,yes,target,always,0,,,,,,,
++20517,G_BONE_ACIDUS@MG_FIREBALL,chase,17,5,4000,300,3000,no,target,always,0,,,,,,,
++20517,G_BONE_ACIDUS@NPC_UNDEADATTACK,chase,347,4,3000,0,4000,yes,target,always,0,,,,,,,
++20612,FERUS_P@AL_TELEPORT,chase,26,5,7000,0,10000,yes,self,mobnearbygt,19,,,,,,,
++20612,FERUS_P@AL_TELEPORT,idle,26,5,7000,0,10000,yes,self,rudeattacked,0,,,,,,,
++20612,FERUS_P@NPC_POISONATTACK,attack,188,1,10000,0,5000,yes,target,always,0,,,,,,,
++20612,FERUS_P@NPC_PIERCINGATT,attack,158,3,3000,500,60000,yes,target,always,0,,,,,,,
++20612,FERUS_P@NPC_DEFENDER,attack,205,1,1500,0,300000,yes,self,longrangeattacked,0,,,,,,,
++20613,TREASURE_MIMIC@AL_TELEPORT,idle,26,5,7000,0,10000,yes,self,mobnearbygt,23,,,,,,,
++20613,TREASURE_MIMIC@NPC_COMBOATTACK,attack,171,3,1000,700,5000,no,target,always,0,,,,,,,
++20613,TREASURE_MIMIC@TF_THROWSTONE,chase,152,1,1500,0,30000,yes,target,always,0,,,,,,,
++20613,TREASURE_MIMIC@NPC_AGIUP,chase,350,5,5000,0,30000,yes,self,always,0,,,,,,,
++20613,TREASURE_MIMIC@NPC_AGIUP,attack,350,5,5000,0,30000,yes,self,always,0,,,,,,,
++20613,TREASURE_MIMIC@NPC_SELFDESTRUCTION,chase,173,1,500,2000,10000,no,self,always,0,,,,,,6,
++20613,TREASURE_MIMIC@NPC_SELFDESTRUCTION,attack,173,1,500,2000,10000,no,self,myhpltmaxrate,10,,,,,,6,
++20614,ACIDUS_B@AL_TELEPORT,idle,26,5,7000,0,10000,yes,self,rudeattacked,0,,,,,,,
++20614,ACIDUS_B@AL_TELEPORT,chase,26,5,7000,0,10000,yes,self,mobnearbygt,23,,,,,,,
++20614,ACIDUS_B@NPC_DARKNESSATTACK,attack,190,6,10000,0,5000,yes,target,always,0,,,,,,,
++20614,ACIDUS_B@NPC_ANTIMAGIC,attack,676,2,2000,0,50000,yes,self,myhpltmaxrate,40,,,,,,,
++20614,ACIDUS_B@NPC_DARKSTRIKE,attack,340,7,1000,0,30000,yes,target,always,0,,,,,,,
++20614,ACIDUS_B@MG_THUNDERSTORM,chase,21,5,1000,500,10000,no,target,always,0,,,,,,,
++20614,ACIDUS_B@NPC_CHEAL,chase,729,5,3000,500,3000,no,self,friendhpltmaxrate,99,,,,,,,
++20615,ACIDUS_S@AL_TELEPORT,idle,26,5,7000,0,10000,yes,self,rudeattacked,0,,,,,,,
++20615,ACIDUS_S@AL_TELEPORT,chase,26,5,7000,0,10000,yes,self,mobnearbygt,23,,,,,,,
++20615,ACIDUS_S@NPC_ANTIMAGIC,attack,676,2,2000,0,50000,yes,self,myhpltmaxrate,40,,,,,,,
++20615,ACIDUS_S@MG_SOULSTRIKE,chase,13,7,1000,0,30000,yes,target,always,0,,,,,,,
++20615,ACIDUS_S@MG_THUNDERSTORM,chase,21,5,1000,500,10000,no,target,always,0,,,,,,,
++20615,ACIDUS_S@NPC_CHEAL,chase,729,5,3000,500,3000,no,self,friendhpltmaxrate,99,,,,,,,
++20616,BONE_FERUS@AL_TELEPORT,idle,26,5,7000,0,10000,yes,self,rudeattacked,0,,,,,,,
++20616,BONE_FERUS@AL_TELEPORT,chase,26,5,7000,0,10000,yes,self,mobnearbygt,23,,,,,,,
++20616,BONE_FERUS@NPC_UNDEADATTACK,attack,347,7,9000,0,4000,yes,target,always,0,,,,,,,
++20616,BONE_FERUS@NPC_CURSEATTACK,chase,181,5,1500,0,60000,yes,target,always,0,,,,,,,
++20616,BONE_FERUS@NPC_PIERCINGATT,attack,158,3,3000,500,60000,yes,target,always,0,,,,,,,
++20616,BONE_FERUS@MG_FIREBALL,chase,17,8,4000,300,3000,no,target,always,0,,,,,,,
++20617,BONE_ACIDUS@AL_TELEPORT,idle,26,5,7000,0,10000,yes,self,rudeattacked,0,,,,,,,
++20617,BONE_ACIDUS@AL_TELEPORT,chase,26,5,7000,0,10000,yes,self,mobnearbygt,23,,,,,,,
++20617,BONE_ACIDUS@NPC_UNDEADATTACK,chase,347,3,3000,0,4000,yes,target,always,0,,,,,,,
++20617,BONE_ACIDUS@NPC_UNDEADATTACK,attack,347,3,5000,0,4000,yes,target,always,0,,,,,,,
++20617,BONE_ACIDUS@NPC_CURSEATTACK,attack,181,3,500,800,5000,no,target,always,0,,,,,,,
++20617,BONE_ACIDUS@NPC_PIERCINGATT,attack,158,5,3000,500,60000,yes,target,always,0,,,,,,,
++20617,BONE_ACIDUS@MG_FIREBALL,chase,17,8,4000,300,3000,no,target,always,0,,,,,,,
++20618,BONE_DETALE@NPC_EMOTION,chase,197,1,1000,0,30000,yes,self,always,0,,,,,,6,
++20618,BONE_DETALE@NPC_SUMMONSLAVE,attack,196,1,10000,2000,5000,no,self,slavele,1,20516,20517,20516,20517,,,
++20618,BONE_DETALE@NPC_SUMMONSLAVE,idle,196,1,10000,2000,5000,no,self,slavele,1,20516,20517,20516,20517,,,
++20618,BONE_DETALE@NPC_SUMMONSLAVE,chase,196,1,10000,2000,5000,no,self,slavele,1,20516,20517,20516,20517,,,
++20618,BONE_DETALE@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,self,always,0,,,,,,,
++20618,BONE_DETALE@NPC_CALLSLAVE,idle,352,1,10000,0,30000,yes,self,always,0,,,,,,,
++20618,BONE_DETALE@NPC_CALLSLAVE,chase,352,1,10000,0,30000,yes,self,always,0,,,,,,,
++20618,BONE_DETALE@MC_MAMMONITE,attack,42,22,3000,0,10000,yes,target,always,0,,,,,,,
++20618,BONE_DETALE@KN_TWOHANDQUICKEN,attack,60,30,4000,0,30000,yes,self,always,0,,,,,,,
++20618,BONE_DETALE@WZ_VERMILION,attack,85,21,2000,3000,30000,yes,target,always,0,,,,,,,
++20618,BONE_DETALE@WZ_METEOR,attack,83,11,2000,6000,30000,yes,target,always,0,,,,,,,
++20618,BONE_DETALE@AM_ACIDTERROR,attack,230,5,3000,2000,30000,no,target,always,0,,,,,,,
++20618,BONE_DETALE@NPC_DARKBLESSING,attack,203,1,10000,0,2000,no,target,myhpltmaxrate,70,,,,,,,
++20618,BONE_DETALE@NPC_UNDEADATTACK,attack,347,10,8000,0,10000,yes,target,always,0,,,,,,,
++20618,BONE_DETALE@NPC_WIDESTUN,chase,678,3,1000,1000,50000,yes,self,always,0,,,,,,,
++20618,BONE_DETALE@NPC_WEAPONBRAKER,attack,343,10,500,0,20000,yes,target,always,0,,,,,,,
++20618,BONE_DETALE@NPC_ARMORBRAKE,attack,344,10,2000,0,5000,yes,target,always,0,,,,,,,
++20618,BONE_DETALE@NPC_HELMBRAKE,attack,345,10,2000,0,5000,yes,target,always,0,,,,,,,
++
+ // Meister ABR's (Automated Battle Robot)
+ 20834,ABR_BATTLE_WARIOR@ABR_BATTLE_BUSTER,chase,8601,1,10000,500,5000,yes,target,always,0,,,,,,,
+ 20834,ABR_BATTLE_WARIOR@ABR_BATTLE_BUSTER,attack,8601,1,10000,500,5000,yes,target,always,0,,,,,,,
+diff --git a/db/re/quest_db.yml b/db/re/quest_db.yml
+index 93894ce5961..ef9a583bd98 100644
+--- a/db/re/quest_db.yml
++++ b/db/re/quest_db.yml
+@@ -5054,15 +5054,39 @@ Body:
+   - Id: 7892
+     Title: What is Valkyrie - Standby
+     TimeLimit: 4h
++  - Id: 7893
++    Title: A unique color of Ferus
++    Targets:
++      - Mob: FERUS_P
++        Count: 20
+   - Id: 7894
+-    Title: A unique color of Ferrus - Waiting
++    Title: A unique color of Ferus - Waiting
+     TimeLimit: 4h
++  - Id: 7895
++    Title: New Mimic Investigation
++    Targets:
++      - Mob: TREASURE_MIMIC
++        Count: 10
+   - Id: 7896
+     Title: New Mimic Investigation - Waiting
+     TimeLimit: 4h
++  - Id: 7897
++    Title: Acidus Attribute Research
++    Targets:
++      - Mob: ACIDUS_B
++        Count: 20
++      - Mob: ACIDUS_S
++        Count: 20
+   - Id: 7898
+-    Title: Assistance Properties Study - Standby
++    Title: Acidus Attribute Research - Standby
+     TimeLimit: 4h
++  - Id: 7899
++    Title: Going against Providence
++    Targets:
++      - Mob: BONE_FERUS
++        Count: 30
++      - Mob: BONE_ACIDUS
++        Count: 30
+   - Id: 7900
+     Title: Going against providence - Waiting
+     TimeLimit: 4h
+diff --git a/npc/re/mobs/dungeons/abyss.txt b/npc/re/mobs/dungeons/abyss.txt
+index 22147711834..a7536637c74 100644
+--- a/npc/re/mobs/dungeons/abyss.txt
++++ b/npc/re/mobs/dungeons/abyss.txt
+@@ -49,3 +49,14 @@ abyss_03,0,0	monster	Ferus	1714,10,5000
+ abyss_03,0,0	monster	Ferus	1717,10,5000
+ abyss_03,0,0	monster	Hydrolancer	1720,3,5000
+ abyss_03,0,0,0,0	boss_monster	Detardeurus	1719,1,10800000,600000,0
++
++//==================================================
++// abyss_04 - Abyss Lake Underground Cave
++//==================================================
++abyss_04	monster	Purple Ferus	20612,25
++abyss_04	monster	Treasure Mimic	20613,15
++abyss_04	monster	Black Acidus	20614,35
++abyss_04	monster	Silver Acidus	20615,35
++abyss_04	monster	Bone Ferus	20616,50
++abyss_04	monster	Bone Acidus	20617,50
++abyss_04	boss_monster	Bone Detardeurus	20618,1,10800000,600000,0
+diff --git a/npc/re/quests/quests_exp_175.txt b/npc/re/quests/quests_exp_175.txt
+index eb2e76e0220..92ddad9b446 100644
+--- a/npc/re/quests/quests_exp_175.txt
++++ b/npc/re/quests/quests_exp_175.txt
+@@ -6,6 +6,7 @@
+ //===== Changelog: ===========================================
+ //= 1.0 Initial release of Glast Heim Abyss quests. [OptimusM]
+ //= 1.1 Corrections here and there. [Capuche]
++//= 1.2 Initial release of Abyss Dungeon 4 quests. [Capuche]
+ //============================================================
+ 
+ glast_01,191,273,3	script	Magician Nillem#glabyss01	4_M_JOB_WIZARD,{
+@@ -209,7 +210,7 @@ glast_01,191,273,3	script	Magician Nillem#glabyss01	4_M_JOB_WIZARD,{
+ 				mes "Instead, you're sharing another new discovery tomorrow. O - K - A - Y -?";
+ 				close;
+ 			case 2:
+-				mes "^4d4dff - You can take this mission again. Speak to Mage Nillem once again to accept it. - ^000000";
++				mes "^4d4dff - You can take this mission again. Speak to Mage Nillem once again to accept it. -^000000";
+ 				erasequest 8548;
+ 				break;
+ 			}
+@@ -292,3 +293,266 @@ gl_cas01_,205,36,5	script	Magician Nillem#glabyss02	4_M_JOB_WIZARD,{
+ 	warp "glast_01",191,270;
+ 	end;
+ }
++
++
++// abyss_04
++abyss_03,108,97,3	script	Traveler's Monument#abyss	1_JOURNEY_STONE_F,{
++	mes "[Traveler's Monument]";
++	mes "The Traveler's Monument stands still.";
++	close;
++}
++
++hugel,102,148,3	script	Ethnographer Marigold#exdq0	4_F_HUWOMAN,{
++	if (BaseLevel < 190) {
++		mes "[Marigold]";
++		mes "A lot of people come and go in the square.";
++		mes "I'm sitting here observing. Someone who will do a very important job for me.";
++		next;
++		mes "^4d4dffThere are quests available for level 190 or higher.^000000";
++		close;
++	}
++	if (checkquest(7893,HUNTING) == 2) {
++		mes "[Marigold]";
++		mes "Purple Ferus... Hmm, that's right. We still need more investigation. Should we do it this time?";
++		erasequest 7893;
++		setquest 7894;
++		getexp 15823920,11076720;
++		next;
++	}
++	if (checkquest(7895,HUNTING) == 2) {
++		mes "[Marigold]";
++		mes "Treasure Mimics carry those things. Oh, you can take all their loot. All I need to know is the type.";
++		erasequest 7895;
++		setquest 7896;
++		getexp 7979360,5585560;
++		next;
++	}
++	if (checkquest(7897,HUNTING) == 2) {
++		mes "[Marigold]";
++		mes "How did you feel against the Black Acidus and the Silver Acidus? Interesting!";
++		erasequest 7897;
++		setquest 7898;
++		getexp 32090640,22463360;
++		next;
++	}
++	if (checkquest(7899,HUNTING) == 2) {
++		mes "[Marigold]";
++		mes "Thank you for dealing with Bone Ferus and Bone Acidus. I haven't been able to explain why this is happening.";
++		erasequest 7899;
++		setquest 7900;
++		getexp 48548160,33983640;
++		next;
++	}
++	mes "[Marigold]";
++	mes "Why do dragons stack up so much gold?";
++	next;
++	mes "[Marigold]";
++	mes "I want to investigate the new dragons found deep in the Abyss Cave, can you help me?";
++	next;
++	switch( select( "A unique color of Ferus", "New Mimic Investigation", "Acidus Attribute Research", "Going against Providence", "What are you studying?" ) ) {
++	case 1:
++		switch( checkquest(7894,PLAYTIME) ) {
++		case -1:
++			break;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "We are still organizing the data you collected the other day.";
++			mes "There is still time until the next investigation, so how about taking a break?";
++			close;
++		case 2:
++			erasequest 7894;
++			break;
++		}
++		switch( checkquest(7893,HUNTING) ) {
++		case -1:
++			mes "[Marigold]";
++			mes "An unusual Purple Ferus was found on the 4th floor of the Abyss Cave.";
++			mes "Ferus color usually follows it's natural attributes, isn't it amazing that it's purple?";
++			mes "So I want to know more about this Purple Ferus.";
++			next;
++			if (select( "Accept the request", "Reject" ) == 2) {
++				mes "[Marigold]";
++				mes "The world is large and full of people.";
++				mes "It sounds like there are many adventurers with great skills.";
++				close;
++			}
++			mes "[Marigold]";
++			mes "The thing to investigate this time is the ^4d4dffPurple Ferus^000000 found on the ^4d4dff4th floor of the Abyss Cave^000000!";
++			mes "Show me the loot you've earned while dealing with it in moderation.";
++			setquest 7893;
++			close;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "Purple Ferus is said to appear on the 4th floor of the Abyss Cave.";
++			close;
++		case 2:
++			end;
++		}
++		end;
++	case 2:
++		switch( checkquest(7896,PLAYTIME) ) {
++		case -1:
++			break;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "We are still organizing the data you collected the other day.";
++			mes "There is still time until the next investigation, so how about taking a break?";
++			close;
++		case 2:
++			erasequest 7896;
++			break;
++		}
++		switch( checkquest(7895,HUNTING) ) {
++		case -1:
++			mes "[Marigold]";
++			mes "A new Mimic has been discovered on the 4th floor of the Abyss Cave.";
++			mes "I wonder what kind of loot this guy called 'Treasure Mimic' will give you.";
++			next;
++			if (select( "Accept the request", "Reject" ) == 2) {
++				mes "[Marigold]";
++				mes "The world is large and full of people.";
++				mes "It sounds like there are many adventurers with great skills.";
++				close;
++			}
++			mes "[Marigold]";
++			mes "The thing to investigate this time is the ^4d4dffTreasure Mimic^000000 found on the ^4d4dff4th floor of the Abyss Cave^000000!";
++			mes "Show me the loot you've earned while dealing with it in moderation.";
++			setquest 7895;
++			close;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "The Treasure Mimic is said to be found on the 4th floor of the Abyss Cave.";
++			close;
++		case 2:
++			end;
++		}
++		end;
++	case 3:
++		switch( checkquest(7898,PLAYTIME) ) {
++		case -1:
++			break;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "We are still organizing the data you collected the other day.";
++			mes "There is still time until the next investigation, so how about taking a break?";
++			close;
++		case 2:
++			erasequest 7898;
++			break;
++		}
++		switch( checkquest(7897,HUNTING) ) {
++		case -1:
++			mes "[Marigold]";
++			mes "The color of an Acidus gives a rough estimate of it's natural properties.";
++			mes "But I don't know about Black Acidus and Silver Acidus. I'm looking for someone to help me collect data while dealing with them.";
++			next;
++			if (select( "Accept the request", "Reject" ) == 2) {
++				mes "[Marigold]";
++				mes "The world is large and full of people.";
++				mes "It sounds like there are many adventurers with great skills.";
++				close;
++			}
++			mes "[Marigold]";
++			mes "This time, we are going to investigate ^4d4dffSilver Acidus and Black Acidus^000000 found on the ^4d4dff4th floor of the Abyss Cave^000000!";
++			mes "Tell me what attributes they have when you deal with them directly.";
++			setquest 7897;
++			close;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "Black Acidus and Silver Acidus live on the 4th floor of the Abyss Cave.";
++			close;
++		case 2:
++			end;
++		}
++		end;
++	case 4:
++		switch( checkquest(7900,PLAYTIME) ) {
++		case -1:
++			break;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "We are still organizing the data you collected the other day.";
++			mes "There is still time until the next investigation, so how about taking a break?";
++			close;
++		case 2:
++			erasequest 7900;
++			break;
++		}
++		switch( checkquest(7899,HUNTING) ) {
++		case -1:
++			mes "[Marigold]";
++			mes "What kind of force acts on the 4th floor of the Abyss Cave?";
++			mes "Ferus and Acidus, who are already dead and have only bones, move as if they were alive.";
++			mes "It's against providence. I don't think it should be left alone.";
++			next;
++			if (select( "Accept the request", "Reject" ) == 2) {
++				mes "[Marigold]";
++				mes "The world is large and full of people.";
++				mes "It sounds like there are many adventurers with great skills.";
++				close;
++			}
++			mes "[Marigold]";
++			mes "Please defeat the ^4d4dffBone Ferus and Bone Acidus^000000 who became monsters ^4d4dffin the 4th floor of the Abyss Cave^000000!";
++			mes "I'll collect data to find out why this happens.";
++			setquest 7899;
++			close;
++		case 0:
++		case 1:
++			mes "[Marigold]";
++			mes "Bone Ferus and Bone Acidus are said to be found on the 4th floor of the Abyss Cave.";
++			close;
++		case 2:
++			end;
++		}
++		end;
++	case 5:
++		mes "[Marigold]";
++		mes "I'm researching nearby phenomena, monsters, and religious relics and objects.";
++		mes "There is one other person besides me, it's Cinnamon.";
++		next;
++		mes "[Marigold]";
++		mes "He was researching the ancient temple of Odin and went to the island where the temple of Odin is located.";
++		mes "Even though it is possible to recruit skilled adventurers even here in the square.";
++		next;
++		mes "[Marigold]";
++		mes "I've heard interesting news about the Dragon's Cave in Abyss Lake to the west and am investigating.";
++		next;
++		mes "[Marigold]";
++		mes "The level we knew as the lowest level, where gold coins were piled up, was not really the lowest floor.";
++		mes "What was the space under the high pile of gold coins?";
++		next;
++		mes "[Marigold]";
++		mes "The gold coins pierced the ceiling and went upstairs.";
++		mes "So now we are collecting data on the ecology down there.";
++		mes "It's a dangerous place, so it's taking time.";
++		close;
++	}
++	end;
++
++OnInit:
++	// completed
++	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(7893,HUNTING) == 2" );
++	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(7895,HUNTING) == 2" );
++	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(7897,HUNTING) == 2" );
++	questinfo( QTYPE_QUEST2, QMARK_YELLOW, "checkquest(7899,HUNTING) == 2" );
++
++	// timeout
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(7894,PLAYTIME) == 2" );
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(7896,PLAYTIME) == 2" );
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(7898,PLAYTIME) == 2" );
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "checkquest(7900,PLAYTIME) == 2" );
++
++	// not started
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(7893) == 0 && checkquest(7894,PLAYTIME) == -1" );
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(7895) == 0 && checkquest(7896,PLAYTIME) == -1" );
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(7897) == 0 && checkquest(7898,PLAYTIME) == -1" );
++	questinfo( QTYPE_DAILYQUEST, QMARK_YELLOW, "isbegin_quest(7899) == 0 && checkquest(7900,PLAYTIME) == -1" );
++	end;
++}
+diff --git a/npc/re/scripts_warps.conf b/npc/re/scripts_warps.conf
+index 3422c095001..e214cfe6b94 100644
+--- a/npc/re/scripts_warps.conf
++++ b/npc/re/scripts_warps.conf
+@@ -20,6 +20,7 @@ npc: npc/re/warps/cities/rockridge.txt
+ npc: npc/re/warps/cities/yggdrasil.txt
+ 
+ // -------------------------- Dungeons --------------------------
++npc: npc/re/warps/dungeons/abyss.txt
+ npc: npc/re/warps/dungeons/bra_dun.txt
+ npc: npc/re/warps/dungeons/dic_dun.txt
+ npc: npc/re/warps/dungeons/ecl_dun.txt
+diff --git a/npc/re/warps/dungeons/abyss.txt b/npc/re/warps/dungeons/abyss.txt
+new file mode 100644
+index 00000000000..119841894bd
+--- /dev/null
++++ b/npc/re/warps/dungeons/abyss.txt
+@@ -0,0 +1,38 @@
++//===== rAthena Script ======================================= 
++//= Abyss Lake Dungeon Warp Script
++//===== Changelogs: ==========================================
++//= 1.0 First version. [Capuche]
++//============================================================
++
++abyss_03,91,110,5	script	Sign#Abs03ToAbs04	2_BULLETIN_BOARD,1,1,{
++	mes "A sign placed in front of a small hole indicates:";
++	mes "- I made a shortcut because it was cumbersome to turn around, but it is very high and deep, so I don't recommend it to others. -";
++	mes "^4d4dffRecommended level is 190 or higher.^000000";
++	next;
++	if (select( "I'm going!", "I'll have to be careful not to fall." ) == 2)
++		end;
++	if (BaseLevel < 190) {
++		mes "Your level is not high enough.";
++		mes "^4d4dffRecommended level is 190 or higher.^000000";
++		close;
++	}
++	warp "abyss_04",169,161;
++	end;
++
++OnTouch:
++	unittalk getcharid(3), "" + strcharinfo(0) + " : I see a rope pointing down.", bc_self;
++	end;
++}
++
++abyss_04,168,166,3	script	#Abs04ToAbs03	1_SHADOW_NPC,1,1,{
++	mes "I see a rope that can be climbed.";
++	next;
++	if (select( "Grab the rope and climb up.", "Stay longer." ) == 2)
++		end;
++	warp "abyss_03",87,107;
++	end;
++
++OnTouch:
++	unittalk getcharid(3), "" + strcharinfo(0) + " : You can see a rope that you can climb.", bc_self;
++	end;
++}
