@@ -1,0 +1,12 @@
+//===== rAthena Script =======================================
+//= Amicitia dungeons
+//===== Description: =========================================
+//= Amicitia dungeons Monster Spawn Script.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+halloween,0,0	monster	Tataro	31001,1000
+halloween,0,0	monster	Tataro	31001,1000
+halloween,0,0	monster	Tataro	31001,1000
+halloween,240,281	monster	Belial	31002,1

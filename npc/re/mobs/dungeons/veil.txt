@@ -1,0 +1,9 @@
+//===== rAthena Script =======================================
+//= Amicitia dungeons
+//===== Description: =========================================
+//= Amicitia dungeons Monster Spawn Script.
+//===== Additional Comments: =================================
+//= 1.0 First version. [Capuche]
+//============================================================
+
+veil	monster	Mingo	31000,600

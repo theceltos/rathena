@@ -36,9 +36,16 @@
 //= 2.2 Instance system rewrite. [Euphy]
 //= 2.3 Added some missing announcements. [Euphy]
 //= 2.4 Added GM management function. [Euphy]
+//= 2.5 Added Difficulty (Normal, Veteran, Nightmare, Hell & Torment). [Louis T Steinhil]
+//= 2.6 Corrected formula of percentage per difficulties. [Louis T Steinhil]
+//= 2.7 Added Experience Rewards per Difficulty. [Louis T Steinhil]
+//= 2.8 Added Drop Rewards per Difficulty. [Louis T Steinhil]
+//= 2.9 Added Item Rewards per Difficulty. [Louis T Steinhil]
+//= 3.0 Added Dynamic Switch Select on Instance Generation. [Louis T Steinhil]
+//= 3.1 Added Level Restriction. [Louis T Steinhil]
 //============================================================ 
 
-alberta,214,77,6	script	Captain Janssen	709,{
+prontera,139,183,6	script	Torre Sem Fim 2.0	709,{
 	if (checkweight(1201,1) == 0) {
 		mes "^008800Wait here!!";
 		mes "You're carrying too much stuff. Why don't you put some of it away, and then come back.^000000";
@@ -203,51 +210,105 @@ alberta,214,77,6	script	Captain Janssen	709,{
 }
 
 e_tower,81,105,0	script	Tower Protection Stone	406,{
-
+// GM Bypass
+//============================================================
+	if(getgroupid() > 90){
+        mes "GM Options";
+        switch(select("Main Menu:Reset Instance / Destroy Instance")){
+			case 1: break;
+			case 2: 
+				if(isbegin_quest(60200))
+					erasequest(60200);
+				if(isbegin_quest(60201))
+					erasequest(60201);
+				etower_partyid = 0;
+				etower_timer = 0;
+				if(instance_id(IM_PARTY))
+					instance_destroy instance_id(IM_PARTY);
+				end;
+        }
+    }
+//============================================================
 	set .@party_id,getcharid(1);
 	set .@md_name$,"Endless Tower";
+	//set .@is_leader, ( getcharid(0) == getpartyleader(.@party_id,2) );
 
-	set .@etower_timer,checkquest(60200,PLAYTIME); // 1 week
+	
+	set .@etower_timer,checkquest(1,PLAYTIME); // 1 week
 	set .@etower_timer2,checkquest(60201,PLAYTIME); // 4 hours
 
-	if (!instance_check_party(.@party_id,2)) {
-		mes "Make or join a party with more than 1 member and try again.";
-		close;
-	}
+	//if (!instance_check_party(.@party_id,2)) {
+	//	mes "Make or join a party with more than 1 member and try again.";
+	//	close;
+	//}
 	switch(.@etower_timer) {
 	case -1:
 		if (is_party_leader() == true) {
+			mes "^ff0000Difficulty Information^000000";
+			mes "^ff0000Normal^000000: Monsters will give ^0000ff10% ^000000more ^0000ffEXP^000000and ^0000ffDrop Rate^000000 is increased by ^0000ffx 2^000000.";			
+			mes "";		
+			mes "^ff0000Veteran^000000: Monsters ^0000ffMax HP^000000, ^0000ffMax Damage^000000 and ^0000ffStatus^000000 is increased by ^0000ff25%^000000 and takes ^0000ff10%^000000 less damage.";
+			mes "^ff0000Veteran^000000: Monsters will give ^0000ffx 20 ^000000more ^0000ffEXP^000000and ^0000ffDrop Rate^000000 is increased by ^0000ffx 4^000000.";
+			mes "";
+			mes "^ff0000Nightmare^000000: Monsters ^0000ffMax HP^000000, ^0000ffMax Damage^000000 and ^0000ffStatus^000000 is increased by ^0000ff50%^000000 and takes ^0000ff20%^000000 less damage.";
+			mes "^ff0000Nightmare^000000: Monsters will give ^0000ffx 40 ^000000more ^0000ffEXP^000000and ^0000ffDrop Rate^000000 is increased by ^0000ffx 6^000000.";
+			mes "";
+			mes "^ff0000Hell^000000: Monsters ^0000ffMax HP^000000, ^0000ffMax Damage^000000 and ^0000ffStatus^000000 is increased by ^0000ff100%^000000 and takes ^0000ff30%^000000 less damage.";
+			mes "^ff0000Hell^000000: Monsters will give ^0000ffx 80 ^000000more ^0000ffEXP^000000and ^0000ffDrop Rate^000000 is increased by ^0000ffx 8^000000.";
+			mes "";
+			mes "^ff0000Torment^000000: Monsters ^0000ffMax HP^000000, ^0000ffMax Damage^000000 and ^0000ffStatus^000000 is increased by ^0000ff200%^000000 and takes ^0000ff40%^000000 less damage.";
+			mes "^ff0000Torment^000000: Monsters will give ^0000ffx 100 ^000000more ^0000ffEXP^000000and ^0000ffDrop Rate^000000 is increased by ^0000ffx 10^000000.";
+			next;			
 			mes "Confirmed the party has been made. Would you like to reserve entrance to the Endless Tower?";
-			next;
-			switch(select("Generate dungeon "+.@md_name$+":Enter the dungeon:Return to Alberta:Cancel")) {
+			next;			
+			switch(select(
+			( .@party_id && getpartyleader(.@party_id,2) && !instance_id(IM_PARTY) )? "Generate dungeon "+.@md_name$:"",
+			( .@party_id && instance_id(IM_PARTY) )?"Enter the dungeon":"",
+			"Return to Prontera",
+			"Cancel"))
+			{
 			case 1:
-				if (instance_create(.@md_name$) < 0) {
-					mes "Party Name: "+ getpartyname(.@party_id);
-					mes "Party Leader: "+strcharinfo(0);
-					mes "^0000ff"+.@md_name$+" ^000000- Reservation Failed!";
-					close;
-				}
-				mes "^0000ff"+.@md_name$+"^000000 - Try to reserve";
-				mes "After making a reservation, you have to talk to NPC behind and select the menu 'Enter the Dungeon' to enter the dungeon.";
+// Difficulty 
+//============================================================
+				.@level_mode = select(
+					"[ Level 50+ ] Normal", 
+					"[ Level 100+ ] Veteran", 
+					"[ Level 150+ ] Nightmare",
+					"[ Level 200+ ] Hell",
+					"[ Level 240+ ] ^ff0000Torment^000000"
+				);
+				$ENDLESSMODE[getcharid(1)] = .@level_mode;
+				
+				if (.@level_mode == 1 && BaseLevel < 50){ mes "Party Leader needs to be atleast Level 50 to enter."; close; }
+				else if (.@level_mode == 2 && BaseLevel < 100){ mes "Party Leader needs to be atleast Level 100 to enter."; close; }
+				else if (.@level_mode == 3 && BaseLevel < 150){ mes "Party Leader needs to be atleast Level 150 to enter."; close; }
+				else if (.@level_mode == 4 && BaseLevel < 200){ mes "Party Leader needs to be atleast Level 200 to enter."; close; }
+				else if (.@level_mode == 5 && BaseLevel < 240){ mes "Party Leader needs to be atleast Level 240 to enter."; close; }	
+				
+				setarray .@modes$[1],"Normal Mode","Veteran Mode","Nightmare Mode","Hell Mode","Torment Mode";
+				.@modez$ = .@modes$[.@level_mode];				
+				announce "The party [ "+ getpartyname(.@party_id) +" ] has registered Endless Tower on " + .@modez$ + ".",bc_all;
+				instance_create("Endless Tower");
 				close;
+//=============================================================	
 			case 2:
 				callsub L_Enter,0,1;
 			case 3:
-				mes "I will move you to Alberta.";
+				mes "I will move you to Prontera.";
 				close2;
-				warp "alberta",223,36;
+				warp "prontera",156,186;
 				end;
 			case 4:
 				close;
 			}
 		}
-		switch(select("Enter the "+.@md_name$+":Return to Alberta:Cancel")) {
+		switch(select("Enter the "+.@md_name$+":Return to Prontera:Cancel")) {
 		case 1:
-			callsub L_Enter,1,1;
+			callsub L_Enter,0,1,1;
 		case 2:
-			mes "I will move you to Alberta.";
+			mes "I will move you to Prontera.";
 			close2;
-			warp "alberta",223,36;
+			warp "prontera",156,186;
 			end;
 		case 3:
 			end;
@@ -257,19 +318,20 @@ e_tower,81,105,0	script	Tower Protection Stone	406,{
 		if (.@etower_timer2 < 2 && getcharid(1) == etower_partyid) {
 			mes "If you have the dungeon generated already, you can enter it. ";
 			next;
-			switch(select("Enter the "+.@md_name$+":Return to Alberta:Cancel")) {
+			switch(select("Enter the "+.@md_name$+":Return to Prontera:Cancel")) {
 			case 1:
 				callsub L_Enter,0,0;
 			case 2:
-				mes "I will move you to Alberta.";
+				mes "I will move you to Prontera.";
 				close2;
-				warp "alberta",223,36;
+				warp "prontera",156,186;
 				end;
 			case 3:
 				close;
 			}
-		} else {
-			set .@dun_lim_time,etower_timer+604800; // 1 week
+		}
+		else {
+			set .@dun_lim_time,etower_timer+1; // 1 week
 			// set .@dun_lim_time2,etower_timer+14400; // 4 hours
 			set .@dun_cur_time,gettimetick(2);
 			set .@dun_ent_t,(.@dun_lim_time - .@dun_cur_time);
@@ -279,9 +341,9 @@ e_tower,81,105,0	script	Tower Protection Stone	406,{
 
 			mes "Due to the tower's aftereffects, you cannot enter the dungeon right now, " + .@dun_h + "hours " + .@dun_m + "minutes " + .@dun_s + "seconds left to enter the next dungeon.";
 			next;
-			mes "It is dangerous here. Let me move you to Alberta.";
+			mes "It is dangerous here. Let me move you to Prontera.";
 			close2;
-			warp "alberta",223,36;
+			warp "prontera",156,186;
 			end;
 		}
 	case 2:
@@ -293,7 +355,9 @@ e_tower,81,105,0	script	Tower Protection Stone	406,{
 	}
 
 L_Enter:
-	switch(instance_enter("Endless Tower")) {
+	set .@party_id,getcharid(1);
+	addrid(2,0,.@party_id);
+	switch(instance_enter("Endless Tower",-1,-1,getcharid(0),instance_id(IM_PARTY))) {
 	case IE_OTHER:
 		mes "An unknown error has occurred.";
 		close;
@@ -305,16 +369,16 @@ L_Enter:
 		mes "You can enter the dungeon after making the party.";
 		close;
 	case IE_OK:
-		mapannounce "e_tower", strcharinfo(0) +" of the party, "+ getpartyname( getcharid(1) ) +", is entering the dungeon, Endless Tower.",bc_map,"0x00ff99",FW_NORMAL,12;
-		if (getarg(1)) {
+		//if (getarg(1)) {
 			set etower_timer,gettimetick(2);
 			set etower_partyid, getcharid(1);
 			setquest 60200;
 			setquest 60201;
-		}
+		//}
+		//warpparty instance_mapname("1@tower"),52,354,getcharid(1);
 		//warp "1@tower",52,354;
-		if (getarg(0) == 0) close;
-		else end;
+		//if (getarg(0) == 0) close;
+		end;
 	}
 }
 
@@ -322,12 +386,12 @@ e_tower,30,30,2	script	Huge Vortex	844,2,2,{
 	end;
 OnTouch:
 	mapannounce "e_tower","[ " + strcharinfo(0) + " ], seems to be engulfed by a huge vortex",bc_map,"0x00ff99",FW_NORMAL,12;
-	warp "alberta",223,36;
+	warp "prontera",156,186;
 	end;
 }
 
 // Original name: "#102Administrator Mode104"
-e_tower,1,1,2	script	#102Administrator Mode	844,{
+e_tower,0,0,2	script	#102Administrator Mode	844,{
 	callfunc "F_GM_NPC";
 	mes "Please enter the password";
 	set .@i, callfunc("F_GM_NPC","dmc2008",1);
@@ -392,7 +456,194 @@ e_tower,151,185,4	script	Purification Stone#et2	844,{
 	warp "e_tower",75,108;
 	end;
 }
+// Difficulty Function
+//============================================================
+function	script	F_Tower_Monster_Summon	{
+	.@map$ = getarg(0, "");
+	.@x1 = getarg(1, 0);
+	.@y1 = getarg(2, 0);
+	.@x2 = getarg(3, 0);
+	.@y2 = getarg(4, 0);
+	.@mob_name$ = getarg(5, "");
+	.@mob_id = getarg(6, 0);
+	.@amount = getarg(7, 0);
+	.@label$ = getarg(8, "");
 
+	switch('level_mode){
+		case 1://Normal
+			.@bonus_hp_rate += 0;
+			.@bonus_dmg_rate += 0;
+			.@bonus_damagetaken += 0;
+			.@bonus_def += 0;
+			.@bonus_mdef += 0;
+			.@bonus_hit += 0;			
+			.@bonus_flee += 0;
+			break;
+		case 2://Veteran
+			.@bonus_hp_rate += 25;
+			.@bonus_dmg_rate += 25;
+			.@bonus_damagetaken += -10;
+			.@bonus_def += 25;
+			.@bonus_mdef += 25;
+			.@bonus_hit += 25;
+			.@bonus_flee += 25;
+			break;
+		case 3://Nightmare
+			.@bonus_hp_rate += 50;
+			.@bonus_dmg_rate += 50;
+			.@bonus_damagetaken += -20;
+			.@bonus_def += 50;
+			.@bonus_mdef += 50;
+			.@bonus_hit += 50;
+			.@bonus_flee += 50;
+			break;
+		case 4://Hell
+			.@bonus_hp_rate += 100;
+			.@bonus_dmg_rate += 100;
+			.@bonus_damagetaken += -30;
+			.@bonus_def += 100;
+			.@bonus_mdef += 100;
+			.@bonus_hit += 100;			
+			.@bonus_flee += 100;			
+			break;
+		case 5://Torment
+			.@bonus_hp_rate += 200;
+			.@bonus_dmg_rate += 200;
+			.@bonus_damagetaken += -40;
+			.@bonus_def += 200;
+			.@bonus_mdef += 200;
+			.@bonus_hit += 200;			
+			.@bonus_flee += 200;				
+			break;
+	}
+	deletearray $@mobid,getarraysize($@mobid);
+	areamonster .@map$, .@x1, .@y1, .@x2, .@y2, .@mob_name$, .@mob_id, .@amount, .@label$;
+	copyarray .@GID, $@mobid, getarraysize($@mobid);
+	if(!.@bonus_hp_rate&& !.@bonus_dmg_rate&& !.@bonus_damagetaken&& !.@bonus_def&& !.@bonus_mdef&& !.@bonus_hit&& !.@bonus_flee)
+		return;
+	getunitdata .@GID, .@ST;
+
+	if(.@bonus_hp_rate){
+		.@HP = .@ST[UMOB_MAXHP] + ((.@ST[UMOB_MAXHP] * .@bonus_hp_rate ) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){			
+			setunitdata(.@GID[.@i], UMOB_MAXHP, .@HP);
+			setunitdata(.@GID[.@i], UMOB_HP, .@HP);
+		}
+	}
+	if(.@bonus_dmg_rate){
+		.@ATKMIN = .@ST[UMOB_ATKMIN] + ((.@ST[UMOB_ATKMIN] * .@bonus_dmg_rate) /100);
+		.@ATKMAX = .@ST[UMOB_ATKMAX] + ((.@ST[UMOB_ATKMAX] * .@bonus_dmg_rate) /100);
+		.@MATKMIN = .@ST[UMOB_MATKMIN] + ((.@ST[UMOB_MATKMIN] * .@bonus_dmg_rate) /100);
+		.@MATKMAX = .@ST[UMOB_MATKMAX] + ((.@ST[UMOB_MATKMAX] * .@bonus_dmg_rate) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){
+			setunitdata(.@GID[.@i], UMOB_ATKMIN, .@ATKMIN);
+			setunitdata(.@GID[.@i], UMOB_ATKMAX, .@ATKMAX);
+			setunitdata(.@GID[.@i], UMOB_MATKMIN, .@MATKMIN);
+			setunitdata(.@GID[.@i], UMOB_MATKMAX, .@MATKMAX);
+		}
+	}
+	if(.@bonus_damagetaken){
+		.@DAMAGETAKEN = .@ST[UMOB_DAMAGETAKEN] + ((.@ST[UMOB_DAMAGETAKEN] * .@bonus_damagetaken) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){		
+			setunitdata(.@GID[.@i], UMOB_DAMAGETAKEN, .@DAMAGETAKEN);
+		}
+	}
+	if(.@bonus_def){
+		.@DEF = .@ST[UMOB_DEF] + ((.@ST[UMOB_DEF] * .@bonus_def) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){		
+			setunitdata(.@GID[.@i], UMOB_DEF, .@DEF);
+		}
+	}	
+	if(.@bonus_mdef){
+		.@MDEF = .@ST[UMOB_MDEF] + ((.@ST[UMOB_MDEF] * .@bonus_mdef) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){		
+			setunitdata(.@GID[.@i], UMOB_MDEF, .@MDEF);
+		}
+	}
+	if(.@bonus_hit){
+		.@HIT = .@ST[UMOB_HIT] + ((.@ST[UMOB_HIT] * .@bonus_hit) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){		
+			setunitdata(.@GID[.@i], UMOB_HIT, .@HIT);
+		}
+	}		
+	if(.@bonus_flee){
+		.@FLEE = .@ST[UMOB_FLEE] + ((.@ST[UMOB_FLEE] * .@bonus_flee) /100);
+		for(.@i=0;.@i<getarraysize(.@GID);.@i++){		
+			setunitdata(.@GID[.@i], UMOB_FLEE, .@FLEE);
+		}
+	}
+	return;
+}
+// Reward Function
+//============================================================
+function	script	F_Tower_Reward	{
+	setarray .@md_points[1],1,3,6,12,24;
+	setarray .@modes$[1],"Easy Mode","Veteran Mode","Nightmare Mode","Hell Mode","Torment Mode";
+	setarray .@item[1],12412,12412,12412,12412,12412;
+
+	'md_points = .@md_points['level_mode];
+	'modez$ = .@modes$['level_mode];
+	'party_id = instance_live_info(ILI_OWNER);
+	
+	getpartymember 'party_id, 1;
+	getpartymember 'party_id, 2;
+	'map$ = instance_mapname("6@tower");
+	copyarray .@CID,$@partymembercid,$@partymembercount;
+	copyarray .@AID,$@partymemberaid,$@partymembercount;
+	for(.@i=0;.@i<getarraysize(.@CID);.@i++){
+		if(isloggedin(.@AID[.@i],.@CID[.@i])){
+			if(strcharinfo(3,.@CID[.@i]) == 'map$){
+				set(#MEMORIALDUNGEONPOINTS,(getvar(#MEMORIALDUNGEONPOINTS,.@CID[.@i]) + 'md_points),.@CID[.@i]);
+				announce "The party [ "+ getpartyname('party_id) +" ] has defeated Endless Tower on " + 'modez$ + ".",bc_all;
+				message strcharinfo(0,.@CID[.@i]),"You've been granted " + 'md_points + " Memorial Dungeon Points.";
+				message strcharinfo(0,.@CID[.@i]),"You now have " + getvar(#MEMORIALDUNGEONPOINTS,.@CID[.@i]) + " Memorial Dungeon Points";
+				getitem .@item['level_mode],1,.@AID[.@i];
+			}
+		}
+	}
+	return;
+}
+// Exp Reward Function
+//============================================================
+function	script	F_Tower_Exp	{
+	setarray .@bonusExp[1],10,20,40,80,100;
+	'bonuzExp = .@bonusExp['level_mode];
+	set BaseExp, BaseExp + (getmonsterinfo(killedrid,3) * 'bonuzExp);
+	set JobExp, JobExp + (getmonsterinfo(killedrid,4) * 'bonuzExp);	
+return;
+}
+// Drops Reward Function
+//============================================================
+function	script	F_Tower_Drop	{
+	setarray .@bonusDrop[1],2,4,6,8,10;
+	set .@bonus, .@bonusDrop['level_mode];
+	set .@map$, getarg(0);
+
+	getmapxy(.@map$, .@x, .@y);
+	getmobdrops(killedrid);
+	set .@mc, $@MobDrop_count;
+	copyarray .@mi, $@MobDrop_item, .@mc;
+	copyarray .@mr, $@MobDrop_rate, .@mc;
+
+	for (set .@i, 0; .@i < .@mc; set .@i, .@i + 1) {
+		set .@dropChance, .@mr[.@i] + .@bonus;
+		if (rand(1, 100) <= .@dropChance) {
+			setarray .@items[getarraysize(.@items)], .@mi[.@i];
+		}
+	}
+
+	set .@d, getarraysize(.@items);
+
+	if (.@d) {
+		for (set .@j, 0; .@j < .@d; set .@j, .@j + 1) {
+			set .@item, .@items[.@j];
+
+			makeitem .@item, 1, .@map$, .@x, .@y, 2048;
+
+		}
+	}
+return;
+}
 // Core Functions
 //============================================================
 function	script	F_Tower_Monster	{
@@ -403,676 +654,682 @@ function	script	F_Tower_Monster	{
 
 	switch(.@level) {
 	case 1:
-		areamonster .@map$,7,351,17,387,"Metaling",1613,15,.@label$;
-		areamonster .@map$,7,351,17,387,"Marin",1242,5,.@label$;
-		areamonster .@map$,7,351,17,387,"Poporing",1031,5,.@label$;
-		areamonster .@map$,7,351,17,387,"Drops",1113,5,.@label$;
-		areamonster .@map$,7,351,17,387,"Mastering",1090,1,.@label$;
-		areamonster .@map$,7,351,17,387,"Poring",1002,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,7,351,17,387,"Metaling",1613,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,7,351,17,387,"Marin",1242,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,7,351,17,387,"Poporing",1031,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,7,351,17,387,"Drops",1113,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,7,351,17,387,"Mastering",1090,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,7,351,17,387,"Poring",1002,5,.@label$);
 		break;
 	case 2:
-		areamonster .@map$,93,351,103,387,"Desert Wolf",1106,20,.@label$;
-		areamonster .@map$,93,351,103,387,"Vagabond Wolf",1092,1,.@label$;
-		areamonster .@map$,93,351,103,387,"Baby Desert Wolf",1107,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Desert Wolf",1106,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Vagabond Wolf",1092,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Baby Desert Wolf",1107,10,.@label$);
 		break;
 	case 3:
-		areamonster .@map$,181,351,191,387,"Archer Skeleton",1016,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Skel Worker",1169,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Soldier Skeleton",1028,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Orc Skeleton",1152,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Pirate Skeleton",1071,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Skeleton",1076,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Archer Skeleton",1016,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Skel Worker",1169,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Soldier Skeleton",1028,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Orc Skeleton",1152,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Pirate Skeleton",1071,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Skeleton",1076,5,.@label$);
 		break;
 	case 4:
-		areamonster .@map$,267,351,277,387,"Argiope",1099,15,.@label$;
-		areamonster .@map$,267,351,277,387,"Mantis",1139,5,.@label$;
-		areamonster .@map$,267,351,277,387,"Argos",1100,5,.@label$;
-		areamonster .@map$,267,351,277,387,"Vocal",1088,1,.@label$;
-		areamonster .@map$,267,351,277,387,"Rocker",1052,5,.@label$;
-		areamonster .@map$,267,351,277,387,"Hornet",1004,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Argiope",1099,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Mantis",1139,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Argos",1100,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Vocal",1088,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Rocker",1052,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Hornet",1004,5,.@label$);
 		break;
 	case 5:
-		areamonster .@map$,352,351,362,387,"Golden Thief Bug",1086,1,.@label$;
-		areamonster .@map$,352,351,362,387,"Thief Bug Male",1054,15,.@label$;
-		areamonster .@map$,352,351,362,387,"Thief Bug Female",1053,15,.@label$;
-		areamonster .@map$,352,351,362,387,"Thief Bug",1051,15,.@label$;
-		areamonster .@map$,352,351,362,387,"Thief Bug Egg",1048,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Golden Thief Bug",1086,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Thief Bug Male",1054,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Thief Bug Female",1053,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Thief Bug",1051,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Thief Bug Egg",1048,5,.@label$);
 		break;
 	case 6:
-		areamonster .@map$,9,267,19,303,"Dragon Egg",1721,5,.@label$;
-		areamonster .@map$,9,267,19,303,"Thief Bug Egg",1048,5,.@label$;
-		areamonster .@map$,9,267,19,303,"Ant Egg",1097,5,.@label$;
-		areamonster .@map$,9,267,19,303,"Pupa",1008,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Dragon Egg",1721,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Thief Bug Egg",1048,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Ant Egg",1097,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Pupa",1008,5,.@label$);
 		break;
 	case 7:
-		areamonster .@map$,93,267,103,303,"Explosion",1383,15,.@label$;
-		areamonster .@map$,93,267,103,303,"Drainliar",1111,15,.@label$;
-		areamonster .@map$,93,267,103,303,"Anopheles",1627,15,.@label$;
-		areamonster .@map$,93,267,103,303,"Farmiliar",1005,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Explosion",1383,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Drainliar",1111,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Anopheles",1627,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Farmiliar",1005,15,.@label$);
 		break;
 	case 8:
-		areamonster .@map$,181,267,191,303,"Firelock Soldier",1403,15,.@label$;
-		areamonster .@map$,181,267,191,303,"Cruiser",1248,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Firelock Soldier",1403,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Cruiser",1248,15,.@label$);
 		break;
 	case 9:
-		areamonster .@map$,267,267,277,303,"Obsidian",1615,15,.@label$;
-		areamonster .@map$,267,267,277,303,"Golem",1040,15,.@label$;
-		areamonster .@map$,267,267,277,303,"Stapo",1784,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Obsidian",1615,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Golem",1040,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Stapo",1784,10,.@label$);
 		break;
 	case 10:
-		areamonster .@map$,352,267,362,303,"Mistress",1059,1,.@label$;
-		areamonster .@map$,352,267,362,303,"Giant Hornet",1303,25,.@label$;
-		areamonster .@map$,352,267,362,303,"Hornet",1004,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Mistress",1059,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Giant Hornet",1303,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Hornet",1004,20,.@label$);
 		break;
 	case 11:
-		areamonster .@map$,9,180,19,216,"Dryad",1493,15,.@label$;
-		areamonster .@map$,9,180,19,216,"Parasite",1500,15,.@label$;
-		areamonster .@map$,9,180,19,216,"Hermit Plant",1413,15,.@label$;
-		areamonster .@map$,9,180,19,216,"Rafflesia",1162,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Dryad",1493,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Parasite",1500,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Hermit Plant",1413,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Rafflesia",1162,5,.@label$);
 		break;
 	case 12:
-		areamonster .@map$,93,180,103,216,"Demon Pungus",1378,25,.@label$;
-		areamonster .@map$,93,180,103,216,"Punk",1199,25,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Demon Pungus",1378,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Punk",1199,25,.@label$);
 		break;
 	case 13:
-		areamonster .@map$,181,180,191,216,"Yao Yun",1512,15,.@label$;
-		areamonster .@map$,181,180,191,216,"Bongunn",1188,15,.@label$;
-		areamonster .@map$,181,180,191,216,"Munak",1026,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Yao Yun",1512,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Bongunn",1188,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Munak",1026,10,.@label$);
 		break;
 	case 14:
-		areamonster .@map$,267,180,277,216,"High Orc",1213,15,.@label$;
-		areamonster .@map$,267,180,277,216,"Orc Archer",1189,10,.@label$;
-		areamonster .@map$,267,180,277,216,"Orc Lady",1273,10,.@label$;
-		areamonster .@map$,267,180,277,216,"Orc Warrior",1023,5,.@label$;
-		areamonster .@map$,267,180,277,216,"Orc Baby",1686,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"High Orc",1213,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Orc Archer",1189,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Orc Lady",1273,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Orc Warrior",1023,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Orc Baby",1686,5,.@label$);
 		break;
 	case 15:
-		areamonster .@map$,352,180,362,216,"Maya",1147,1,.@label$;
-		areamonster .@map$,352,180,362,216,"Phreeoni",1159,1,.@label$;
-		areamonster .@map$,352,180,362,216,"Deniro",1105,15,.@label$;
-		areamonster .@map$,352,180,362,216,"Pierre",1160,15,.@label$;
-		areamonster .@map$,352,180,362,216,"Andre",1095,15,.@label$;
-		areamonster .@map$,352,180,362,216,"Ant Egg",1097,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Maya",1147,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Phreeoni",1159,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Deniro",1105,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Pierre",1160,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Andre",1095,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Ant Egg",1097,5,.@label$);
 		break;
 	case 16:
-		areamonster .@map$,9,96,19,132,"Raydric Archer",1276,10,.@label$;
-		areamonster .@map$,9,96,19,132,"Orc Archer",1189,10,.@label$;
-		areamonster .@map$,9,96,19,132,"Gargoyle",1253,10,.@label$;
-		areamonster .@map$,9,96,19,132,"Archer Skeleton",1016,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Raydric Archer",1276,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Orc Archer",1189,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Gargoyle",1253,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Archer Skeleton",1016,10,.@label$);
 		break;
 	case 17:
-		areamonster .@map$,93,96,103,132,"Merman",1264,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Baphomet Jr.",1101,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Strouf",1065,15,.@label$;
-		areamonster .@map$,93,96,103,132,"Hill Wind",1629,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Merman",1264,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Baphomet Jr.",1101,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Strouf",1065,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Hill Wind",1629,5,.@label$);
 		break;
 	case 18:
-		areamonster .@map$,181,96,191,132,"Cramp",1209,25,.@label$;
-		areamonster .@map$,181,96,191,132,"Tarou",1175,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Cramp",1209,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Tarou",1175,15,.@label$);
 		break;
 	case 19:
-		areamonster .@map$,267,96,277,132,"Deviace",1108,10,.@label$;
-		areamonster .@map$,267,96,277,132,"Megalodon",1064,10,.@label$;
-		areamonster .@map$,267,96,277,132,"Swordfish",1069,10,.@label$;
-		areamonster .@map$,267,96,277,132,"Phen",1158,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Deviace",1108,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Megalodon",1064,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Swordfish",1069,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Phen",1158,10,.@label$);
 		break;
 	case 20:
-		areamonster .@map$,352,96,362,132,"Drake",1112,1,.@label$;
-		areamonster .@map$,352,96,362,132,"Pirate Skeleton",1071,50,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Drake",1112,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Pirate Skeleton",1071,50,.@label$);
 		break;
 	case 21:
-		areamonster .@map$,9,9,19,45,"Plasma",1693,10,.@label$;
-		areamonster .@map$,9,9,19,45,"Plasma",1696,10,.@label$;
-		areamonster .@map$,9,9,19,45,"Plasma",1695,5,.@label$;
-		areamonster .@map$,9,9,19,45,"Plasma",1697,5,.@label$;
-		areamonster .@map$,9,9,19,45,"Plasma",1694,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Plasma",1693,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Plasma",1696,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Plasma",1695,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Plasma",1697,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Plasma",1694,5,.@label$);
 		break;
 	case 22:
-		areamonster .@map$,93,9,103,45,"Muscipular",1780,15,.@label$;
-		areamonster .@map$,93,9,103,45,"Drosera",1781,15,.@label$;
-		areamonster .@map$,93,9,103,45,"Flora",1118,15,.@label$;
-		areamonster .@map$,93,9,103,45,"Hydra",1068,15,.@label$;
-		areamonster .@map$,93,9,103,45,"Mandragora",1020,10,.@label$;
-		areamonster .@map$,93,9,103,45,"Rafflesia",1162,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Muscipular",1780,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Drosera",1781,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Flora",1118,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Hydra",1068,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Mandragora",1020,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Rafflesia",1162,10,.@label$);
 		break;
 	case 23:
-		areamonster .@map$,181,9,191,45,"Penomena",1216,15,.@label$;
-		areamonster .@map$,181,9,191,45,"Obeaune",1044,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Marse",1144,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Swordfish",1069,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Hydra",1068,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Penomena",1216,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Obeaune",1044,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Marse",1144,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Swordfish",1069,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Hydra",1068,5,.@label$);
 		break;
 	case 24:
-		areamonster .@map$,267,9,277,45,"Joker",1131,15,.@label$;
-		areamonster .@map$,267,9,277,45,"Carat",1267,15,.@label$;
-		areamonster .@map$,267,9,277,45,"Jakk",1130,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Joker",1131,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Carat",1267,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Jakk",1130,10,.@label$);
 		break;
 	case 25:
-		areamonster .@map$,352,9,362,45,"Cat o' Nine Tails",1307,15,.@label$;
-		areamonster .@map$,352,9,362,45,"Moonlight",1150,1,.@label$;
-		areamonster .@map$,352,9,362,45,"Nine Tail",1180,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Cat o' Nine Tails",1307,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Moonlight",1150,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Nine Tail",1180,15,.@label$);
 		break;
 	case 26:
-		areamonster .@map$,9,351,19,387,"Gibbet",1503,10,.@label$;
-		areamonster .@map$,9,351,19,387,"Enchanted Peach Tree",1410,10,.@label$;
-		areamonster .@map$,9,351,19,387,"Wooden Golem",1497,10,.@label$;
-		areamonster .@map$,9,351,19,387,"Stone Shooter",1495,10,.@label$;
-		areamonster .@map$,9,351,19,387,"Elder Willow",1033,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Gibbet",1503,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Enchanted Peach Tree",1410,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Wooden Golem",1497,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Stone Shooter",1495,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Elder Willow",1033,5,.@label$);
 		break;
 	case 27:
-		areamonster .@map$,93,351,103,387,"Goblin Archer",1258,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Goblin",1122,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Goblin",1123,5,.@label$;
-		areamonster .@map$,93,351,103,387,"Goblin",1124,5,.@label$;
-		areamonster .@map$,93,351,103,387,"Gobin",1125,5,.@label$;
-		areamonster .@map$,93,351,103,387,"Goblin",1126,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Goblin Archer",1258,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Goblin",1122,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Goblin",1123,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Goblin",1124,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Gobin",1125,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Goblin",1126,5,.@label$);
 		break;
 	case 28:
-		areamonster .@map$,181,351,191,387,"Arclouse",1194,30,.@label$;
-		areamonster .@map$,181,351,191,387,"Neraid",1255,15,.@label$;
-		areamonster .@map$,181,351,191,387,"Pest",1256,15,.@label$;
-		areamonster .@map$,181,351,191,387,"Kukre",1070,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Arclouse",1194,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Neraid",1255,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Pest",1256,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Kukre",1070,10,.@label$);
 		break;
 	case 29:
-		areamonster .@map$,267,351,277,387,"Dark Frame",1260,10,.@label$;
-		areamonster .@map$,267,351,277,387,"The Paper",1375,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Hylozoist",1510,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Quve",1508,5,.@label$;
-		areamonster .@map$,267,351,277,387,"Lude",1509,5,.@label$;
-		areamonster .@map$,267,351,277,387,"Whisper",1179,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Dark Frame",1260,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"The Paper",1375,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Hylozoist",1510,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Quve",1508,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Lude",1509,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Whisper",1179,10,.@label$);
 		break;
 	case 30:
-		areamonster .@map$,352,351,362,387,"White Lady",1630,1,.@label$;
-		areamonster .@map$,352,351,362,387,"Evil Nymph",1416,30,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"White Lady",1630,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Evil Nymph",1416,30,.@label$);
 		break;
 	case 31:
-		areamonster .@map$,9,267,19,303,"Gig",1387,20,.@label$;
-		areamonster .@map$,9,267,19,303,"Iron Fist",1212,15,.@label$;
-		areamonster .@map$,9,267,19,303,"Argiope",1099,10,.@label$;
-		areamonster .@map$,9,267,19,303,"Scorpion",1001,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Gig",1387,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Iron Fist",1212,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Argiope",1099,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Scorpion",1001,5,.@label$);
 		break;
 	case 32:
-		areamonster .@map$,93,267,103,303,"Goblin Leader",1299,1,.@label$;
-		areamonster .@map$,93,267,103,303,"Goblin Archer",1258,10,.@label$;
-		areamonster .@map$,93,267,103,303,"Goblin",1122,10,.@label$;
-		areamonster .@map$,93,267,103,303,"Goblin",1123,5,.@label$;
-		areamonster .@map$,93,267,103,303,"Goblin",1124,5,.@label$;
-		areamonster .@map$,93,267,103,303,"Goblin",1125,5,.@label$;
-		areamonster .@map$,93,267,103,303,"Goblin",1126,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin Leader",1299,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin Archer",1258,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin",1122,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin",1123,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin",1124,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin",1125,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Goblin",1126,5,.@label$);
 		break;
 	case 33:
-		areamonster .@map$,181,267,191,303,"Kobold Leader",1296,1,.@label$;
-		areamonster .@map$,181,267,191,303,"Kobold",1133,15,.@label$;
-		areamonster .@map$,181,267,191,303,"Kobold_Archer",1282,15,.@label$;
-		areamonster .@map$,181,267,191,303,"Kobold",1134,10,.@label$;
-		areamonster .@map$,181,267,191,303,"Kobold",1135,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Kobold Leader",1296,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Kobold",1133,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Kobold_Archer",1282,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Kobold",1134,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Kobold",1135,5,.@label$);
 		break;
 	case 34:
-		areamonster .@map$,267,267,277,303,"Flame Skull",1869,20,.@label$;
-		areamonster .@map$,267,267,277,303,"Whisper",1179,10,.@label$;
-		areamonster .@map$,267,267,277,303,"Giant Whisper",1186,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Flame Skull",1869,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Whisper",1179,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Giant Whisper",1186,10,.@label$);
 		break;
 	case 35:
-		areamonster .@map$,352,267,362,303,"Turtle General",1312,1,.@label$;
-		areamonster .@map$,352,267,362,303,"Freezer",1319,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Solider",1316,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Heater",1318,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Permeter",1314,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Turtle General",1312,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Freezer",1319,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Solider",1316,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Heater",1318,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Permeter",1314,10,.@label$);
 		break;
 	case 36:
-		areamonster .@map$,9,180,19,216,"Anolian",1206,30,.@label$;
-		areamonster .@map$,9,180,19,216,"Grove",1687,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Alligator",1271,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Anolian",1206,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Grove",1687,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Alligator",1271,10,.@label$);
 		break;
 	case 37:
-		areamonster .@map$,93,180,103,216,"Clock Tower Manager",1270,10,.@label$;
-		areamonster .@map$,93,180,103,216,"Clock",1269,10,.@label$;
-		areamonster .@map$,93,180,103,216,"Alarm",1193,30,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Clock Tower Manager",1270,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Clock",1269,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Alarm",1193,30,.@label$);
 		break;
 	case 38:
-		areamonster .@map$,181,180,191,216,"Death Word",1698,25,.@label$;
-		areamonster .@map$,181,180,191,216,"Rideword",1195,25,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Death Word",1698,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Rideword",1195,25,.@label$);
 		break;
 	case 39:
-		areamonster .@map$,267,180,277,216,"Evil Nymph",1416,10,.@label$;
-		areamonster .@map$,267,180,277,216,"Mao Gui",1513,10,.@label$;
-		areamonster .@map$,267,180,277,216,"Taoist Hermit",1412,10,.@label$;
-		areamonster .@map$,267,180,277,216,"Zhu Po Long",1514,10,.@label$;
-		areamonster .@map$,267,180,277,216,"Jin Guai",1517,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Evil Nymph",1416,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Mao Gui",1513,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Taoist Hermit",1412,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Zhu Po Long",1514,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Jin Guai",1517,5,.@label$);
 		break;
 	case 40:
-		areamonster .@map$,352,180,362,216,"Samurai Specter",1492,1,.@label$;
-		areamonster .@map$,352,180,362,216,"Shinobi",1401,10,.@label$;
-		areamonster .@map$,352,180,362,216,"Tengu",1405,10,.@label$;
-		areamonster .@map$,352,180,362,216,"Firelock Soldier",1403,5,.@label$;
-		areamonster .@map$,352,180,362,216,"Miyabi Doll",1404,10,.@label$;
-		areamonster .@map$,352,180,362,216,"Karakasa",1400,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Samurai Specter",1492,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Shinobi",1401,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Tengu",1405,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Firelock Soldier",1403,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Miyabi Doll",1404,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Karakasa",1400,5,.@label$);
 		break;
 	case 41:
-		areamonster .@map$,9,96,19,132,"Kraben",1587,50,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Kraben",1587,50,.@label$);
 		break;
 	case 42:
-		areamonster .@map$,93,96,103,132,"Sleeper",1386,20,.@label$;
-		areamonster .@map$,93,96,103,132,"Sting",1207,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Mi Gao",1516,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Sandman",1165,5,.@label$;
-		areamonster .@map$,93,96,103,132,"Hode",1127,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Sleeper",1386,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Sting",1207,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Mi Gao",1516,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Sandman",1165,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Hode",1127,5,.@label$);
 		break;
 	case 43:
-		areamonster .@map$,181,96,191,132,"Medusa",1148,10,.@label$;
-		areamonster .@map$,181,96,191,132,"Sidewinder",1037,40,.@label$;
-		areamonster .@map$,181,96,191,132,"Anacondaq",1030,5,.@label$;
-		areamonster .@map$,181,96,191,132,"Boa",1025,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Medusa",1148,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Sidewinder",1037,40,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Anacondaq",1030,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Boa",1025,5,.@label$);
 		break;
 	case 44:
-		areamonster .@map$,267,96,277,132,"Hatii Baby",1515,20,.@label$;
-		areamonster .@map$,267,96,277,132,"Baphomet Jr.",1101,20,.@label$;
-		areamonster .@map$,267,96,277,132,"Orc Baby",1686,1,.@label$;
-		areamonster .@map$,267,96,277,132,"Baby Desert Wolf",1107,10,.@label$;
-		areamonster .@map$,267,96,277,132,"Savage Babe",1167,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Hatii Baby",1515,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Baphomet Jr.",1101,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Orc Baby",1686,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Baby Desert Wolf",1107,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Savage Babe",1167,10,.@label$);
 		break;
 	case 45:
-		areamonster .@map$,352,96,362,132,"Osiris",1038,1,.@label$;
-		areamonster .@map$,352,96,362,132,"Ancient Mummy",1297,15,.@label$;
-		areamonster .@map$,352,96,362,132,"Verit",1032,15,.@label$;
-		areamonster .@map$,352,96,362,132,"Mummy",1041,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Osiris",1038,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Ancient Mummy",1297,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Verit",1032,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Mummy",1041,20,.@label$);
 		break;
 	case 46:
-		areamonster .@map$,9,9,19,45,"Seeker",1774,20,.@label$;
-		areamonster .@map$,9,9,19,45,"Beholder",1633,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Seeker",1774,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Beholder",1633,20,.@label$);
 		break;
 	case 47:
-		areamonster .@map$,93,9,103,45,"Deleter",1384,20,.@label$;
-		areamonster .@map$,93,9,103,45,"Deleter",1385,10,.@label$;
-		areamonster .@map$,93,9,103,45,"Petite",1156,10,.@label$;
-		areamonster .@map$,93,9,103,45,"Petite",1155,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Deleter",1384,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Deleter",1385,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Petite",1156,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Petite",1155,10,.@label$);
 		break;
 	case 48:
-		areamonster .@map$,181,9,191,45,"Ancient Worm",1305,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Ancient Mummy",1297,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Ancient Mimic",1699,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Ancient Worm",1305,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Ancient Mummy",1297,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Ancient Mimic",1699,10,.@label$);
 		break;
 	case 49:
-		areamonster .@map$,267,9,277,45,"Grizzly",1381,20,.@label$;
-		areamonster .@map$,267,9,277,45,"Leib Olmai",1306,7,.@label$;
-		areamonster .@map$,267,9,277,45,"Zipper Bear",1417,5,.@label$;
-		areamonster .@map$,267,9,277,45,"Sasquatch",1243,5,.@label$;
-		areamonster .@map$,267,9,277,45,"Bigfoot",1060,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Grizzly",1381,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Leib Olmai",1306,7,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Zipper Bear",1417,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Sasquatch",1243,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Bigfoot",1060,5,.@label$);
 		break;
 	case 50:
-		areamonster .@map$,352,9,362,45,"Pharaoh",1157,1,.@label$;
-		areamonster .@map$,352,9,362,45,"Amon Ra",1511,1,.@label$;
-		areamonster .@map$,352,9,362,45,"Anubis",1098,10,.@label$;
-		areamonster .@map$,352,9,362,45,"Marduk",1140,10,.@label$;
-		areamonster .@map$,352,9,362,45,"Matyr",1146,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Pharaoh",1157,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Amon Ra",1511,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Anubis",1098,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Marduk",1140,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Matyr",1146,10,.@label$);
 		break;
 	case 51:
-		areamonster .@map$,9,351,19,387,"Mini Demon",1292,20,.@label$;
-		areamonster .@map$,9,351,19,387,"Diabolic",1382,20,.@label$;
-		areamonster .@map$,9,351,19,387,"Deviruchi",1109,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Mini Demon",1292,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Diabolic",1382,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Deviruchi",1109,10,.@label$);
 		break;
 	case 52:
-		areamonster .@map$,93,351,103,387,"Harpy",1376,20,.@label$;
-		areamonster .@map$,93,351,103,387,"Grand Peco",1369,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Bloody Butterfly",1408,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Gargoyle",1253,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Hill Wind",1680,5,.@label$;
-		areamonster .@map$,93,351,103,387,"Hill Wind",1629,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Harpy",1376,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Grand Peco",1369,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Bloody Butterfly",1408,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Gargoyle",1253,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Hill Wind",1680,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Hill Wind",1629,5,.@label$);
 		break;
 	case 53:
-		areamonster .@map$,181,351,191,387,"Assaulter",1315,25,.@label$;
-		areamonster .@map$,181,351,191,387,"Shinobi",1401,30,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Assaulter",1315,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Shinobi",1401,30,.@label$);
 		break;
 	case 54:
-		areamonster .@map$,267,351,277,387,"Chepet",1250,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Mariontte",1143,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Miyabi Doll",1404,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Chepet",1250,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Mariontte",1143,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Miyabi Doll",1404,10,.@label$);
 		break;
 	case 55:
-		areamonster .@map$,352,351,362,387,"Medusa",1148,25,.@label$;
-		areamonster .@map$,352,351,362,387,"Evil Snake Lord",1418,1,.@label$;
-		areamonster .@map$,352,351,362,387,"Isis",1029,15,.@label$;
-		areamonster .@map$,352,351,362,387,"Sidewinder",1037,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Medusa",1148,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Evil Snake Lord",1418,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Isis",1029,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Sidewinder",1037,15,.@label$);
 		break;
 	case 56:
-		areamonster .@map$,9,267,19,303,"Freezer",1319,10,.@label$;
-		areamonster .@map$,9,267,19,303,"Hatii Baby",1515,10,.@label$;
-		areamonster .@map$,9,267,19,303,"Ice Titan",1777,15,.@label$;
-		areamonster .@map$,9,267,19,303,"Snowier",1775,10,.@label$;
-		areamonster .@map$,9,267,19,303,"Gazeti",1778,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Freezer",1319,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Hatii Baby",1515,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Ice Titan",1777,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Snowier",1775,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Gazeti",1778,10,.@label$);
 		break;
 	case 57:
-		areamonster .@map$,93,267,103,303,"Arc Angeling",1388,1,.@label$;
-		areamonster .@map$,93,267,103,303,"Deviling",1582,1,.@label$;
-		areamonster .@map$,93,267,103,303,"Angeling",1096,1,.@label$;
-		areamonster .@map$,93,267,103,303,"Ghostring",1120,1,.@label$;
-		areamonster .@map$,93,267,103,303,"Mastering",1090,1,.@label$;
-		areamonster .@map$,93,267,103,303,"Metaling",1613,25,.@label$;
-		areamonster .@map$,93,267,103,303,"Marin",1242,5,.@label$;
-		areamonster .@map$,93,267,103,303,"Poporing",1031,5,.@label$;
-		areamonster .@map$,93,267,103,303,"Drops",1113,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Arc Angeling",1388,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Deviling",1582,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Angeling",1096,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Ghostring",1120,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Mastering",1090,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Metaling",1613,25,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Marin",1242,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Poporing",1031,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Drops",1113,5,.@label$);
 		break;
 	case 58:
-		areamonster .@map$,181,267,191,303,"Phendark",1202,20,.@label$;
-		areamonster .@map$,181,267,191,303,"Rybio",1201,10,.@label$;
-		areamonster .@map$,181,267,191,303,"Zombie Prisoner",1197,10,.@label$;
-		areamonster .@map$,181,267,191,303,"Skeleton Prisoner",1196,5,.@label$;
-		areamonster .@map$,181,267,191,303,"Injustice",1257,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Phendark",1202,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Rybio",1201,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Zombie Prisoner",1197,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Skeleton Prisoner",1196,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Injustice",1257,5,.@label$);
 		break;
 	case 59:
-		areamonster .@map$,267,267,277,303,"Ancient Mimic",1699,30,.@label$;
-		areamonster .@map$,267,267,277,303,"Mimic",1191,20,.@label$;
-		areamonster .@map$,267,267,277,303,"Mystcase",1249,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Ancient Mimic",1699,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Mimic",1191,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Mystcase",1249,10,.@label$);
 		break;
 	case 60:
-		areamonster .@map$,352,267,362,303,"Egnigem Cenia",1658,1,.@label$;
-		areamonster .@map$,352,267,362,303,"Doppelganger",1046,1,.@label$;
-		areamonster .@map$,352,267,362,303,"Armeyer Dinze",1654,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Wickebine Tres",1653,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Laurell Winder",1657,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Kavach Icarus",1656,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Errende Ebecee",1655,10,.@label$;
-		areamonster .@map$,352,267,362,303,"Egnigem Cenia",1652,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Egnigem Cenia",1658,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Doppelganger",1046,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Armeyer Dinze",1654,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Wickebine Tres",1653,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Laurell Winder",1657,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Kavach Icarus",1656,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Errende Ebecee",1655,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Egnigem Cenia",1652,10,.@label$);
 		break;
 	case 61:
-		areamonster .@map$,9,180,19,216,"Agav",1769,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Echio",1770,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Isilla",1772,5,.@label$;
-		areamonster .@map$,9,180,19,216,"Mobster",1313,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Pasana",1154,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Vanberk",1771,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Agav",1769,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Echio",1770,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Isilla",1772,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Mobster",1313,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Pasana",1154,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Vanberk",1771,5,.@label$);
 		break;
 	case 62:
-		areamonster .@map$,93,180,103,216,"Wanderer",1208,35,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Wanderer",1208,35,.@label$);
 		break;
 	case 63:
-		areamonster .@map$,181,180,191,216,"Ragged Zombie",1865,20,.@label$;
-		areamonster .@map$,181,180,191,216,"Zombie Master",1298,10,.@label$;
-		areamonster .@map$,181,180,191,216,"Zombie Prisoner",1197,5,.@label$;
-		areamonster .@map$,181,180,191,216,"Orc Zombie",1153,5,.@label$;
-		areamonster .@map$,181,180,191,216,"Zombie",1015,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Ragged Zombie",1865,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Zombie Master",1298,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Zombie Prisoner",1197,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Orc Zombie",1153,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Zombie",1015,5,.@label$);
 		break;
 	case 64:
-		areamonster .@map$,267,180,277,216,"Ungoliant",1618,30,.@label$;
-		areamonster .@map$,267,180,277,216,"Ancient Worm",1305,2,.@label$;
-		areamonster .@map$,267,180,277,216,"Caterpillar",1300,2,.@label$;
-		areamonster .@map$,267,180,277,216,"Creamy Fear",1293,2,.@label$;
-		areamonster .@map$,267,180,277,216,"Killer Mantis",1294,2,.@label$;
-		areamonster .@map$,267,180,277,216,"Giant Hornet",1303,2,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Ungoliant",1618,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Ancient Worm",1305,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Caterpillar",1300,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Creamy Fear",1293,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Killer Mantis",1294,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Giant Hornet",1303,2,.@label$);
 		break;
 	case 65:
-		areamonster .@map$,352,180,362,216,"Atros",1785,1,.@label$;
-		areamonster .@map$,352,180,362,216,"Galion",1783,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Atros",1785,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Galion",1783,20,.@label$);
 		break;
 	case 66:
-		areamonster .@map$,9,96,19,132,"Incubus",1374,20,.@label$;
-		areamonster .@map$,9,96,19,132,"Aliot",1736,20,.@label$;
-		areamonster .@map$,9,96,19,132,"Injustice",1257,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Incubus",1374,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Aliot",1736,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Injustice",1257,10,.@label$);
 		break;
 	case 67:
-		areamonster .@map$,93,96,103,132,"Acidus",1716,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Acidus",1713,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Deleter",1384,5,.@label$;
-		areamonster .@map$,93,96,103,132,"Mutant Dragonoid",1262,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Petite",1156,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Acidus",1716,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Acidus",1713,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Deleter",1384,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Mutant Dragonoid",1262,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Petite",1156,5,.@label$);
 		break;
 	case 68:
-		areamonster .@map$,181,96,191,132,"Lava Golem",1366,10,.@label$;
-		areamonster .@map$,181,96,191,132,"Stalactic Golem",1278,10,.@label$;
-		areamonster .@map$,181,96,191,132,"Ice Titan",1777,10,.@label$;
-		areamonster .@map$,181,96,191,132,"Wooden Golem",1497,5,.@label$;
-		areamonster .@map$,181,96,191,132,"Golem",1040,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Lava Golem",1366,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Stalactic Golem",1278,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Ice Titan",1777,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Wooden Golem",1497,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Golem",1040,5,.@label$);
 		break;
 	case 69:
-		areamonster .@map$,267,96,277,132,"Dame of Sentinel",1700,20,.@label$;
-		areamonster .@map$,267,96,277,132,"Mistress of Shelter",1701,10,.@label$;
-		areamonster .@map$,267,96,277,132,"Baroness of Retribution",1702,10,.@label$;
-		areamonster .@map$,267,96,277,132,"Lady Solace",1703,10,.@label$;
-		areamonster .@map$,267,96,277,132,"False Angel",1371,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Dame of Sentinel",1700,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Mistress of Shelter",1701,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Baroness of Retribution",1702,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Lady Solace",1703,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"False Angel",1371,10,.@label$);
 		break;
 	case 70:
-		areamonster .@map$,352,96,362,132,"Orc Hero",1087,1,.@label$;
-		areamonster .@map$,352,96,362,132,"Orc Lord",1190,1,.@label$;
-		areamonster .@map$,352,96,362,132,"Orc Baby",1686,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Orc Hero",1087,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Orc Lord",1190,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Orc Baby",1686,20,.@label$);
 		break;
 	case 71:
-		areamonster .@map$,9,9,19,45,"Succubus",1370,20,.@label$;
-		areamonster .@map$,9,9,19,45,"Nightmare Terror",1379,20,.@label$;
-		areamonster .@map$,9,9,19,45,"Incubus",1374,20,.@label$;
-		areamonster .@map$,9,9,19,45,"Nightmare",1061,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Succubus",1370,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Nightmare Terror",1379,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Incubus",1374,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Nightmare",1061,5,.@label$);
 		break;
 	case 72:
-		areamonster .@map$,93,9,103,45,"Margaretha Sorin",1637,10,.@label$;
-		areamonster .@map$,93,9,103,45,"Permeter",1314,10,.@label$;
-		areamonster .@map$,93,9,103,45,"Errende Ebecee",1655,10,.@label$;
-		areamonster .@map$,93,9,103,45,"Enchanted Peach Tree",1410,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Margaretha Sorin",1637,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Permeter",1314,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Errende Ebecee",1655,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Enchanted Peach Tree",1410,10,.@label$);
 		break;
 	case 73:
-		areamonster .@map$,181,9,191,45,"Succubus",1370,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Loli Ruri",1505,20,.@label$;
-		areamonster .@map$,181,9,191,45,"Aliza",1737,10,.@label$;
-		areamonster .@map$,181,9,191,45,"Zealotus",1200,5,.@label$;
-		areamonster .@map$,181,9,191,45,"Alice",1275,5,.@label$;
-		areamonster .@map$,181,9,191,45,"Green Maiden",1519,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Succubus",1370,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Loli Ruri",1505,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Aliza",1737,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Zealotus",1200,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Alice",1275,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Green Maiden",1631,10,.@label$);
 		break;
 	case 74:
-		areamonster .@map$,267,9,277,45,"Dimik",1671,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Dimik",1673,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Dimik",1672,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Venatu",1677,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Dimik",1670,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Archdam",1668,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Venatu",1678,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Venatu",1679,6,.@label$;
-		areamonster .@map$,267,9,277,45,"Venatu",1676,6,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Dimik",1671,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Dimik",1673,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Dimik",1672,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Venatu",1677,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Dimik",1670,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Archdam",1668,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Venatu",1678,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Venatu",1679,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Venatu",1676,6,.@label$);
 		break;
 	case 75:
-		areamonster .@map$,352,9,362,45,"Baphomet",1039,1,.@label$;
-		areamonster .@map$,352,9,362,45,"Dark Lord",1272,1,.@label$;
-		areamonster .@map$,352,9,362,45,"Baphomet Jr.",1101,20,.@label$;
-		areamonster .@map$,352,9,362,45,"Dark Illusion",1302,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Baphomet",1039,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Dark Lord",1272,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Baphomet Jr.",1101,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,9,362,45,"Dark Illusion",1302,10,.@label$);
 		break;
 	case 76:
-		areamonster .@map$,9,351,19,387,"Abysmal Knight",1219,30,.@label$;
-		areamonster .@map$,9,351,19,387,"Nightmare Terror",1379,20,.@label$;
-		areamonster .@map$,9,351,19,387,"Nightmare",1061,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Abysmal Knight",1219,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Nightmare Terror",1379,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,351,19,387,"Nightmare",1061,10,.@label$);
 		break;
 	case 77:
-		areamonster .@map$,93,351,103,387,"Banshee",1867,30,.@label$;
-		areamonster .@map$,93,351,103,387,"Wraith Dead",1291,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Evil Druid",1117,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Wraith",1192,10,.@label$;
-		areamonster .@map$,93,351,103,387,"Wind Ghost",1263,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Banshee",1867,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Wraith Dead",1291,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Evil Druid",1117,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Wraith",1192,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,351,103,387,"Wind Ghost",1263,10,.@label$);
 		break;
 	case 78:
-		areamonster .@map$,181,351,191,387,"Sword Master",1829,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Bloody Knight",1268,10,.@label$;
-		areamonster .@map$,181,351,191,387,"Abysmal Knight",1219,5,.@label$;
-		areamonster .@map$,181,351,191,387,"Dullahan",1504,10,.@label$;
-		areamonster .@map$,181,351,191,387,"Raydric",1163,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Sword Master",1829,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Bloody Knight",1268,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Abysmal Knight",1219,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Dullahan",1504,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,351,191,387,"Raydric",1163,20,.@label$);
 		break;
 	case 79:
-		areamonster .@map$,267,351,277,387,"Hydro",1720,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Ferus",1714,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Ferus",1717,10,.@label$;
-		areamonster .@map$,267,351,277,387,"Deleter",1385,5,.@label$;
-		areamonster .@map$,267,351,277,387,"Petite",1155,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Hydro",1720,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Ferus",1714,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Ferus",1717,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Deleter",1385,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,351,277,387,"Petite",1155,5,.@label$);
 		break;
 	case 80:
-		areamonster .@map$,352,351,362,387,"Falling Bishop",1871,1,.@label$;
-		areamonster .@map$,352,351,362,387,"Necromancer",1870,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Falling Bishop",1871,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,351,362,387,"Necromancer",1870,15,.@label$);
 		break;
 	case 81:
-		areamonster .@map$,9,267,19,303,"Mysteltainn",1203,20,.@label$;
-		areamonster .@map$,9,267,19,303,"Ogretooth",1204,20,.@label$;
-		areamonster .@map$,9,267,19,303,"Executioner",1205,20,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Mysteltainn",1203,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Ogretooth",1204,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,267,19,303,"Executioner",1205,20,.@label$);
 		break;
 	case 82:
-		areamonster .@map$,93,267,103,303,"Bloody Knight",1268,10,.@label$;
-		areamonster .@map$,93,267,103,303,"Agav",1769,10,.@label$;
-		areamonster .@map$,93,267,103,303,"Bloody Murderer",1507,10,.@label$;
-		areamonster .@map$,93,267,103,303,"Skogul",1752,10,.@label$;
-		areamonster .@map$,93,267,103,303,"Injustice",1257,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Bloody Knight",1268,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Agav",1769,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Bloody Murderer",1507,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Skogul",1752,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,267,103,303,"Injustice",1257,10,.@label$);
 		break;
 	case 83:
-		areamonster .@map$,181,267,191,303,"Skeggiold",1754,10,.@label$;
-		areamonster .@map$,181,267,191,303,"Dark Illusion",1302,10,.@label$;
-		areamonster .@map$,181,267,191,303,"Gryphon",1259,10,.@label$;
-		areamonster .@map$,181,267,191,303,"Chimera",1283,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Skeggiold",1754,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Dark Illusion",1302,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Gryphon",1259,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,267,191,303,"Chimera",1283,10,.@label$);
 		break;
 	case 84:
-		areamonster .@map$,267,267,277,303,"Succubus",1370,10,.@label$;
-		areamonster .@map$,267,267,277,303,"Dark Illusion",1302,20,.@label$;
-		areamonster .@map$,267,267,277,303,"Owl Duke",1320,10,.@label$;
-		areamonster .@map$,267,267,277,303,"Owl Baron",1295,10,.@label$;
-		areamonster .@map$,267,267,277,303,"Incubus",1374,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Succubus",1370,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Dark Illusion",1302,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Owl Duke",1320,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Owl Baron",1295,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,267,277,303,"Incubus",1374,10,.@label$);
 		break;
 	case 85:
-		areamonster .@map$,352,267,362,303,"Ifrit",1832,1,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,267,362,303,"Ifrit",1832,1,.@label$);
 		break;
 	case 86:
-		areamonster .@map$,9,180,19,216,"Hydro",1720,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Gryphon",1259,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Chimera",1283,10,.@label$;
-		areamonster .@map$,9,180,19,216,"Majoruros",1310,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Hydro",1720,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Gryphon",1259,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Chimera",1283,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,180,19,216,"Majoruros",1310,10,.@label$);
 		break;
 	case 87:
-		areamonster .@map$,93,180,103,216,"Salamander",1831,15,.@label$;
-		areamonster .@map$,93,180,103,216,"Kasa",1833,20,.@label$;
-		areamonster .@map$,93,180,103,216,"Lava Golem",1366,15,.@label$;
-		areamonster .@map$,93,180,103,216,"Gajomart",1309,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Salamander",1831,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Kasa",1833,20,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Lava Golem",1366,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,180,103,216,"Gajomart",1309,10,.@label$);
 		break;
 	case 88:
-		areamonster .@map$,181,180,191,216,"Necromancer",1870,15,.@label$;
-		areamonster .@map$,181,180,191,216,"Anubis",1098,15,.@label$;
-		areamonster .@map$,181,180,191,216,"Wraith Dead",1291,10,.@label$;
-		areamonster .@map$,181,180,191,216,"Ancient Mummy",1297,10,.@label$;
-		areamonster .@map$,181,180,191,216,"Khalitzburg",1132,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Necromancer",1870,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Anubis",1098,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Wraith Dead",1291,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Ancient Mummy",1297,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,180,191,216,"Khalitzburg",1132,10,.@label$);
 		break;
 	case 89:
-		areamonster .@map$,267,180,277,216,"Odium of Thanatos",1704,6,.@label$;
-		areamonster .@map$,267,180,277,216,"Despero of Thanatos",1705,6,.@label$;
-		areamonster .@map$,267,180,277,216,"Maero of Thanatos",1706,6,.@label$;
-		areamonster .@map$,267,180,277,216,"Dolor of Thanatos",1707,6,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Odium of Thanatos",1704,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Despero of Thanatos",1705,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Maero of Thanatos",1706,6,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,180,277,216,"Dolor of Thanatos",1707,6,.@label$);
 		break;
 	case 90:
-		areamonster .@map$,352,180,362,216,"Valkyrie Randgris",1751,1,.@label$;
-		areamonster .@map$,352,180,362,216,"Baroness of Retribution",1702,10,.@label$;
-		areamonster .@map$,352,180,362,216,"Lady Solace",1703,10,.@label$;
-		areamonster .@map$,352,180,362,216,"False Angel",1371,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Valkyrie Randgris",1751,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Baroness of Retribution",1702,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"Lady Solace",1703,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,180,362,216,"False Angel",1371,10,.@label$);
 		break;
 	case 91:
-		areamonster .@map$,9,96,19,132,"Cecil Damon",1638,10,.@label$;
-		areamonster .@map$,9,96,19,132,"Bow Master",1830,10,.@label$;
-		areamonster .@map$,9,96,19,132,"Kavac",1656,30,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Cecil Damon",1638,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Bow Master",1830,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,96,19,132,"Kavac",1656,30,.@label$);
 		break;
 	case 92:
-		areamonster .@map$,93,96,103,132,"Kathryne Keyron",1639,15,.@label$;
-		areamonster .@map$,93,96,103,132,"Elder",1377,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Laurell Weinder",1657,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Wind Ghost",1263,10,.@label$;
-		areamonster .@map$,93,96,103,132,"Marduk",1140,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Kathryne Keyron",1639,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Elder",1377,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Laurell Weinder",1657,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Wind Ghost",1263,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,96,103,132,"Marduk",1140,10,.@label$);
 		break;
 	case 93:
-		areamonster .@map$,181,96,191,132,"Seyren Windsor",1634,15,.@label$;
-		areamonster .@map$,181,96,191,132,"Bloody Knight",1268,10,.@label$;
-		areamonster .@map$,181,96,191,132,"Abysmal Knight",1219,10,.@label$;
-		areamonster .@map$,181,96,191,132,"Wanderer",1208,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Seyren Windsor",1634,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Bloody Knight",1268,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Abysmal Knight",1219,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,96,191,132,"Wanderer",1208,10,.@label$);
 		break;
 	case 94:
-		areamonster .@map$,267,96,277,132,"Sword Master",1829,15,.@label$;
-		areamonster .@map$,267,96,277,132,"Bow Master",1830,15,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Sword Master",1829,15,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,267,96,277,132,"Bow Master",1830,15,.@label$);
 		break;
 	case 95:
-		areamonster .@map$,352,96,362,132,"Beelzebub",1873,1,.@label$;
-		areamonster .@map$,352,96,362,132,"Hunter Fly",1035,30,.@label$;
-		areamonster .@map$,352,96,362,132,"Steel Chonchon",1042,5,.@label$;
-		areamonster .@map$,352,96,362,132,"Dragon FLy",1091,5,.@label$;
-		areamonster .@map$,352,96,362,132,"Chonchon",1011,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Beelzebub",1873,1,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Hunter Fly",1035,30,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Steel Chonchon",1042,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Dragon FLy",1091,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,352,96,362,132,"Chonchon",1011,5,.@label$);
 		break;
 	case 96:
-		areamonster .@map$,9,9,19,45,"Valkyrie",1765,5,.@label$;
-		areamonster .@map$,9,9,19,45,"Skeggiold",1755,10,.@label$;
-		areamonster .@map$,9,9,19,45,"Skeggiold",1754,10,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Valkyrie",1765,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Skeggiold",1755,10,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,9,9,19,45,"Skeggiold",1754,10,.@label$);
 		break;
 	case 97:
-		areamonster .@map$,93,9,103,45,"Incarnation of Morocc",1918,5,.@label$;
-		areamonster .@map$,93,9,103,45,"Incarnation of Morocc",1919,5,.@label$;
-		areamonster .@map$,93,9,103,45,"Incarnation of Morocc",1920,5,.@label$;
-		areamonster .@map$,93,9,103,45,"Incarnation of Morocc",1921,5,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Incarnation of Morocc",1918,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Incarnation of Morocc",1919,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Incarnation of Morocc",1920,5,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,93,9,103,45,"Incarnation of Morocc",1921,5,.@label$);
 		break;
 	case 98:
-		areamonster .@map$,181,9,191,45,"Kathryne Keyron",1639,2,.@label$;
-		areamonster .@map$,181,9,191,45,"Seyren Windsor",1634,2,.@label$;
-		areamonster .@map$,181,9,191,45,"Margaretha Sorin",1637,2,.@label$;
-		areamonster .@map$,181,9,191,45,"Eremes Guile",1635,2,.@label$;
-		areamonster .@map$,181,9,191,45,"Howard Alt-Eisen",1636,2,.@label$;
-		areamonster .@map$,181,9,191,45,"Cecil Damon",1638,2,.@label$;
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Kathryne Keyron",1639,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Seyren Windsor",1634,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Margaretha Sorin",1637,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Eremes Guile",1635,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Howard Alt-Eisen",1636,2,.@label$);
+		callfunc("F_Tower_Monster_Summon", .@map$,181,9,191,45,"Cecil Damon",1638,2,.@label$);
 		break;
 	case 99:
 		for(set .@i,1; .@i<=7; set .@i,.@i+1) {
 			set .@mob_ran,rand(1,30);
 			if (.@mob_ran == 1) 
-				areamonster .@map$,267,9,277,45,"Kathryne Keyron",1639,2,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Kathryne Keyron",1639,2,.@label$);
 			else if (.@mob_ran == 2) 
-				areamonster .@map$,267,9,277,45,"Seyren Windsor",1634,2,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Seyren Windsor",1634,2,.@label$);
 			else if (.@mob_ran == 3) 
-				areamonster .@map$,267,9,277,45,"Margaretha Sorin",1637,2,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Margaretha Sorin",1637,2,.@label$);
 			else if (.@mob_ran == 4) 
-				areamonster .@map$,267,9,277,45,"Eremes Guile",1635,2,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Eremes Guile",1635,2,.@label$);
 			else if (.@mob_ran == 5) 
-				areamonster .@map$,267,9,277,45,"Howard Alt-Eisen",1636,2,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Howard Alt-Eisen",1636,2,.@label$);
 			else if (.@mob_ran == 6) 
-				areamonster .@map$,267,9,277,45,"Cecil Damon",1638,2,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Cecil Damon",1638,2,.@label$);
 			else if (.@mob_ran == 7) 
-				areamonster .@map$,267,9,277,45,"Incarnation of Morocc",1918,5,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Incarnation of Morocc",1918,5,.@label$);
 			else if (.@mob_ran == 8) 
-				areamonster .@map$,267,9,277,45,"Incarnation of Morocc",1919,5,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Incarnation of Morocc",1919,5,.@label$);
 			else if (.@mob_ran == 9) 
-				areamonster .@map$,267,9,277,45,"Incarnation of Morocc",1920,5,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Incarnation of Morocc",1920,5,.@label$);
 			else if (.@mob_ran == 10) 
-				areamonster .@map$,267,9,277,45,"Incarnation of Morocc",1921,5,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Incarnation of Morocc",1921,5,.@label$);
 			else if (.@mob_ran == 11) 
-				areamonster .@map$,267,9,277,45,"Valkyrie",1765,5,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Valkyrie",1765,5,.@label$);
 			else if (.@mob_ran == 12) 
-				areamonster .@map$,267,9,277,45,"Skeggiold",1755,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Skeggiold",1755,10,.@label$);
 			else if (.@mob_ran == 13) 
-				areamonster .@map$,267,9,277,45,"Skeggiold",1754,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Skeggiold",1754,10,.@label$);
 			else if (.@mob_ran == 14) 
-				areamonster .@map$,267,9,277,45,"Seyren Windsor",1634,15,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Seyren Windsor",1634,15,.@label$);
 			else if (.@mob_ran == 15) 
-				areamonster .@map$,267,9,277,45,"Bloody Knight",1268,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Bloody Knight",1268,10,.@label$);
 			else if (.@mob_ran == 16) 
-				areamonster .@map$,267,9,277,45,"Abysmal Knight",1219,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Abysmal Knight",1219,10,.@label$);
 			else if (.@mob_ran == 17) 
-				areamonster .@map$,267,9,277,45,"Wanderer",1208,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Wanderer",1208,10,.@label$);
 			else if (.@mob_ran == 18) 
-				areamonster .@map$,267,9,277,45,"Sword Master",1829,15,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Sword Master",1829,15,.@label$);
 			else if (.@mob_ran == 19) 
-				areamonster .@map$,267,9,277,45,"Bow Master",1830,15,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Bow Master",1830,15,.@label$);
 			else if (.@mob_ran == 20) 
-				areamonster .@map$,267,9,277,45,"Kathryne Keyron",1639,15,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Kathryne Keyron",1639,15,.@label$);
 			else if (.@mob_ran == 21) 
-				areamonster .@map$,267,9,277,45,"Elder",1377,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Elder",1377,10,.@label$);
 			else if (.@mob_ran == 22) 
-				areamonster .@map$,267,9,277,45,"Laurell Weinder",1657,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Laurell Weinder",1657,10,.@label$);
 			else if (.@mob_ran == 23) 
-				areamonster .@map$,267,9,277,45,"Wind Ghost",1263,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Wind Ghost",1263,10,.@label$);
 			else if (.@mob_ran == 24) 
-				areamonster .@map$,267,9,277,45,"Marduk",1140,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Marduk",1140,10,.@label$);
 			else if (.@mob_ran == 25) 
-				areamonster .@map$,267,9,277,45,"Cecil Damon",1638,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Cecil Damon",1638,10,.@label$);
 			else if (.@mob_ran == 26) 
-				areamonster .@map$,267,9,277,45,"Bow Master",1830,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Bow Master",1830,10,.@label$);
 			else if (.@mob_ran == 27) 
-				areamonster .@map$,267,9,277,45,"Kavach Icarus",1656,30,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Kavach Icarus",1656,30,.@label$);
 			else if (.@mob_ran == 28) 
-				areamonster .@map$,267,9,277,45,"Baroness of Retribution",1702,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Baroness of Retribution",1702,10,.@label$);
 			else if (.@mob_ran == 29) 
-				areamonster .@map$,267,9,277,45,"Lady Solace",1703,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"Lady Solace",1703,10,.@label$);
 			else 
-				areamonster .@map$,267,9,277,45,"False Angel",1371,10,.@label$;
+				callfunc("F_Tower_Monster_Summon", .@map$,267,9,277,45,"False Angel",1371,10,.@label$);
 		}
+		break;
+	case 100:
+		callfunc("F_Tower_Monster_Summon", .@map$,83,85,83,85,"Entweihen Crothen",1957,1, .@label$);
+		break;		
+	case 101:
+		callfunc("F_Tower_Monster_Summon", .@map$,156,147,156,147,"Nacht Sieger",1956,1, .@label$);
 		break;
 	}
 	return;
@@ -1221,13 +1478,14 @@ OnTimer10000:
 	end;
 
 OnInstanceInit:
-	callfunc "F_Tower_Monster",
-		1,
-		instance_mapname("1@tower"),
-		instance_npcname("#1F Controller")+"::OnMyMobDead";
+	'level_mode = $ENDLESSMODE[instance_live_info(ILI_OWNER)];
+
+	callfunc "F_Tower_Monster",1,instance_mapname("1@tower"),instance_npcname("#1F Controller")+"::OnMyMobDead";
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("1@tower");
 	set .@map$, instance_mapname("1@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#1F Controller")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -1266,6 +1524,8 @@ OnTouch_:
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("1@tower");
 	set .@map$, strnpcinfo(4);
 	set .@level, atoi(replacestr(strnpcinfo(0),"FGate102tower","")) + 1;
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname(strnpcinfo(0))+"::OnMyMobDead");
@@ -1391,13 +1651,12 @@ OnTimer120000:
 	end;
 
 OnInstanceInit:
-	callfunc "F_Tower_Monster",
-		26,
-		instance_mapname("2@tower"),
-		instance_npcname("Immortal Furnace#1")+"::OnMyMobDead";
+	callfunc "F_Tower_Monster",26,instance_mapname("2@tower"),instance_npcname("Immortal Furnace#1")+"::OnMyMobDead";
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("2@tower");
 	set .@map$, instance_mapname("2@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("Immortal Furnace#1")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -1507,13 +1766,12 @@ OnTouch_:
 	end;
 
 OnInstanceInit:
-	callfunc "F_Tower_Monster",
-		51,
-		instance_mapname("3@tower"),
-		instance_npcname("Immortal Furnace#2")+"::OnMyMobDead";
+	callfunc "F_Tower_Monster",51,instance_mapname("3@tower"),instance_npcname("Immortal Furnace#2")+"::OnMyMobDead";
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";	
+	callfunc "F_Tower_Drop",instance_mapname("3@tower");
 	set .@map$, instance_mapname("3@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("Immortal Furnace#2")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -1623,13 +1881,12 @@ OnTouch_:
 	end;
 
 OnInstanceInit:
-	callfunc "F_Tower_Monster",
-		76,
-		instance_mapname("4@tower"),
-		instance_npcname("Immortal Furnace#3")+"::OnMyMobDead";
+	callfunc "F_Tower_Monster",76,instance_mapname("4@tower"),instance_npcname("Immortal Furnace#3")+"::OnMyMobDead";
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("4@tower");
 	set .@map$, instance_mapname("4@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("Immortal Furnace#3")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -1757,7 +2014,7 @@ OnTouch_:
 		mes "^0000ffAs soon as the voice stopped talking, an irresistible force lifted and moved you somewhere else.";
 		close2;
 		set in_102tower,10;
-		warp "alberta",223,36;
+		warp "prontera",156,186;
 	}
 	else {
 		mes "^0000ffThe radiating crystal piece seems to beckon you, just like last time.^000000";
@@ -1837,10 +2094,13 @@ OnTimer500:
 
 OnInstanceInit:
 	donpcevent instance_npcname("#102FShadowDust")+"::OnEnable";
-	monster instance_mapname("5@tower"),83,85,"Entweihen Crothen",1957,1,instance_npcname("#102FShadowDust1")+"::OnMyMobDead";
+	callfunc "F_Tower_Monster",100,instance_mapname("5@tower"),instance_npcname("#102FShadowDust1")+"::OnMyMobDead";
+	//monster instance_mapname("5@tower"),83,85,"Entweihen Crothen",1957,1,instance_npcname("#102FShadowDust1")+"::OnMyMobDead";
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("5@tower");
 	set .@map$, instance_mapname("5@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#102FShadowDust1")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -1966,6 +2226,8 @@ OnInstanceInit:
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("6@tower");
 	set .@mob_dead_num,mobcount(instance_mapname("6@tower"),instance_npcname("Tyrant's Throne#")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
 		donpcevent instance_npcname("#1st Beeper")+"::OnEnable";
@@ -2006,6 +2268,8 @@ OnTimer20500:
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("6@tower");
 	set .@map$, instance_mapname("6@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#1st Beeper")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -2041,6 +2305,8 @@ OnTimer10500:
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("6@tower");
 	set .@map$, instance_mapname("6@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#2nd Beeper")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -2076,6 +2342,8 @@ OnTimer10500:
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("6@tower");
 	set .@map$, instance_mapname("6@tower");
 	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#3rd Beeper")+"::OnMyMobDead");
 	if (.@mob_dead_num < 1) {
@@ -2106,11 +2374,15 @@ OnTimer10500:
 	set .@map$, instance_mapname("6@tower");
 	mapannounce .@map$,"You'll soon know. Mine is the face of death!",bc_map,"0x00ffcc";
 	stopnpctimer;
-	monster .@map$,156,147,"Nacht Sieger",1956,1,instance_npcname("#4th Beeper")+"::OnMyMobDead";
+	//monster .@map$,156,147,"Nacht Sieger",1956,1,instance_npcname("#4th Beeper")+"::OnMyMobDead";
+	callfunc "F_Tower_Monster",101,instance_mapname("6@tower"),instance_npcname("#4th Beeper")+"::OnMyMobDead";	
 	end;
 
 OnMyMobDead:
+	callfunc "F_Tower_Exp";
+	callfunc "F_Tower_Drop",instance_mapname("6@tower");
 	donpcevent instance_npcname("Lost Soul#102")+"::OnEnable";
+	callfunc "F_Tower_Reward";
 	end;
 }
 
@@ -2166,7 +2438,7 @@ OnMyMobDead:
 	mes "[Lost Souls]";
 	mes "Farewell, young adventurer. I wish you good luck.";
 	close2;
-	warp "alberta",223,36;
+	warp "prontera",156,186;
 	end;
 
 OnInstanceInit:

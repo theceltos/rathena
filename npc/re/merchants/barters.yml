@@ -47,6 +47,8 @@ Header:
 
 Footer:
   Imports:
+  - Path: npc/re/merchants/barters/loja_grace.yml
+  - Path: npc/re/merchants/barters/loja_turnin.yml
   - Path: npc/re/merchants/barters/Extended_Ammunition.yml
   - Path: npc/re/merchants/barters/Gemstone_Bagger.yml
   - Path: npc/re/merchants/barters/quests_16_1.yml
