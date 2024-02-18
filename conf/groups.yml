@@ -46,13 +46,22 @@ Body:
     Name: Player
     Level: 0
     Commands:
+      autoloot: true
       changedress: true
       resurrect: true
+      go: true
+      refresh: true
+      noask: true
+      request: true
+      breakguild: true
+      channel: true
+      langtype: true
     Permissions:
       # without this basic permissions regular players could not trade or party
       can_trade: true
       can_party: true
       attendance: true
+      any_warp: true
   - Id: 1
     Name: Super Player
     # Can do everything Players can and more
@@ -180,8 +189,19 @@ Body:
       Player: true
     Level: 0
     Commands:
+      commands: true
+      noks: true
+      warp: true
+      alootid: true
+      autoloottype: true
+      autotrade: true
       rates: true
       who: true
+      storage: true
+      iteminfo: true
+      mobinfo: true
+      whodrops: true
+      whereis: true
   - Id: 10
     Name: Law Enforcement
     Inherit:
@@ -228,9 +248,9 @@ Body:
       can_trade: true
       can_party: true
       command_enable: true
-      all_skill: false
+      all_skill: true
       all_equipment: false
-      skill_unconditional: false
+      skill_unconditional: true
       use_check: true
       use_changemaptype: true
       all_commands: true
