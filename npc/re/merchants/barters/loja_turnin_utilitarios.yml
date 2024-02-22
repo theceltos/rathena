@@ -45,21 +45,79 @@ Header:
   Type: BARTER_DB
   Version: 1
 
-Footer:
-  Imports:
-  - Path: npc/re/merchants/barters/loja_turnin_utilitarios.yml
-  - Path: npc/re/merchants/barters/loja_grace.yml
-  - Path: npc/re/merchants/barters/loja_turnin.yml
-  - Path: npc/re/merchants/barters/Extended_Ammunition.yml
-  - Path: npc/re/merchants/barters/Gemstone_Bagger.yml
-  - Path: npc/re/merchants/barters/quests_16_1.yml
-  - Path: npc/re/merchants/barters/quests_16_2.yml
-  - Path: npc/re/merchants/barters/quests_17_1.yml
-  - Path: npc/re/merchants/barters/quests_17_2.yml
-  - Path: npc/re/merchants/barters/refine.yml
-  - Path: npc/re/merchants/barters/enchantgrade.yml
-  - Path: npc/re/merchants/barters/cashmall.yml
-  - Path: npc/re/merchants/barters/rgsr_in.yml
-  - Path: npc/re/merchants/barters/enchan_illusion_dungeons.yml
-  - Path: npc/re/merchants/barters/quests_exp_175.yml
-  - Path: npc/re/merchants/barters/mysterious_cookie_shop.yml
+Body:
+###########################################################################
+##= Ammunition Trader Shop
+###########################################################################
+  - Name: loja_turnin_utilitarios
+    Items:
+      - Index: 0
+        Item: Flame_Acid_Bottle
+        Zeny: 5000
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2
+      - Index: 1
+        Item: Earth_Acid_Bottle
+        Zeny: 5000
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2
+      - Index: 2
+        Item: Gale_Acid_Bottle
+        Zeny: 5000
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2
+      - Index: 3
+        Item: Icicle_Acid_Bottle
+        Zeny: 5000
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2
+      - Index: 4
+        Item: Guarantee_Weapon_7Up
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 5
+        Item: Guarantee_Armor_7Up
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 6
+        Item: blacksmith_blessing
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 1000
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 20
+      - Index: 7
+        Item: silvervine_fruit_box40
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 4000
+      - Index: 8
+        Item: TCG_Card
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 1000
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 20

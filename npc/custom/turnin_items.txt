@@ -2,7 +2,7 @@ prontera,139,173,6	script	Cleitin#ext162	572,{
 	mes "[Cleitin]";
 	mes "Olá.";
 	mes "Temos equipamentos ^4d4dffEspeciais Celtin^000000 que podem ser trocados por " + mesitemlink( 42015 ) + ".";
-	switch(select("Farmar Moedas:Loja Especial")){
+	switch(select("Farmar Moedas:Loja Especial:Loja Etc")){
 	case 1:
 		switch(select("Level 100~150 [ ^FF0000"+getmapusers("veil")+"^000000 ]:Level 150~250 [ ^FF0000"+getmapusers("halloween")+"^000000 ]")){
 		case 1:
@@ -21,6 +21,10 @@ prontera,139,173,6	script	Cleitin#ext162	572,{
 	case 2:
 		close2;
 	callshop "loja_turnin";
+		end;
+	case 3:
+		close2;
+	callshop "loja_turnin_utilitarios";
 		end;
 	}
 	OnInit:

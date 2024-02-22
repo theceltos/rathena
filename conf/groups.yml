@@ -237,6 +237,68 @@ Body:
       any_warp: true
       view_hpmeter: true
       macro_detect: true
+  - Id: 98
+    Name: GM
+    Level: 98
+    Inherit:
+      Support: true
+      Law Enforcement: true
+      Event Manager: true
+    LogCommands: true
+    Commands:
+    
+      monster: true
+      monstersmall: true
+      monsterbig: true
+      killmonster2: true
+      cleanarea: true
+      cleanmap: true
+      item: true
+      zeny: true
+      disguise: true
+      undisguise: true
+      size: true
+      raise: true
+      raisemap: true
+      day: true
+      night: true
+      skillon: true
+      skilloff: true
+      pvpon: true
+      pvpoff: true
+      gvgon: true
+      gvgoff: true
+      allowks: true
+      me: true
+      marry: true
+      divorce: true
+      refreshall: true
+    CharCommands:
+      item: true
+      zeny: true
+      disguise: true
+      undisguise: true
+      size: true
+    LogCommands: true
+    Permissions:
+      can_trade: false
+      any_warp: true
+    Permissions:
+      can_trade: true
+      can_party: true
+      command_enable: true
+      all_skill: false
+      all_equipment: false
+      skill_unconditional: true
+      use_check: true
+      use_changemaptype: true
+      all_commands: true
+      channel_admin: true
+      can_trade_bounded: true
+      item_unconditional: false
+      bypass_stat_onclone: true
+      bypass_max_stat: true
+      macro_register: true
   - Id: 99
     Name: Admin
     Level: 99

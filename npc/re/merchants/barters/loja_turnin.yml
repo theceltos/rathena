@@ -51,34 +51,6 @@ Body:
 ###########################################################################
   - Name: loja_turnin
     Items:
-      - Index: 0
-        Item: Flame_Acid_Bottle
-        Zeny: 5000
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 2
-      - Index: 1
-        Item: Earth_Acid_Bottle
-        Zeny: 5000
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 2
-      - Index: 2
-        Item: Gale_Acid_Bottle
-        Zeny: 5000
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 2
-      - Index: 3
-        Item: Icicle_Acid_Bottle
-        Zeny: 5000
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 2
       - Index: 4
         Item: Evt_Iron_Nail_K
         RequiredItems:
@@ -628,36 +600,3 @@ Body:
           - Index: 1
             Item: EP17_1_EVT39
             Amount: 100
-      - Index: 85
-        Item: Guarantee_Weapon_7Up
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 5500
-          - Index: 1
-            Item: EP17_1_EVT39
-            Amount: 100
-      - Index: 86
-        Item: Guarantee_Armor_7Up
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 5500
-          - Index: 1
-            Item: EP17_1_EVT39
-            Amount: 100
-      - Index: 87
-        Item: blacksmith_blessing
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 1000
-          - Index: 1
-            Item: EP17_1_EVT39
-            Amount: 20
-      - Index: 88
-        Item: silvervine_fruit_box40
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 4000

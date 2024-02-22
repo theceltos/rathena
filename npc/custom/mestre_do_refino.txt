@@ -1,154 +1,227 @@
-//===== Cronus Script ===========================================
-//= Mestre do Refino
-//===== Por: ====================================================
+//===== rAthena Script ======================================= 
+//= Ticket Refiner
+//===== By: ==================================================
 //= Euphy
-//===== Versão Atual: ===========================================
+//===== Current Version: =====================================
 //= 1.1
-//===== Descrição: ==============================================
-// = [Conversão Oficial] 
-// = Refinador que usa 5 ~ 9/11 pergaminhos de refinamento para refinar 
-// = Refinamento com 100% de chances de sucesso. 
-// = NOTA: Este NPC está desativado nos servidores oficiais.
-//===== Comentários Adicionais: =================================
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Refiner that uses +5~9/+11 refine tickets to refine
+//= equipment with no chance of failure.
+//= NOTE: This NPC is currently disabled on official servers.
+//===== Additional Comments: =================================
 //= 1.0 First version. [Euphy]
-//= 1.1 Tradução [Evanio]
-//===============================================================
+//= 1.1 Do not refine above ticket level. [Euphy]
+//============================================================
+//
+// barcellos 21/02/2024
+// millu@barcellosjorge.net.br
+// alterado 
+// modelo de array para os tickets
+//129	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );	
+//130	switch(.@itemtype) {
 
-prontera,184,177,6	script	Mestre do Refino	4_M_REPAIR,{
+// Main NPC :: safety_Ref_NPC
+//============================================================
+prontera,184,177,6	script	Refine Master	851,{
 	disable_items;
-	if (countitem(6238) || countitem(6228) || countitem(6229) || countitem(6230) || countitem(6231) || countitem(6456))
+	/* setarray .@cert_weapon[0],
+		6864,	// Guarantee_Weapon_19Up
+		6875,	// Guarantee_Weapon_18Up
+		6874,	// Guarantee_Weapon_17Up
+		6873,	// Guarantee_Weapon_16Up
+		6872,	// Guarantee_Weapon_15Up
+		6871,	// Guarantee_Weapon_14Up
+		6870,	// Guarantee_Weapon_13Up
+		6584,	// Guarantee_Weapon_12Up
+		6238,	// Guarantee_Weapon_11Up
+		6228,	// Guarantee_Weapon_9Up
+		6229,	// Guarantee_Weapon_8Up
+		6230,	// Guarantee_Weapon_7Up
+		6231,	// Guarantee_Weapon_6Up
+		6456;	// Guarantee_Weapon_5Up
+		*/
+	if ( countitem(6864) || countitem(6875) || countitem(6874) || 
+		countitem(6873) || countitem(6872) || countitem(6871) || 
+		countitem(6870) || countitem(6584) || countitem(6238) || 
+		countitem(6228) || countitem(6229) || countitem(6230) || 
+		countitem(6231) || countitem(6456))
 		set .@bWeaponUp,1;
-	if (countitem(6239) || countitem(6232) || countitem(6233) || countitem(6234) || countitem(6235) || countitem(6457))
+/*
+	setarray .@cert_armor[0],
+		6865,	// Guarantee_Armor_19Up
+		6881,	// Guarantee_Armor_18Up
+		6880,	// Guarantee_Armor_17Up
+		6879,	// Guarantee_Armor_16Up
+		6878,	// Guarantee_Armor_15Up
+		6877,	// Guarantee_Armor_14Up
+		6876,	// Guarantee_Armor_13Up
+		6585,	// Guarantee_Armor_12Up
+		6239,	// Guarantee_Armor_11Up
+		6232,	// Guarantee_Armor_9Up
+		6233,	// Guarantee_Armor_8Up
+		6234,	// Guarantee_Armor_7Up
+		6235,	// Guarantee_Armor_6Up
+		6457;	// Guarantee_Armor_5Up
+*/
+	if (	countitem(6865) || countitem(6881) || countitem(6880) || 
+		countitem(6879) || countitem(6878) || countitem(6877) || 
+		countitem(6876) || countitem(6585) || countitem(6239) || 
+		countitem(6232) || countitem(6233) || countitem(6234) || 
+		countitem(6235) || countitem(6457))
 		set .@bArmorUp,1;
 	if (!.@bWeaponUp && !.@bArmorUp) {
-		mes "[Mestre do Refino]";
+		mes "[Refine Master]";
 		mes "Olá!";
-		mes "Qual é a boa?";
-		mes "Eu sou um especialista";
-		mes "em refinamento de itens,";
-		mes "mas eu me aposentei nesse ramo.";
+		mes "Tudo bem?";
+		mes "Eu sou especialista em";
+		mes "refinar itens";
+		mes "apesar de estar sem trabalho a algum tempo";
 		next;
-		switch(select("Irei seguir meu caminho.:Hmm... isto me deixou curioso.")) {
+		switch(select("Não estou interessado.:Hmm... fiquei curioso.")) {
 		case 1:
-			mes "[Mestre do Refino]";
-			mes "Tome cuidado, aventureiro.";
+			mes "[Refine Master]";
+			mes "Tenha cuidado aventureiro.";
 			close;
 		case 2:
-			mes "[Mestre do Refino]";
-			mes "Atualmente, eu presto meus serviços para aventureiros que possuem o ^006400Pergaminho de Refinamento^000000...";
-			mes "Tchau tchau~!";
+			mes "[Refine Master]";
+			mes "Na verdade, forneço serviços de refinamento para aventureiros com um ^FF0000Refine Ticket^000000...";
+			mes "Até breve!";
 			close;
 		}
 	}
-	mes "[Mestre do Refino]";
-	mes "Saudações!";
-	mes "Eu posso refinar um item até o ^006400mesmo nível do seu pergaminho^000000.";
-	mes "Não se preocupe! Não há a mínima chance de seu item quebrar.";
+	emotion ET_SURPRISE;
+	mes "[Refine Master]";
+	mes "Saudações";
+	mes "Eu posso refinar um equipamento para o mesmo nível de um ticket.";
+	mes "Você não precisa se preocupar! Não há chance de quebrar seu item.";
 	next;
-	if(select("Irei voltar depois.:Refine um item com o pergaminho.") == 1) {
-		mes "[Mestre do Refino]";
-		mes "Certo.";
-		mes "Você pode voltar depois.";
+	if(select("Vou buscar um ticket.:Refine agora, por favor.") == 1) {
+		mes "[Refine Master]";
+		mes "Ok.";
+		mes "Volte quando estiver pronto.";
 		close;
 	}
-	mes "[Mestre do Refino]";
-	mes "Qual equipamento que você gostaria de refinar?";
+	mes "[Refine Master]";
+	mes "Qual equipamento quer refinar?";
 	next;
-	setarray .@position$[1],"Cabeça","Armadura","Mão esquerda","Mão direita","Capa","Calçados","Acessório 1","Acessório 2","Cabeça-meio","Cabeça-baixo";
-	set .@menu$,"";
+	setarray .@position$[1],"Head upper","Armor","Left hand","Right hand","Robe","Shoes","Accessory 1","Accessory 2","Head middle","Head lower";
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
 	for(set .@i,1; .@i<=10; set .@i,.@i+1)
-		set .@menu$, .@menu$+((getequipisequiped(.@i))?getequipname(.@i):.@position$[.@i]+"- [Empty]")+":";
-	set .@part, select(.@menu$);
+		set .@menu$, .@menu$+((getequipisequiped(.@indices[.@i]))?getequipname(.@indices[.@i]):.@position$[.@i]+"- [Empty]")+":";
+	set .@part, .@indices[ select(.@menu$) ];
 	if (!getequipisequiped(.@part)) {
-		mes "[Mestre do Refino]";
-		mes "Você precisa equipar o item para que eu possa refiná-lo.";
+		mes "[Refine Master]";
+		mes "Você deve equipar o equipamento que deseja refinar";
 		close;
 	}
 	if (!getequipisenableref(.@part)) {
-		mes "[Mestre do Refino]";
-		mes "Oh, me desculpe.";
-		mes "Este item é impossível refiná-lo.";
+		emotion ET_OTL;
+		mes "[Refine Master]";
+		mes "Desculpe,";
+		mes "mas este item não é refinável.";
 		close;
 	}
-	switch(getequipweaponlv(.@part)) {
+	.@refineitemid = getequipid(.@part); // save id of the item
+	.@refinerycnt = getequiprefinerycnt(.@part); //save refinery count
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );	
+	switch(.@itemtype) {
 	default:
-	case 0:
-		setarray .@tickets[0],6457,6235,6234,6233,6232,6239;
-		setarray .@levels[0],5,6,7,8,9,11;
-		set .@type$,"Armadura";
+	case 4:	//armor
+		setarray .@levels[0],19,18,17,16,15,14,13,12,11,10,9,8,7,6,5;		
+		setarray .@tickets[0],6865,6881,6880,6879,6878,6877,6876,6585,6239,6232,6233,6234,6235,6457;
+		set .@type$,"Armor";
 		set .@check,.@bArmorUp;
 		break;
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-		setarray .@tickets[0],6456,6231,6230,6229,6228,6238;
-		setarray .@levels[0],5,6,7,8,9,11;
-		set .@type$,"Arma";
+	case 5:
+		setarray .@levels[0],19,18,17,16,15,14,13,12,11,10,9,8,7,6,5;
+		setarray .@tickets[0],6864,6875,6874,6873,6872,6871,6870,6584,6238,6228,6229,6230,6231,6456;
+		set .@type$,"Weapon";
 		set .@check,.@bWeaponUp;
 		break;
 	}
 	if (!.@check) {
-		mes "[Mestre do Refino]";
-		mes "Se você quiser refinar esta ^006400"+.@type$+"^000000, por favor tenha em seu inventário o ^006400Pergaminho de "+.@type$+"^000000.";
-		mes "Vejo você depois!";
+		emotion ET_THINK;
+		mes "[Refine Master]";
+		mes "Se você quer refinar ^FF0000"+.@type$+"^000000, precisa ter um ticket do tipo ^B84728"+.@type$+" ^000000.";
+		mes "Volte com o ticket apropriado!";
 		close;
 	}
-	mes "[Mestre do Refino]";
-	mes "Por favor, escolha qual ^006400Pergaminho de "+.@type$+"^000000 que você quer usar.";
+	mes "[Refine Master]";
+	mes "Selecione o Ticket de Refino a utilizar para ^FF0000"+.@type$+" ^000000.";
 	next;
 	set .@menu$,"";
-	for(set .@i,0; .@i<getarraysize(.@tickets); set .@i,.@i+1)
-		set .@menu$, .@menu$+getitemname(.@tickets[.@i])+":";
+	for(set .@i,0; .@i<getarraysize(.@tickets); set .@i,.@i+1){
+		//if(countitem(.@tickets[.@i])>0){
+			set .@menu$, .@menu$+getitemname(.@tickets[.@i])+":";
+		//}
+	}
 	set .@select, select(.@menu$)-1;
 	set .@ticket_lv, .@levels[.@select];
 	set .@ticket_id, .@tickets[.@select];
 	if (countitem(.@ticket_id) == 0) {
-		mes "[Mestre do Refino]";
-		mes getitemname(.@ticket_id)+" não está em seu inventário. Será que você não colocou no seu armazém?";
-		mes "Tente conferir isso.";
-		mes "Te vejo depois!";
+		emotion ET_QUESTION;
+		mes "[Refine Master]";
+		mes getitemname(.@ticket_id)+" não está no inventário. Você o colocou no inventário?";
+		mes "Verifique isto";
+		mes "e retorne mais tarde!";
 		close;
 	}
 	if (getequiprefinerycnt(.@part) >= .@ticket_lv) {
-		mes "[Mestre do Refino]";
-		mes "^8B4513Este item já está refinado o bastante para o nível de seu pergaminho^000000";
-		mes "Só posso refinar um equipamento que o refinamento dele seja menor que seu pergaminho pode disponibilizar.";
+		emotion ET_PROFUSELY_SWEAT;
+		mes "[Refine Master]";
+		mes "^FF0000Este item já está refinado ao nível do ticket.^000000";
+		mes "Por favor, tenha um ticket de refino de nível maior que seu equipamento";
 		close;
 	}
-	mes "[Mestre do Refino]";
-	mes "Irei refinar o ^006400"+getequipname(.@part)+"^8B4513 para o nível +"+.@ticket_lv+"^000000 com o ^006400"+getitemname(.@ticket_id)+"^000000.";
-	mes "Podemos proseguir?";
+	mes "[Refine Master]";
+	mes "Vou refinar ^FF0000"+getequipname(.@part)+"^FF0000 até o nível +"+.@ticket_lv+"^000000 com ^FF0000"+getitemname(.@ticket_id)+"^000000 .";
+	mes "Vamos continuar?";
 	next;
 	if(select("Não.:Sim.") == 1) {
-		mes "[Mestre do Refino]";
-		mes "Oh, você mudou de ideia.";
+		emotion ET_THINK;
+		mes "[Refine Master]";
+		mes "Ah... mudou de ideia?";
 		mes "Ok.";
-		mes "Volte quando tiver se decidido.";
+		mes "Volte quando acabar sua indecisão.";
 		close;
 	}
-	mes "[Mestre do Refino]";
-	mes "Excelente!";
-	mes "Como você queria!";
-	mes "Eu tenho minha própria maneira especial de refinamento...";
+	mes "[Refine Master]";
+	mes "Grande!!!";
+	mes "Como você desejou!";
+	mes "Eu sou bom no que faço, não...";
 	mes ".......ka boom!";
 	specialeffect EF_SUI_EXPLOSION;
-	if (countitem(.@ticket_id))
+	if (countitem(.@ticket_id)) {
 		delitem .@ticket_id,1;
-	else {
+
+		// anti-hack
+		if (callfunc("F_IsEquipIDHack", .@part, .@refineitemid) ||
+			callfunc("F_IsEquipRefineHack", .@part, .@refinerycnt) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3])) {
+			mes "[Refine Master]";
+			emotion ET_FRET;
+			mes "Só um segundo...";
+			mes "Está pensando que sou estúpido?!";
+			mes "Você trocou o item enquanto eu não estava olhando! Saia daqui!";
+			close;
+		}
+	} else {
 		next;
-		mes "Erro!";
-		mes "Por favor, reporte isso.";
+		mes "Error!";
+		mes "Informe ao Admin.";
 		close;
 	}
-	for(set .@i,getequiprefinerycnt(.@part); .@i<.@ticket_lv; set .@i,.@i+1)
-		successrefitem .@part;
+	successrefitem .@part, .@ticket_lv - getequiprefinerycnt(.@part);
 	next;
-	mes "[Mestre do Refino]";
-	mes "Certo, aqui está~";
+	emotion ET_DELIGHT;
+	mes "[Refine Master]";
+	mes "Beleza... aqui está~";
 	mes "Bem, ^0000FF"+strcharinfo(0)+"^000000!";
-	mes "Parabéns pela brilhante "+.@type$+".";
-	mes "Olhe que GRANDIOSO!";
-	mes "Despedida~!";
+	mes "Parabéns por sua conquista "+.@type$+".";
+	mes "Siga em frente!";
+	mes "Até breve~!";
 	close;
 }

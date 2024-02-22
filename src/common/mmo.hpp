@@ -78,7 +78,7 @@ typedef uint32 t_itemid;
 /** Number of slots carded equipment can have. Never set to less than 4 as they are also used to keep the data of forged items/equipment. [Skotlex]
 * Note: The client seems unable to receive data for more than 4 slots due to all related packets having a fixed size. */
 #define MAX_SLOTS 4
-#define MAX_AMOUNT 30000 ////Max amount of a single stacked item
+#define MAX_AMOUNT 100000 ////Max amount of a single stacked item
 #define MAX_ZENY INT_MAX ///Max zeny
 #define MAX_BANK_ZENY SINT32_MAX ///Max zeny in Bank
 #ifndef MAX_CASHPOINT
@@ -88,7 +88,7 @@ typedef uint32 t_itemid;
 	#define MAX_KAFRAPOINT INT_MAX
 #endif
 #define MAX_FAME 1000000000 ///Max fame points
-#define MAX_CART 100 ///Maximum item in cart
+#define MAX_CART 500 ///Maximum item in cart
 #define MAX_SKILL 1623 ///Maximum skill can be hold by Player, Homunculus, & Mercenary (skill list) AND skill_db limit
 #define DEFAULT_WALK_SPEED 150 ///Default walk speed
 #define MIN_WALK_SPEED 20 ///Min walk speed
@@ -105,7 +105,7 @@ typedef uint32 t_itemid;
 #else
 #define MAX_GUILDSKILL	15 ///Max Guild skills
 #endif
-#define MAX_GUILDLEVEL 50 ///Max Guild level
+#define MAX_GUILDLEVEL 150 ///Max Guild level
 #define MAX_GUARDIANS 8	///Local max per castle. If this value is increased, need to add more fields on MySQL `guild_castle` table [Skotlex]
 #define MAX_QUEST_OBJECTIVES 3 ///Max quest objectives for a quest
 #define MAX_PC_BONUS_SCRIPT 50 ///Max bonus script can be fetched from `bonus_script` table on player load [Cydh]
