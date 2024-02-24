@@ -91882,6 +91882,8 @@ Body:
     DamageMotion: 288
     Ai: 19
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: HazyMooncake
         Rate: 1000
       - Item: Munak_Turban
@@ -91927,6 +91929,8 @@ Body:
     DamageMotion: 420
     Ai: 19
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: HazyMooncake
         Rate: 1750
       - Item: Old_Portrait
@@ -91972,6 +91976,8 @@ Body:
     DamageMotion: 576
     Ai: 19
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Bloody_LoveLetter
         Rate: 2000
       - Item: Skirt_Of_Virgin
@@ -92025,6 +92031,8 @@ Body:
         Rate: 10
       - Item: Apple_Of_Archer
         Rate: 6
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Poison_Herb_Amoena
         Rate: 200
       - Item: Fire_Arrow
@@ -97798,6 +97806,8 @@ Body:
     DamageMotion: 480
     Ai: 21
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Angel_Dream
         Rate: 1500
       - Item: Rune_Of_Darkness
@@ -97841,6 +97851,8 @@ Body:
     DamageMotion: 480
     Ai: 21
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Angel_Dream
         Rate: 1500 
       - Item: Odin_itembox
@@ -97882,6 +97894,8 @@ Body:
     DamageMotion: 432
     Ai: 20
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Angel_Dream
         Rate: 350
       - Item: Rune_Of_Darkness
@@ -97925,6 +97939,8 @@ Body:
     DamageMotion: 480
     Ai: 20
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Rune_Of_Darkness
         Rate: 500
       - Item: Brigan
@@ -97970,6 +97986,8 @@ Body:
     DamageMotion: 576
     Ai: 04
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Scell
         Rate: 10000
       - Item: Soft_Feather
@@ -98015,6 +98033,8 @@ Body:
     DamageMotion: 576
     Ai: 04
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Scell
         Rate: 10000
       - Item: Soft_Feather
@@ -98067,6 +98087,8 @@ Body:
       Detector: true
       Mvp: true
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Reginleif_Card
         Rate: 1
         StealProtected: true
@@ -98107,6 +98129,8 @@ Body:
       Detector: true
       Mvp: true
     Drops:
+      - Item: Etel_Dust
+        Rate: 10
       - Item: Ingrid_Card
         Rate: 1
         StealProtected: true
