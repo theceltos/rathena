@@ -246,15 +246,14 @@ Body:
       Event Manager: true
     LogCommands: true
     Commands:
-    
+      heal: true
+      alive: true
       monster: true
       monstersmall: true
       monsterbig: true
       killmonster2: true
       cleanarea: true
       cleanmap: true
-      item: true
-      zeny: true
       disguise: true
       undisguise: true
       size: true
@@ -274,8 +273,6 @@ Body:
       divorce: true
       refreshall: true
     CharCommands:
-      item: true
-      zeny: true
       disguise: true
       undisguise: true
       size: true
@@ -283,7 +280,6 @@ Body:
     Permissions:
       can_trade: false
       any_warp: true
-    Permissions:
       can_trade: true
       can_party: true
       command_enable: true

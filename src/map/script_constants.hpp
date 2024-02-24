@@ -8269,6 +8269,7 @@
 	export_constant_npc(JT_ROZ_MQ_XAVIER);
 	export_constant_npc(JT_ROZ_MQ_MOCLORD);
 	export_constant_npc(JT_ROZ_MQ_SKULD);
+	export_constant_npc(JT_DRAGON);	
 	export_constant_npc(JT_NEW_NPC_3RD_END);
 	#undef export_constant_npc
 

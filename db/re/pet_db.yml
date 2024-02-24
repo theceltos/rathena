@@ -2169,3 +2169,27 @@ Body:
       } else if (.@i >= PET_INTIMATE_NEUTRAL) {
         bonus2 bAddRace2,RC2_EP172ALPHA,4;
       }
+  - Mob: DRAGON
+    EggItem: Aliza_EGG
+    FoodItem: Celtcoin
+    Fullness: 2
+    HungryDelay: 120
+    IntimacyFed: 15
+    CaptureRate: 0
+    SpecialPerformance: false
+    AllowAutoFeed: true
+    Script: >
+      .@i = getpetinfo(PETINFO_INTIMATE);
+      
+      if (.@i >= PET_INTIMATE_LOYAL) {
+        bonus bMdef,7;
+        bonus bHealPower,6;
+      } else if (.@i >= PET_INTIMATE_CORDIAL) {
+        bonus bMdef,6;
+        bonus bHealPower,4;
+      } else if (.@i >= PET_INTIMATE_NEUTRAL) {
+        bonus bMdef,5;
+        bonus bHealPower,2;
+      } else {
+        bonus bMdef,4;
+      }

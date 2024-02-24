@@ -131,14 +131,15 @@ prontera,184,177,6	script	Refine Master	851,{
 	switch(.@itemtype) {
 	default:
 	case 4:	//armor
-		setarray .@levels[0],19,18,17,16,15,14,13,12,11,10,9,8,7,6,5;		
+		setarray .@levels[0],19,18,17,16,15,14,13,12,11,9,8,7,6,5;		
 		setarray .@tickets[0],6865,6881,6880,6879,6878,6877,6876,6585,6239,6232,6233,6234,6235,6457;
 		set .@type$,"Armor";
 		set .@check,.@bArmorUp;
 		break;
 	case 5:
-		setarray .@levels[0],19,18,17,16,15,14,13,12,11,10,9,8,7,6,5;
+		setarray .@levels[0],19,18,17,16,15,14,13,12,11,9,8,7,6,5;
 		setarray .@tickets[0],6864,6875,6874,6873,6872,6871,6870,6584,6238,6228,6229,6230,6231,6456;
+		
 		set .@type$,"Weapon";
 		set .@check,.@bWeaponUp;
 		break;

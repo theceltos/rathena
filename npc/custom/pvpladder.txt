@@ -71,9 +71,10 @@
 //	v1.1 = KDR Algorithm update for undefined calculation check [Lighta]
 //	     = Fixed obfuscation at Nemesis Kill [Lighta]
 //	v1.0 = Initial release
-//Â©2011-2012 Ghost
+//©2011-2012 Ghost
 //========================================================================================
 prontera,157,198,4	script	Arena PvP#1	810,{
+	mes "Olá! O PvP é ativado em qualquer mapa, exceto cidades. Qual arena deseja entrar??";
 	mes "Qual arena deseja entrar??";
 	next;
 	switch(select("Sala Sandwish [ ^FF0000"+getmapusers("pvp_n_1-1")+"^000000 ]:Sala Rock On [ ^FF0000"+getmapusers("pvp_n_1-2")+"^000000 ]:Sala Four Room [ ^FF0000"+getmapusers("pvp_n_1-3")+"^000000 ]")){
@@ -363,9 +364,9 @@ announce "[Anti-Feed] Your kill count has been rollbacked "+.Rollback+" times.",
 return;
 }
 
-morocc,162,107,3	script	Loki	467,{
-mes "[Loki]"; mes "What can I do for you today?";
-switch(select("Player Ranking:PvP Statistic:Announcer Setting")){
+prontera,155,198,3	script	PvP Status	467,{
+mes "[Loki]"; mes "O que posso fazer por você?";
+switch(select("Ranking de PvP:Minhas Estatisticas:Configuração de Anúncio")){
 case 1: //Player Ranking
 	next; 
 	if(getvariableofnpc(.ServerType, "Versus")){

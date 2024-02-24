@@ -600,3 +600,12 @@ Body:
           - Index: 1
             Item: EP17_1_EVT39
             Amount: 100
+      - Index: 85
+        Item: Solid_Claymore
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100

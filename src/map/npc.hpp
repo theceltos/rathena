@@ -1474,6 +1474,7 @@ enum e_job_types
 	JT_ROZ_MQ_SKULD,
 
 	JT_NEW_NPC_3RD_END = 19999,
+	JT_DRAGON = 31003,
 	NPC_RANGE3_END, // Official: JT_NEW_NPC_3RD_END=19999
 
 	// Unofficial
