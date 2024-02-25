@@ -609,3 +609,66 @@ Body:
           - Index: 1
             Item: EP17_1_EVT39
             Amount: 100
+      - Index: 86
+        Item: Striking_Mikoshi
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 87
+        Item: Cylinder_Boots
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 88
+        Item: RingofVenus
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 89
+        Item: Booster_shoes
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 90
+        Item: Cvt_Physical_Wing
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 91
+        Item: Paracelsus_Glove
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 100
+      - Index: 92
+        Item: Bloody_Knight_Shield__
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 7500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 200 
