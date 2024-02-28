@@ -156,7 +156,7 @@ prontera,143,179,4	script	Viajante#1	4_M_PHILMAN,{
 OnInit:
 	questinfo QTYPE_EVENT,QMARK_GREEN,"cheffenia == 0";
 	while(1) {
-        showscript "Cheffênia", getnpcid(0);
+        showscript "• Cheffênia •", getnpcid(0);
         sleep 100;
     }
 	end;

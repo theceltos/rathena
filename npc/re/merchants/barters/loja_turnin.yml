@@ -137,7 +137,7 @@ Body:
             Amount: 750
           - Index: 1
             Item: red_gemstone
-            Amount: 100
+            Amount: 40
       - Index: 14
         Item: Shield_Of_Gust
         RequiredItems:
@@ -158,7 +158,7 @@ Body:
             Amount: 750
           - Index: 1
             Item: yellow_gemstone
-            Amount: 100
+            Amount: 40
       - Index: 16
         Item: bigshield_of_water
         RequiredItems:
@@ -167,7 +167,7 @@ Body:
             Amount: 750
           - Index: 1
             Item: blue_gemstone
-            Amount: 100
+            Amount: 40
       - Index: 17
         Item: Fallen_Angel_Wing
         RequiredItems:
@@ -497,7 +497,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 71
         Item: S_Timeoverload_Armor
         RequiredItems:
@@ -506,7 +506,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 72
         Item: S_Timeoverload_Shield
         RequiredItems:
@@ -515,7 +515,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 73
         Item: S_Timeoverload_Shoes
         RequiredItems:
@@ -524,7 +524,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 74
         Item: S_Timeoverload_Earing
         RequiredItems:
@@ -533,7 +533,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 75
         Item: S_Timeoverload_Pandent
         RequiredItems:
@@ -542,7 +542,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 76
         Item: Evt_Royal_Bow_K
         RequiredItems:
@@ -599,7 +599,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 85
         Item: Solid_Claymore
         RequiredItems:
@@ -608,7 +608,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 86
         Item: Striking_Mikoshi
         RequiredItems:
@@ -617,7 +617,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 87
         Item: Cylinder_Boots
         RequiredItems:
@@ -626,7 +626,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 88
         Item: RingofVenus
         RequiredItems:
@@ -635,7 +635,7 @@ Body:
             Amount: 5500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 89
         Item: Booster_shoes
         RequiredItems:
@@ -644,7 +644,7 @@ Body:
             Amount: 5500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 90
         Item: Cvt_Physical_Wing
         RequiredItems:
@@ -653,7 +653,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 91
         Item: Paracelsus_Glove
         RequiredItems:
@@ -662,7 +662,7 @@ Body:
             Amount: 2500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 100
+            Amount: 40
       - Index: 92
         Item: Bloody_Knight_Shield__
         RequiredItems:
@@ -671,4 +671,4 @@ Body:
             Amount: 7500
           - Index: 1
             Item: EP17_1_EVT39
-            Amount: 200 
+            Amount: 80 

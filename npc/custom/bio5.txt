@@ -12,7 +12,7 @@ prontera,145,177,4	script	Bio 5#1	3220,{
 	}
 	OnInit:
 		while(1) {
-        showscript "Bio 5", getnpcid(0);
+        showscript "• BIO 5 •", getnpcid(0);
         sleep 100;
     }
 

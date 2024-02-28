@@ -31,7 +31,7 @@ prontera,139,173,6	script	Cleitin#ext162	31003,{
 	}
 	OnInit:
 	while(1) {
-        showscript "Loja Especial - CeltCoin - TurnIn", getnpcid(0);
+        showscript "• Loja Especial - TurnIn •", getnpcid(0);
         sleep 100;
     }
 end;
