@@ -45,26 +45,84 @@ Header:
   Type: BARTER_DB
   Version: 1
 
-Footer:
-  Imports:
-  - Path: npc/re/merchants/barters/turnin/loja_turnin_pets.yml
-  - Path: npc/re/merchants/barters/turnin/loja_turnin_equip_armors.yml
-  - Path: npc/re/merchants/barters/turnin/loja_turnin_equip_weapons.yml
-  - Path: npc/re/merchants/barters/turnin/loja_turnin_equip_shields.yml
-  - Path: npc/re/merchants/barters/turnin/loja_turnin_equip_acessory.yml
-  - Path: npc/re/merchants/barters/turnin/loja_turnin_utilitarios.yml
-  - Path: npc/re/merchants/barters/loja_grace.yml
-  - Path: npc/re/merchants/barters/turnin/loja_turnin.yml
-  - Path: npc/re/merchants/barters/Extended_Ammunition.yml
-  - Path: npc/re/merchants/barters/Gemstone_Bagger.yml
-  - Path: npc/re/merchants/barters/quests_16_1.yml
-  - Path: npc/re/merchants/barters/quests_16_2.yml
-  - Path: npc/re/merchants/barters/quests_17_1.yml
-  - Path: npc/re/merchants/barters/quests_17_2.yml
-  - Path: npc/re/merchants/barters/refine.yml
-  - Path: npc/re/merchants/barters/enchantgrade.yml
-  - Path: npc/re/merchants/barters/cashmall.yml
-  - Path: npc/re/merchants/barters/rgsr_in.yml
-  - Path: npc/re/merchants/barters/enchan_illusion_dungeons.yml
-  - Path: npc/re/merchants/barters/quests_exp_175.yml
-  - Path: npc/re/merchants/barters/mysterious_cookie_shop.yml
+Body:
+###########################################################################
+##= Ammunition Trader Shop
+###########################################################################
+  - Name: loja_turnin_equip_shields
+    Items:
+      - Index: 0
+        Item: Toy_Shield
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 750
+      - Index: 1
+        Item: Shield_Of_Flame
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 750
+          - Index: 1
+            Item: red_gemstone
+            Amount: 40
+      - Index: 2
+        Item: Shield_Of_Gust
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 750
+          - Index: 1
+            Item: yellow_gemstone
+            Amount: 50
+          - Index: 1
+            Item: blue_gemstone
+            Amount: 50
+      - Index: 3
+        Item: Shield_Of_Earth
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 750
+          - Index: 1
+            Item: yellow_gemstone
+            Amount: 40
+      - Index: 4
+        Item: bigshield_of_water
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 750
+          - Index: 1
+            Item: blue_gemstone
+            Amount: 40
+      - Index: 5
+        Item: S_Timeoverload_Shield
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 40
+      - Index: 6
+        Item: Mad_Bunny_K_
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 7
+        Item: Bloody_Knight_Shield__
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 7500
+          - Index: 1
+            Item: EP17_1_EVT39
+            Amount: 80
+      - Index: 8
+        Item: Lapine_Shield
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 7500

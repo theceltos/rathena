@@ -3,7 +3,7 @@ prontera,139,173,6	script	Cleitin#ext162	31003,{
 	mes "Olá.";
 	mes "Temos equipamentos ^4d4dffEspeciais Celtin^000000 que podem ser trocados por " + mesitemlink( 42015 ) + ".";
 	soundeffect "zherlthsh_die.wav", 0;
-	switch(select("Farmar Moedas:Loja Especial:Loja Etc")){
+	switch(select("^FF0000• Farmar Moedas^000000:^00FF00• Loja Especial^000000:^FF5452• Loja Etc:^0000FF• Loja Pets^000000")){
 	case 1:
 
 		switch(select("Level 100~150 [ ^FF0000"+getmapusers("veil")+"^000000 ]:Level 150~250 [ ^FF0000"+getmapusers("halloween")+"^000000 ]")){
@@ -21,12 +21,26 @@ prontera,139,173,6	script	Cleitin#ext162	31003,{
 			end;
 		}
 	case 2:
-		close2;
-	callshop "loja_turnin";
+		switch(select("^FF0000•^000000 ^455045Armaduras^000000:^FF0000•^000000 ^455045Aneis / Luvas^000000:^FF0000•^000000 ^455045Escudos^000000:^FF0000•^000000 ^455045Armas^000000:")){
+		case 1:
+		callshop "loja_turnin_equip_armors";
+			end;
+		case 2:
+		callshop "loja_turnin_equip_acessory";
+			end;
+		case 3:
+		callshop "loja_turnin_equip_shields";
+			end;
+		case 4:
+		callshop "loja_turnin_equip_weapons";
+			end;
+		}
 		end;
 	case 3:
-		close2;
 	callshop "loja_turnin_utilitarios";
+		end;
+	case 4:
+	callshop "loja_turnin_pets";
 		end;
 	}
 	OnInit:
