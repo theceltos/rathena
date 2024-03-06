@@ -181,5 +181,68 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
-            Amount: 40
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 17
+        Item: Solid_Staff
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 18
+        Item: Solid_Wand
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 19
+        Item: Solid_Edge
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 20
+        Item: Solid_Spear
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 21
+        Item: Solid_Manual
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 22
+        Item: Solid_Rod
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100
+      - Index: 23
+        Item: Solid_Dagger
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 100

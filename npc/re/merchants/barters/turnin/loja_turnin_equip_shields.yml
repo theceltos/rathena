@@ -103,7 +103,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 6
         Item: Mad_Bunny_K_
@@ -118,7 +118,7 @@ Body:
             Item: Celtcoin
             Amount: 7500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 80
       - Index: 8
         Item: Lapine_Shield

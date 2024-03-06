@@ -1,7 +1,7 @@
 prontera,139,173,6	script	Cleitin#ext162	31003,{
 	mes "[Cleitin]";
 	mes "Olá.";
-	mes "Temos equipamentos ^4d4dffEspeciais Celtin^000000 que podem ser trocados por " + mesitemlink( 42015 ) + ".";
+	mes "Temos equipamentos ^4d4dffEspeciais Celtin^000000 que podem ser trocados por " + mesitemlink( 42015 ) + " e alguns por " + mesitemlink( 25375 ) + ".";
 	soundeffect "zherlthsh_die.wav", 0;
 	switch(select("^FF0000• Farmar Moedas^000000:^00FF00• Loja Especial^000000:^FF5452• Loja Etc:^0000FF• Loja Pets^000000")){
 	case 1:

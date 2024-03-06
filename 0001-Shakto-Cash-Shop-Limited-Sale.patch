@@ -1,0 +1,945 @@
+From aa42401bc5b6832ae080b678d71121f43796938b Mon Sep 17 00:00:00 2001
+From: Pokye <98105181+Pokye@users.noreply.github.com>
+Date: Wed, 12 Jul 2023 10:37:46 -0300
+Subject: [PATCH] [Shakto] Cash Shop Limited Sale
+
+---
+ src/map/cashshop.cpp       | 135 ++++++++++++++++++++++--------
+ src/map/cashshop.hpp       |   5 +-
+ src/map/clif.cpp           | 163 +++++++++++++++++++++++++++++++------
+ src/map/clif.hpp           |   4 +
+ src/map/clif_packetdb.hpp  |  17 ++--
+ src/map/packets.hpp        |  33 ++++++--
+ src/map/packets_struct.hpp |  97 +++++++++++++++++++++-
+ src/map/pc.cpp             |   5 ++
+ src/map/pc.hpp             |   2 +
+ 9 files changed, 387 insertions(+), 74 deletions(-)
+
+diff --git a/src/map/cashshop.cpp b/src/map/cashshop.cpp
+index 520cf32..0622382 100644
+--- a/src/map/cashshop.cpp
++++ b/src/map/cashshop.cpp
+@@ -5,6 +5,7 @@
+ 
+ #include <stdlib.h> // atoi
+ #include <string.h> // memset
++#include <time.h>  // <ctime> in c++
+ 
+ #include <common/cbasetypes.hpp> // uint16, uint32
+ #include <common/malloc.hpp> // CREATE, RECREATE, aFree
+@@ -140,7 +141,7 @@ CashShopDatabase cash_shop_db;
+ #if PACKETVER_SUPPORTS_SALES
+ static bool sale_parse_dbrow( char* fields[], int columns, int current ){
+ 	t_itemid nameid = strtoul(fields[0], nullptr, 10);
+-	int start = atoi(fields[1]), end = atoi(fields[2]), amount = atoi(fields[3]);
++	int start = atoi(fields[1]), end = atoi(fields[2]), amount = atoi(fields[3]), id = atoi(fields[4]), rentalTime = atoi(fields[5]);
+ 	time_t now = time(NULL);
+ 	struct sale_item_data* sale_item = NULL;
+ 
+@@ -176,12 +177,14 @@ static bool sale_parse_dbrow( char* fields[], int columns, int current ){
+ 		sale_item = sale_items.item[sale_items.count - 1];
+ 	}
+ 
++	sale_item->id = id;
+ 	sale_item->nameid = nameid;
+ 	sale_item->start = start;
+ 	sale_item->end = end;
+ 	sale_item->amount = amount;
+ 	sale_item->timer_start = INVALID_TIMER;
+ 	sale_item->timer_end = INVALID_TIMER;
++	sale_item->rentalTime = rentalTime;
+ 
+ 	return true;
+ }
+@@ -189,19 +192,19 @@ static bool sale_parse_dbrow( char* fields[], int columns, int current ){
+ static void sale_read_db_sql( void ){
+ 	uint32 lines = 0, count = 0;
+ 
+-	if( SQL_ERROR == Sql_Query( mmysql_handle, "SELECT `nameid`, UNIX_TIMESTAMP(`start`), UNIX_TIMESTAMP(`end`), `amount` FROM `%s` WHERE `end` > now()", sales_table ) ){
++	if( SQL_ERROR == Sql_Query( mmysql_handle, "SELECT `nameid`, UNIX_TIMESTAMP(`start`), UNIX_TIMESTAMP(`end`), `amount`, `id`, `rentalTime` FROM `%s` WHERE `end` > now()", sales_table ) ){
+ 		Sql_ShowDebug(mmysql_handle);
+ 		return;
+ 	}
+ 
+ 	while( SQL_SUCCESS == Sql_NextRow(mmysql_handle) ){
+-		char* str[4];
++		char* str[6];
+ 		char dummy[256] = "";
+ 		int i;
+ 
+ 		lines++;
+ 
+-		for( i = 0; i < 4; i++ ){
++		for( i = 0; i < 6; i++ ){
+ 			Sql_GetData( mmysql_handle, i, &str[i], NULL );
+ 
+ 			if( str[i] == NULL ){
+@@ -209,7 +212,7 @@ static void sale_read_db_sql( void ){
+ 			}
+ 		}
+ 
+-		if( !sale_parse_dbrow( str, 4, lines ) ){
++		if( !sale_parse_dbrow( str, 6, lines ) ){
+ 			ShowError( "sale_read_db_sql: Cannot process table '%s' at line '%d', skipping...\n", sales_table, lines );
+ 			continue;
+ 		}
+@@ -229,7 +232,7 @@ static TIMER_FUNC(sale_end_timer){
+ 	delete_timer( sale_item->timer_end, sale_end_timer );
+ 	sale_item->timer_end = INVALID_TIMER;
+ 	
+-	clif_sale_end( sale_item, NULL, ALL_CLIENT );
++	map_foreachpc(clif_CashShopLimited_sub);
+ 
+ 	sale_remove_item( sale_item->nameid );
+ 
+@@ -239,8 +242,7 @@ static TIMER_FUNC(sale_end_timer){
+ static TIMER_FUNC(sale_start_timer){
+ 	struct sale_item_data* sale_item = (struct sale_item_data*)data;
+ 
+-	clif_sale_start( sale_item, NULL, ALL_CLIENT );
+-	clif_sale_amount( sale_item, NULL, ALL_CLIENT );
++	map_foreachpc(clif_CashShopLimited_sub);
+ 
+ 	// Clear the start timer
+ 	if( sale_item->timer_start != INVALID_TIMER ){
+@@ -254,7 +256,11 @@ static TIMER_FUNC(sale_start_timer){
+ 	return 1;
+ }
+ 
+-enum e_sale_add_result sale_add_item( t_itemid nameid, int32 count, time_t from, time_t to ){
++enum e_sale_add_result sale_add_item( t_itemid nameid, int32 count, time_t from, time_t to, time_t rent ){
++	int id;
++	char* data;
++	int rent_time_temp = 0;
++
+ 	// Check if the item exists in the sales tab
+ 	if( cash_shop_db.findItemInTab( CASHSHOP_TAB_SALE, nameid ) == nullptr ){
+ 		return SALE_ADD_FAILED;
+@@ -280,21 +286,41 @@ enum e_sale_add_result sale_add_item( t_itemid nameid, int32 count, time_t from,
+ 		return SALE_ADD_DUPLICATE;
+ 	}
+ 	
+-	if( SQL_ERROR == Sql_Query(mmysql_handle, "INSERT INTO `%s`(`nameid`,`start`,`end`,`amount`) VALUES ( '%u', FROM_UNIXTIME(%d), FROM_UNIXTIME(%d), '%d' )", sales_table, nameid, (uint32)from, (uint32)to, count) ){
++	if( rent > 0 ){
++		struct tm *ltm = gmtime(&rent);
++		if(ltm->tm_mday >= 14 && ltm->tm_hour >= 0)
++			rent_time_temp = 0;
++		else
++			rent_time_temp = (ltm->tm_mday * 24 * 60 * 60) + (ltm->tm_hour * 60 * 60) + (ltm->tm_min * 60);
++	}
++
++	if( SQL_ERROR == Sql_Query(mmysql_handle, "INSERT INTO `%s`(`nameid`,`start`,`end`,`amount`,`rentalTime`) VALUES ( '%u', FROM_UNIXTIME(%d), FROM_UNIXTIME(%d), '%d', '%d' )", sales_table, nameid, (uint32)from, (uint32)to, count, rent_time_temp) ){
++ 		Sql_ShowDebug(mmysql_handle);
++ 		return SALE_ADD_FAILED;
++ 	}
++	if( SQL_ERROR == Sql_Query(mmysql_handle, "SELECT `id` FROM `%s` WHERE `nameid` = '%u'", sales_table, nameid) ){
+ 		Sql_ShowDebug(mmysql_handle);
+ 		return SALE_ADD_FAILED;
+ 	}
++	while( SQL_SUCCESS == Sql_NextRow( mmysql_handle ) )
++		Sql_GetData( mmysql_handle, 0, &data, NULL ); 
++
++	id = atoi(data);
++
++	Sql_FreeResult( mmysql_handle );
+ 
+ 	RECREATE(sale_items.item, struct sale_item_data *, ++sale_items.count);
+ 	CREATE(sale_items.item[sale_items.count - 1], struct sale_item_data, 1);
+ 	struct sale_item_data* sale_item = sale_items.item[sale_items.count - 1];
+ 
++	sale_item->id = id;
+ 	sale_item->nameid = nameid;
+ 	sale_item->start = from;
+ 	sale_item->end = to;
+ 	sale_item->amount = count;
+ 	sale_item->timer_start = add_timer( gettick() + (unsigned int)(from - time(NULL)) * 1000, sale_start_timer, 0, (intptr_t)sale_item );
+ 	sale_item->timer_end = INVALID_TIMER;
++	sale_item->rentalTime = static_cast<int>(rent_time_temp);
+ 
+ 	return SALE_ADD_SUCCESS;
+ }
+@@ -311,6 +337,10 @@ bool sale_remove_item( t_itemid nameid ){
+ 	}
+ 
+ 	// Delete it from the database
++	if( SQL_ERROR == Sql_Query(mmysql_handle, "DELETE FROM `sales_limited_acc` WHERE `sales_id` IN (SELECT `id` FROM `%s` WHERE `nameid` = '%u')", sales_table, nameid ) ){
++		Sql_ShowDebug(mmysql_handle);
++		return false;
++	}
+ 	if( SQL_ERROR == Sql_Query(mmysql_handle, "DELETE FROM `%s` WHERE `nameid` = '%u'", sales_table, nameid ) ){
+ 		Sql_ShowDebug(mmysql_handle);
+ 		return false;
+@@ -327,7 +357,7 @@ bool sale_remove_item( t_itemid nameid ){
+ 		sale_item->timer_end = INVALID_TIMER;
+ 
+ 		// Notify all clients that the sale has ended
+-		clif_sale_end(sale_item, NULL, ALL_CLIENT);
++		map_foreachpc(clif_CashShopLimited_sub);
+ 	}
+ 
+ 	// Find the original pointer in the array
+@@ -381,11 +411,6 @@ struct sale_item_data* sale_find_item( t_itemid nameid, bool onsale ){
+ 		return NULL;
+ 	}
+ 
+-	// The amount has been used up already
+-	if( sale_items.item[i]->amount == 0 ){
+-		return NULL;
+-	}
+-
+ 	// Return the sale item
+ 	return sale_items.item[i];
+ }
+@@ -395,11 +420,25 @@ void sale_notify_login( map_session_data* sd ){
+ 
+ 	for( i = 0; i < sale_items.count; i++ ){
+ 		if( sale_items.item[i]->timer_end != INVALID_TIMER ){
+-			clif_sale_start( sale_items.item[i], &sd->bl, SELF );
+-			clif_sale_amount( sale_items.item[i], &sd->bl, SELF );
++			//clif_CashShopLimited(sd);
+ 		}
+ 	}
+ }
++
++void sale_load_pc( map_session_data* sd ){
++	char* data;
++	int id, amount;
++
++	if( SQL_ERROR == Sql_Query(mmysql_handle, "SELECT `sales_id`, `amount` FROM `sales_limited_acc` WHERE `account_id` = '%d'", sd->bl.id) ){
++		Sql_ShowDebug(mmysql_handle);
++		return;
++	}
++	while( SQL_SUCCESS == Sql_NextRow( mmysql_handle ) ){
++		Sql_GetData( mmysql_handle, 0, &data, NULL ); id = atoi(data);
++		Sql_GetData( mmysql_handle, 1, &data, NULL ); amount = atoi(data);
++		sd->sales.push_back( std::make_pair(id,amount) );
++	}
++}
+ #endif
+ 
+ static void cashshop_read_db( void ){
+@@ -412,6 +451,9 @@ static void cashshop_read_db( void ){
+ 	sale_read_db_sql();
+ 
+ 	// Clean outdated sales
++	if( SQL_ERROR == Sql_Query(mmysql_handle, "DELETE FROM `sales_limited_acc` WHERE `sales_id` IN (SELECT `id` FROM `%s` WHERE `end` < FROM_UNIXTIME(%d))", sales_table, (uint32)now ) ){
++		Sql_ShowDebug(mmysql_handle);
++	}
+ 	if( SQL_ERROR == Sql_Query(mmysql_handle, "DELETE FROM `%s` WHERE `end` < FROM_UNIXTIME(%d)", sales_table, (uint32)now ) ){
+ 		Sql_ShowDebug(mmysql_handle);
+ 	}
+@@ -494,11 +536,19 @@ bool cashshop_buylist( map_session_data* sd, uint32 kafrapoints, int n, struct P
+ 				return false;
+ 			}
+ 
+-			if( sale->amount < quantity ){
+-				// Client tried to buy a higher quantity than is available
++			int temp_amount = sale->amount;
++			for(auto &it : sd->sales){
++				if(it.first == sale->id){
++					temp_amount = it.second;
++					break;
++				}
++			}
++
++			if( temp_amount < quantity ){
++				// Client tried to buy a higher quantity than is available for his account
+ 				clif_cashshop_result( sd, nameid, CASHSHOP_RESULT_ERROR_UNKNOWN );
+ 				// Maybe he did not get refreshed in time -> do it now
+-				clif_sale_amount( sale, &sd->bl, SELF );
++				clif_CashShopLimited(sd);
+ 				return false;
+ 			}
+ #else
+@@ -565,11 +615,19 @@ bool cashshop_buylist( map_session_data* sd, uint32 kafrapoints, int n, struct P
+ 				return false;
+ 			}
+ 
+-			if( sale->amount < quantity ){
++			int temp_amount = sale->amount;
++			for(auto &it : sd->sales){
++				if(it.first == sale->id){
++					temp_amount = it.second;
++					break;
++				}
++			}
++
++			if( temp_amount < quantity ){
+ 				// Client tried to buy a higher quantity than is available
+ 				clif_cashshop_result( sd, nameid, CASHSHOP_RESULT_ERROR_UNKNOWN );
+ 				// Maybe he did not get refreshed in time -> do it now
+-				clif_sale_amount( sale, &sd->bl, SELF );
++				clif_CashShopLimited(sd);
+ 				return false;
+ 			}
+ 		}
+@@ -581,6 +639,9 @@ bool cashshop_buylist( map_session_data* sd, uint32 kafrapoints, int n, struct P
+ 
+ 				item_tmp.nameid = nameid;
+ 				item_tmp.identify = 1;
++				if(tab == CASHSHOP_TAB_SALE && sale->rentalTime > 0 && id->type != IT_HEALING && id->type != IT_CARD)
++					item_tmp.expire_time = (unsigned int)(time(NULL) + sale->rentalTime);
++
+ 
+ 				switch( pc_additem( sd, &item_tmp, get_amt, LOG_TYPE_CASH ) ){
+ 					case ADDITEM_OVERWEIGHT:
+@@ -602,19 +663,25 @@ bool cashshop_buylist( map_session_data* sd, uint32 kafrapoints, int n, struct P
+ 
+ #if PACKETVER_SUPPORTS_SALES
+ 			if( tab == CASHSHOP_TAB_SALE ){
+-				uint32 new_amount = sale->amount - get_amt;
+-
+-				if( new_amount == 0 ){
+-					sale_remove_item(sale->nameid);
+-				}else{
+-					if( SQL_ERROR == Sql_Query( mmysql_handle, "UPDATE `%s` SET `amount` = '%d' WHERE `nameid` = '%u'", sales_table, new_amount, nameid ) ){
+-						Sql_ShowDebug(mmysql_handle);
+-					}
++				int new_amount = sale->amount-get_amt;
++				new_amount = (new_amount == 0) ? -1 : new_amount;
++
++				for(auto &it : sd->sales){
++					if(it.first == sale->id){
++						new_amount = it.second-get_amt;
++						new_amount = (new_amount == 0) ? -1 : new_amount;
++						it.second = new_amount;
++						break;
++ 					}
++				}
++ 
++				if( SQL_ERROR == Sql_Query( mmysql_handle, "INSERT INTO `sales_limited_acc` (`sales_id`,`account_id`,`amount`) VALUES ('%d', '%d', '%d') ON DUPLICATE KEY UPDATE amount = '%d'", sale->id, sd->bl.id, new_amount, new_amount ) ){
++					Sql_ShowDebug(mmysql_handle);
++ 				}
+ 
+-					sale->amount = new_amount;
++				sd->sales.push_back( std::make_pair(sale->id,new_amount) );
+ 
+-					clif_sale_amount(sale, NULL, ALL_CLIENT);
+-				}
++				clif_CashShopLimited(sd);
+ 			}
+ #endif
+ 			// CashShop Log
+diff --git a/src/map/cashshop.hpp b/src/map/cashshop.hpp
+index 4cf2e51..8ad4b11 100644
+--- a/src/map/cashshop.hpp
++++ b/src/map/cashshop.hpp
+@@ -86,9 +86,11 @@ enum e_sale_add_result {
+ 
+ struct sale_item_data{
+ 	// Data
++	int id;
+ 	t_itemid nameid;
+ 	time_t start;
+ 	time_t end;
++	int rentalTime;
+ 	uint32 amount;
+ 
+ 	// Timers
+@@ -105,9 +107,10 @@ struct sale_item_db{
+ extern struct sale_item_db sale_items;
+ 
+ struct sale_item_data* sale_find_item(t_itemid nameid, bool onsale);
+-enum e_sale_add_result sale_add_item(t_itemid nameid, int32 count, time_t from, time_t to);
++enum e_sale_add_result sale_add_item(t_itemid nameid, int32 count, time_t from, time_t to, time_t rent);
+ bool sale_remove_item(t_itemid nameid);
+ void sale_notify_login( map_session_data* sd );
++void sale_load_pc( map_session_data* sd );
+ #endif
+ 
+ #endif /* CASHSHOP_HPP */
+diff --git a/src/map/clif.cpp b/src/map/clif.cpp
+index bd046e7..bce466c 100644
+--- a/src/map/clif.cpp
++++ b/src/map/clif.cpp
+@@ -21432,11 +21432,20 @@ void clif_parse_sale_refresh( int fd, map_session_data* sd ){
+ 
+ 	struct sale_item_data* sale;
+ 
++#if PACKETVER < 20190724
+ 	if( p->AID != sd->status.account_id ){
+ 		return;
+ 	}
++#endif
++
++#if PACKETVER >= 20190724
++	std::shared_ptr<item_data> id = item_db.searchname( p->item_name );
++#else
++	safestrncpy( item_name, p->item_name, min(p->packetLength, ITEM_NAME_LENGTH) );
++	std::shared_ptr<item_data> id = item_db.searchname( item_name );
++#endif
+ 
+-	sale = sale_find_item( p->itemId, true );
++	sale = sale_find_item( id->nameid, true );
+ 
+ 	if( sale == NULL ){
+ 		return;
+@@ -21458,11 +21467,11 @@ void clif_sale_open( map_session_data* sd ){
+ 
+ 	sd->state.sale_open = true;
+ 
+-	int fd = sd->fd;
++	struct PACKET_ZC_OPEN_BARGAIN_SALE_TOOL p;
++
++	p.packetType = HEADER_ZC_OPEN_BARGAIN_SALE_TOOL;
+ 
+-	WFIFOHEAD(fd, 2);
+-	WFIFOW(fd, 0) = 0x9b5;
+-	WFIFOSET(fd, 2);
++	clif_send( &p, sizeof( p ), &sd->bl, SELF );
+ #endif
+ }
+ 
+@@ -21473,9 +21482,13 @@ void clif_parse_sale_open( int fd, map_session_data* sd ){
+ #if PACKETVER_SUPPORTS_SALES
+ 	nullpo_retv(sd);
+ 
+-	if( RFIFOL(fd, 2) != sd->status.account_id ){
++	struct PACKET_CZ_OPEN_BARGAIN_SALE_TOOL* p = (struct PACKET_CZ_OPEN_BARGAIN_SALE_TOOL*)RFIFOP( fd, 0 );
++
++#if PACKETVER < 20190724
++	if( p->AID != sd->status.account_id ){
+ 		return;
+ 	}
++#endif
+ 
+ 	char command[CHAT_SIZE_MAX];
+ 
+@@ -21497,11 +21510,11 @@ void clif_sale_close(map_session_data* sd) {
+ 
+ 	sd->state.sale_open = false;
+ 
+-	int fd = sd->fd;
++	struct PACKET_ZC_CLOSE_BARGAIN_SALE_TOOL p;
+ 
+-	WFIFOHEAD(fd, 2);
+-	WFIFOW(fd, 0) = 0x9bd;
+-	WFIFOSET(fd, 2);
++	p.packetType = HEADER_ZC_CLOSE_BARGAIN_SALE_TOOL;
++
++	clif_send( &p, sizeof( p ), &sd->bl, SELF );
+ #endif
+ }
+ 
+@@ -21511,9 +21524,13 @@ void clif_parse_sale_close(int fd, map_session_data* sd) {
+ #if PACKETVER_SUPPORTS_SALES
+ 	nullpo_retv(sd);
+ 
+-	if( RFIFOL(fd, 2) != sd->status.account_id ){
++	struct PACKET_CZ_CLOSE_BARGAIN_SALE_TOOL* p = (struct PACKET_CZ_CLOSE_BARGAIN_SALE_TOOL*)RFIFOP( fd, 0 );
++
++#if PACKETVER < 20190724
++	if( p->AID != sd->status.account_id ){
+ 		return;
+ 	}
++#endif
+ 
+ 	clif_sale_close(sd);
+ #endif
+@@ -21530,11 +21547,15 @@ void clif_sale_search_reply( map_session_data* sd, std::shared_ptr<s_cash_item>
+ 	if( item != NULL ){
+ 		p.result = 0;
+ 		p.itemId = client_nameid( item->nameid );
++#if PACKETVER < 20190724
+ 		p.price = item->price;
++#endif
+ 	}else{
+ 		p.result = 1;
+ 		p.itemId = 0;
++#if PACKETVER < 20190724
+ 		p.price = 0;
++#endif
+ 	}
+ 
+ 	clif_send( &p, sizeof( p ), &sd->bl, SELF );
+@@ -21545,19 +21566,31 @@ void clif_sale_search_reply( map_session_data* sd, std::shared_ptr<s_cash_item>
+ /// 09ac <length>.W <account id>.L <item name>.?B (CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO)
+ void clif_parse_sale_search( int fd, map_session_data* sd ){
+ #if PACKETVER_SUPPORTS_SALES
+-	char item_name[ITEM_NAME_LENGTH];
+-
+ 	nullpo_retv(sd);
+ 
+-	if( RFIFOL(fd, 4) != sd->status.account_id ){
++	struct PACKET_CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO* p = (struct PACKET_CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO*)RFIFOP( fd, 0 );
++
++#if PACKETVER < 20190724
++	char item_name[ITEM_NAME_LENGTH];
++
++	if( p->AID != sd->status.account_id ){
+ 		return;
+ 	}
++#endif
+ 
+ 	if( !sd->state.sale_open ){
+ 		return;
+ 	}
+ 
+-	safestrncpy( item_name, RFIFOCP(fd, 8), min(RFIFOW(fd, 2) - 7, ITEM_NAME_LENGTH) );
++#if PACKETVER >= 20190724
++	std::shared_ptr<item_data> id = item_db.searchname( p->item_name );
++ 
++	if( id == nullptr ){
++		clif_sale_search_reply( sd, nullptr );
++		return;
++	}
++#else
++	safestrncpy( item_name, p->item_name, min(p->packetLength, ITEM_NAME_LENGTH) );
+ 
+ 	std::shared_ptr<item_data> id = item_db.searchname( item_name );
+ 
+@@ -21566,6 +21599,7 @@ void clif_parse_sale_search( int fd, map_session_data* sd ){
+ 		clif_sale_search_reply( sd, nullptr );
+ 		return;
+ 	}
++#endif
+ 
+ 	clif_sale_search_reply( sd, cash_shop_db.findItemInTab( CASHSHOP_TAB_SALE, id->nameid ) );
+ #endif
+@@ -21575,12 +21609,12 @@ void clif_parse_sale_search( int fd, map_session_data* sd ){
+ /// 09af <result>.W (ZC_ACK_APPLY_BARGAIN_SALE_ITEM)
+ void clif_sale_add_reply( map_session_data* sd, enum e_sale_add_result result ){
+ #if PACKETVER_SUPPORTS_SALES
+-	int fd = sd->fd;
++	struct PACKET_ZC_ACK_APPLY_BARGAIN_SALE_ITEM p;
+ 
+-	WFIFOHEAD(fd, 4);
+-	WFIFOW(fd, 0) = 0x9af;
+-	WFIFOW(fd, 2) = (uint16)result;
+-	WFIFOSET(fd, 4);
++	p.packetType = HEADER_ZC_ACK_APPLY_BARGAIN_SALE_ITEM;
++	p.result = result;
++	clif_send( &p, sizeof( p ), &sd->bl, SELF );
++	int fd = sd->fd;
+ #endif
+ }
+ 
+@@ -21593,17 +21627,23 @@ void clif_parse_sale_add( int fd, map_session_data* sd ){
+ 
+ 	struct PACKET_CZ_REQ_APPLY_BARGAIN_SALE_ITEM* p = (struct PACKET_CZ_REQ_APPLY_BARGAIN_SALE_ITEM*)RFIFOP( fd, 0 );
+ 
++#if PACKETVER < 20190724
+ 	if( p->AID != sd->status.account_id ){
+ 		return;
+ 	}
++#endif
+ 
+ 	if( !sd->state.sale_open ){
+ 		return;
+ 	}
+-	
++
++#if PACKETVER >= 20190724
++	clif_sale_add_reply( sd, sale_add_item( p->itemId, p->amount, p->startTime, p->endTime, p->rentalTime ) );
++#else
+ 	time_t endTime = p->startTime + p->hours * 60 * 60;
++	clif_sale_add_reply( sd, sale_add_item( p->itemId, p->amount, p->startTime, endTime, 0 ) );
++#endif
+ 
+-	clif_sale_add_reply( sd, sale_add_item( p->itemId, p->amount, p->startTime, endTime ) );
+ #endif
+ }
+ 
+@@ -21611,12 +21651,12 @@ void clif_parse_sale_add( int fd, map_session_data* sd ){
+ /// 09b1 <result>.W (ZC_ACK_REMOVE_BARGAIN_SALE_ITEM)
+ void clif_sale_remove_reply( map_session_data* sd, bool failed ){
+ #if PACKETVER_SUPPORTS_SALES
+-	int fd = sd->fd;
++	struct PACKET_ZC_ACK_REMOVE_BARGAIN_SALE_ITEM p;
+ 
+-	WFIFOHEAD(fd, 4);
+-	WFIFOW(fd, 0) = 0x9b1;
+-	WFIFOW(fd, 2) = failed;
+-	WFIFOSET(fd, 4);
++	p.packetType = HEADER_ZC_ACK_REMOVE_BARGAIN_SALE_ITEM;
++	p.result = failed;
++	clif_send( &p, sizeof( p ), &sd->bl, SELF );
++	int fd = sd->fd;
+ #endif
+ }
+ 
+@@ -21628,9 +21668,11 @@ void clif_parse_sale_remove( int fd, map_session_data* sd ){
+ 
+ 	struct PACKET_CZ_REQ_REMOVE_BARGAIN_SALE_ITEM* p = (struct PACKET_CZ_REQ_REMOVE_BARGAIN_SALE_ITEM*)RFIFOP( fd, 0 );
+ 
++#if PACKETVER < 20190724
+ 	if( p->AID != sd->status.account_id ){
+ 		return;
+ 	}
++#endif
+ 
+ 	if( !sd->state.sale_open ){
+ 		return;
+@@ -23022,6 +23064,73 @@ void clif_parse_inventory_expansion_reject( int fd, map_session_data* sd ){
+ #endif
+ }
+ 
++void clif_parse_CashShopLimited( int fd, map_session_data* sd ){
++#if PACKETVER >= 20190724
++	clif_CashShopLimited(sd);
++#endif
++}
++
++int clif_CashShopLimited_sub(map_session_data *sd,va_list ap)
++{
++	clif_CashShopLimited(sd);
++
++	return 1;
++}
++
++void clif_CashShopLimited( map_session_data* sd ){
++#if PACKETVER >= 20190724
++	int i;
++	std::shared_ptr<s_cash_item> cash_it = nullptr;
++	int fd = sd->fd;
++
++	time_t now = time(NULL);
++	struct sale_item_data* sale_item;
++
++	int len = sizeof( struct PACKET_ZC_SE_CASHSHOP_LIMITED_REQ ) + sale_items.count * sizeof(struct SE_CASHSHOP_LIMITED_REQ_sub);
++
++	WFIFOHEAD( fd, len );
++	struct PACKET_ZC_SE_CASHSHOP_LIMITED_REQ *p = (struct PACKET_ZC_SE_CASHSHOP_LIMITED_REQ *)WFIFOP( fd, 0 );
++
++	p->packetType = HEADER_ZC_SE_CASHSHOP_LIMITED_REQ;
++	p->unknow = 0;
++
++	int count = 0;
++	for( i = 0; i < sale_items.count; i++ ){
++		sale_item = sale_items.item[i];
++		if( sale_item->start <= now && sale_item->end > now ){
++							cash_it = cash_shop_db.findItemInTab( CASHSHOP_TAB_SALE, sale_item->nameid );
++			if( cash_it == nullptr ){
++				ShowWarning( "sale_parse_dbrow: ID %u is not registered in the Sale tab in line '%d', skipping...\n", sale_item->nameid );
++				continue;
++			}
++
++			int sale_amount = 0;
++			for(auto &it : sd->sales){
++				if(it.first == sale_item->id){
++					sale_amount = it.second;
++					break;
++				}
++			}
++
++			if(sale_amount == -1)
++				continue;
++
++			int temp_amount = sale_amount ? sale_amount : sale_item->amount;
++			p->list[count].nameid = sale_item->nameid;
++			p->list[count].amount = sale_item->amount;
++			p->list[count].amountLeft = temp_amount;
++			p->list[count].price = cash_it->price;
++			p->list[count].startTime = static_cast<uint32>(sale_item->start);
++			p->list[count].endTime = static_cast<uint32>(sale_item->end);
++			count++;
++		}
++	}
++	p->packetLength = sizeof(PACKET_ZC_SE_CASHSHOP_LIMITED_REQ) + count * sizeof(struct SE_CASHSHOP_LIMITED_REQ_sub);
++
++	WFIFOSET( fd, p->packetLength );
++#endif
++}
++
+ void clif_barter_open( map_session_data& sd, struct npc_data& nd ){
+ #if PACKETVER_MAIN_NUM >= 20190116 || PACKETVER_RE_NUM >= 20190116 || PACKETVER_ZERO_NUM >= 20181226
+ 	if( nd.subtype != NPCTYPE_BARTER || nd.u.barter.extended || sd.state.barter_open ){
+diff --git a/src/map/clif.hpp b/src/map/clif.hpp
+index 0f3ce86..f895a12 100644
+--- a/src/map/clif.hpp
++++ b/src/map/clif.hpp
+@@ -1213,6 +1213,10 @@ void clif_parse_skill_toid( map_session_data* sd, uint16 skill_id, uint16 skill_
+ 
+ void clif_inventory_expansion_info( map_session_data* sd );
+ 
++/// Limited cash shop
++int clif_CashShopLimited_sub(map_session_data *sd,va_list ap);
++void clif_CashShopLimited( map_session_data* sd );
++
+ // Barter System
+ void clif_barter_open( map_session_data& sd, struct npc_data& nd );
+ void clif_barter_extended_open( map_session_data& sd, struct npc_data& nd );
+diff --git a/src/map/clif_packetdb.hpp b/src/map/clif_packetdb.hpp
+index 14492dc..e68dbe7 100644
+--- a/src/map/clif_packetdb.hpp
++++ b/src/map/clif_packetdb.hpp
+@@ -2093,16 +2093,22 @@
+ 	parseable_packet(0x098D,-1,clif_parse_clan_chat,2,4);
+ 	packet(0x098E,-1);
+ 	// Sale
++#if PACKETVER >= 20190724
++	parseable_packet( HEADER_CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO, sizeof( PACKET_CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO ), clif_parse_sale_search, 0 );
++#else
+ 	parseable_packet( HEADER_CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO, -1, clif_parse_sale_search, 0 );
++#endif
+ 	packet( HEADER_ZC_ACK_CASH_BARGAIN_SALE_ITEM_INFO, sizeof( PACKET_ZC_ACK_CASH_BARGAIN_SALE_ITEM_INFO ) );
+ 	parseable_packet( HEADER_CZ_REQ_APPLY_BARGAIN_SALE_ITEM, sizeof( PACKET_CZ_REQ_APPLY_BARGAIN_SALE_ITEM ), clif_parse_sale_add, 0 );
+-	packet(0x09AF,4);
++	packet( HEADER_ZC_ACK_APPLY_BARGAIN_SALE_ITEM, sizeof( PACKET_ZC_ACK_APPLY_BARGAIN_SALE_ITEM ) );
+ 	parseable_packet( HEADER_CZ_REQ_REMOVE_BARGAIN_SALE_ITEM, sizeof( PACKET_CZ_REQ_REMOVE_BARGAIN_SALE_ITEM ), clif_parse_sale_remove, 0 );
+-	packet(0x09B1,4);
++	packet( HEADER_ZC_ACK_REMOVE_BARGAIN_SALE_ITEM, sizeof( PACKET_ZC_ACK_REMOVE_BARGAIN_SALE_ITEM ) );
+ 	packet( HEADER_ZC_NOTIFY_BARGAIN_SALE_SELLING, sizeof( PACKET_ZC_NOTIFY_BARGAIN_SALE_SELLING ) );
+ 	packet( HEADER_ZC_NOTIFY_BARGAIN_SALE_CLOSE, sizeof( PACKET_ZC_NOTIFY_BARGAIN_SALE_CLOSE ) );
+-	parseable_packet(0x09B4,6,clif_parse_sale_open,2);
+-	parseable_packet(0x09BC,6,clif_parse_sale_close,2);
++	parseable_packet( HEADER_CZ_OPEN_BARGAIN_SALE_TOOL , sizeof(PACKET_CZ_OPEN_BARGAIN_SALE_TOOL), clif_parse_sale_open,0);
++	packet (HEADER_ZC_OPEN_BARGAIN_SALE_TOOL, sizeof(PACKET_ZC_OPEN_BARGAIN_SALE_TOOL));
++	parseable_packet( HEADER_CZ_CLOSE_BARGAIN_SALE_TOOL , sizeof(PACKET_CZ_CLOSE_BARGAIN_SALE_TOOL), clif_parse_sale_close,0);
++	packet (HEADER_ZC_CLOSE_BARGAIN_SALE_TOOL, sizeof(PACKET_ZC_CLOSE_BARGAIN_SALE_TOOL));
+ 	parseable_packet(0x09C3,8,clif_parse_sale_refresh,2,6);
+ 	packet( HEADER_ZC_ACK_COUNT_BARGAIN_SALE_ITEM, sizeof( PACKET_ZC_ACK_COUNT_BARGAIN_SALE_ITEM ) );
+ 	// New Packet
+@@ -2410,7 +2416,8 @@
+ #endif
+ 
+ #if PACKETVER >= 20190724
+-	parseable_packet( 0x0b4c, 2, clif_parse_dull, 0 );
++	parseable_packet( HEADER_CZ_SE_CASHSHOP_LIMITED_REQ, sizeof( PACKET_CZ_SE_CASHSHOP_LIMITED_REQ ), clif_parse_CashShopLimited, 0 );
++	packet (HEADER_ZC_SE_CASHSHOP_LIMITED_REQ, sizeof(PACKET_ZC_SE_CASHSHOP_LIMITED_REQ));
+ #endif
+ 
+ #if PACKETVER_MAIN_NUM >= 20191120 || PACKETVER_RE_NUM >= 20191106 || PACKETVER_ZERO_NUM >= 20191127
+diff --git a/src/map/packets.hpp b/src/map/packets.hpp
+index f52a3f5..c16c109 100644
+--- a/src/map/packets.hpp
++++ b/src/map/packets.hpp
+@@ -62,12 +62,12 @@ struct PACKET_CZ_SE_PC_BUY_CASHITEM_LIST{
+ 
+ struct PACKET_CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO{
+ 	int16 packetType;
++#if PACKETVER < 20190724
+ 	int16 packetLength;
+ 	uint32 AID;
+-#if PACKETVER_MAIN_NUM >= 20181121 || PACKETVER_RE_NUM >= 20180704 || PACKETVER_ZERO_NUM >= 20181114
+-	uint32 itemId;
++	char item_name[];
+ #else
+-	uint16 itemId;
++	char item_name[ITEM_NAME_LENGTH];
+ #endif
+ } __attribute__((packed));
+ 
+@@ -79,12 +79,16 @@ struct PACKET_ZC_ACK_CASH_BARGAIN_SALE_ITEM_INFO{
+ #else
+ 	uint16 itemId;
+ #endif
++#if PACKETVER < 20190724
+ 	uint32 price;
++#endif
+ } __attribute__((packed));
+ 
+ struct PACKET_CZ_REQ_APPLY_BARGAIN_SALE_ITEM{
+ 	int16 packetType;
++#if PACKETVER < 20190724
+ 	uint32 AID;
++#endif
+ #if PACKETVER_MAIN_NUM >= 20181121 || PACKETVER_RE_NUM >= 20180704 || PACKETVER_ZERO_NUM >= 20181114
+ 	uint32 itemId;
+ #else
+@@ -92,16 +96,23 @@ struct PACKET_CZ_REQ_APPLY_BARGAIN_SALE_ITEM{
+ #endif
+ 	uint32 amount;
+ 	uint32 startTime;
+-#if PACKETVER >= 20150520
++#if PACKETVER >= 20190724
++	uint32 endTime;
++#elif PACKETVER >= 20150520
+ 	uint16 hours;
+ #else
+ 	uint8 hours;
+ #endif
++#if PACKETVER_MAIN_NUM >= 20210818 || PACKETVER_RE_NUM >= 20211103 || PACKETVER_ZERO_NUM >= 20210818
++	uint32 rentalTime;
++#endif
+ } __attribute__((packed));
+ 
+ struct PACKET_CZ_REQ_REMOVE_BARGAIN_SALE_ITEM{
+ 	int16 packetType;
++#if PACKETVER < 20190724
+ 	uint32 AID;
++#endif
+ #if PACKETVER_MAIN_NUM >= 20181121 || PACKETVER_RE_NUM >= 20180704 || PACKETVER_ZERO_NUM >= 20181114
+ 	uint32 itemId;
+ #else
+@@ -554,10 +565,16 @@ DEFINE_PACKET_HEADER(ZC_ENTRY_QUEUE_INIT, 0x90e);
+ DEFINE_PACKET_HEADER(ZC_BANKING_CHECK, 0x9a6)
+ DEFINE_PACKET_HEADER(ZC_ACK_BANKING_DEPOSIT, 0x9a8)
+ DEFINE_PACKET_HEADER(ZC_ACK_BANKING_WITHDRAW, 0x9aa)
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(CZ_REQ_REMOVE_BARGAIN_SALE_ITEM, 0x0b4a)
++DEFINE_PACKET_HEADER(CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO, 0x0b53)
++DEFINE_PACKET_HEADER(ZC_ACK_CASH_BARGAIN_SALE_ITEM_INFO, 0x0b54)
++#else
+ DEFINE_PACKET_HEADER(CZ_REQ_CASH_BARGAIN_SALE_ITEM_INFO, 0x9ac)
+ DEFINE_PACKET_HEADER(ZC_ACK_CASH_BARGAIN_SALE_ITEM_INFO, 0x9ad)
+-DEFINE_PACKET_HEADER(CZ_REQ_APPLY_BARGAIN_SALE_ITEM, 0x9ae)
+ DEFINE_PACKET_HEADER(CZ_REQ_REMOVE_BARGAIN_SALE_ITEM, 0x9b0)
++#endif
++DEFINE_PACKET_HEADER(CZ_REQ_APPLY_BARGAIN_SALE_ITEM, 0x9ae)
+ DEFINE_PACKET_HEADER(ZC_NOTIFY_BARGAIN_SALE_SELLING, 0x9b2)
+ DEFINE_PACKET_HEADER(ZC_NOTIFY_BARGAIN_SALE_CLOSE, 0x9b3)
+ DEFINE_PACKET_HEADER(ZC_ACK_OPEN_BANKING, 0x9b7)
+@@ -567,7 +584,13 @@ DEFINE_PACKET_HEADER(ZC_ACK_GUILDSTORAGE_LOG, 0x9da)
+ DEFINE_PACKET_HEADER(ZC_GOLDPCCAFE_POINT, 0xa15)
+ DEFINE_PACKET_HEADER(CZ_DYNAMICNPC_CREATE_REQUEST, 0xa16)
+ DEFINE_PACKET_HEADER(ZC_DYNAMICNPC_CREATE_RESULT, 0xa17)
++#if PACKETVER_MAIN_NUM >= 20210818 || PACKETVER_RE_NUM >= 20211103 || PACKETVER_ZERO_NUM >= 20210818
++DEFINE_PACKET_HEADER(CZ_REQ_APPLY_BARGAIN_SALE_ITEM2, 0xbac)
++#elif PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(CZ_REQ_APPLY_BARGAIN_SALE_ITEM2, 0xb48)
++#else
+ DEFINE_PACKET_HEADER(CZ_REQ_APPLY_BARGAIN_SALE_ITEM2, 0xa3d)
++#endif
+ DEFINE_PACKET_HEADER(CZ_REQ_STYLE_CHANGE, 0xa46)
+ DEFINE_PACKET_HEADER(ZC_STYLE_CHANGE_RES, 0xa47)
+ DEFINE_PACKET_HEADER(CZ_REQ_STYLE_CLOSE, 0xa48)
+diff --git a/src/map/packets_struct.hpp b/src/map/packets_struct.hpp
+index 5ee8a2a..8186f74 100644
+--- a/src/map/packets_struct.hpp
++++ b/src/map/packets_struct.hpp
+@@ -4485,10 +4485,103 @@ DEFINE_PACKET_HEADER(CZ_SE_CASHSHOP_OPEN2, 0x0b6d);
+ #endif
+ 
+ #if PACKETVER >= 20190724
+-struct PACKET_CZ_GET_ACCOUNT_LIMTIED_SALE_LIST {
++struct PACKET_CZ_SE_CASHSHOP_LIMITED_REQ {
+ 	int16 packetType;
+ } __attribute__((packed));
+-DEFINE_PACKET_HEADER(CZ_GET_ACCOUNT_LIMTIED_SALE_LIST, 0x0b4c);
++DEFINE_PACKET_HEADER(CZ_SE_CASHSHOP_LIMITED_REQ, 0x0b4c);
++#endif
++
++struct SE_CASHSHOP_LIMITED_REQ_sub {
++	uint32 nameid;
++	uint32 amount;
++	uint32 amountLeft;
++	uint32 price;
++	uint32 startTime;
++	uint32 endTime;
++} __attribute__((packed));
++
++#if PACKETVER >= 20190724
++struct PACKET_ZC_SE_CASHSHOP_LIMITED_REQ {
++	int16 packetType;
++	int16 packetLength;
++	int16 unknow;
++	struct SE_CASHSHOP_LIMITED_REQ_sub list[];
++} __attribute__((packed));
++DEFINE_PACKET_HEADER(ZC_SE_CASHSHOP_LIMITED_REQ, 0x0b4d);
++#endif
++
++#if PACKETVER_SUPPORTS_SALES
++struct PACKET_CZ_OPEN_BARGAIN_SALE_TOOL {
++	int16 packetType;
++#if PACKETVER < 20190724
++	uint32 AID;
++#endif
++} __attribute__((packed));
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(CZ_OPEN_BARGAIN_SALE_TOOL, 0x0b4f);
++#else
++DEFINE_PACKET_HEADER(CZ_OPEN_BARGAIN_SALE_TOOL, 0x09b4);
++#endif
++#endif
++
++#if PACKETVER_SUPPORTS_SALES
++struct PACKET_ZC_OPEN_BARGAIN_SALE_TOOL {
++	int16 packetType;
++} __attribute__((packed));
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(ZC_OPEN_BARGAIN_SALE_TOOL, 0x0b50);
++#else
++DEFINE_PACKET_HEADER(ZC_OPEN_BARGAIN_SALE_TOOL, 0x09b5);
++#endif
++#endif
++
++#if PACKETVER_SUPPORTS_SALES
++struct PACKET_CZ_CLOSE_BARGAIN_SALE_TOOL {
++	int16 packetType;
++#if PACKETVER < 20190724
++	uint32 AID;
++#endif
++} __attribute__((packed));
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(CZ_CLOSE_BARGAIN_SALE_TOOL, 0x0b51);
++#else
++DEFINE_PACKET_HEADER(CZ_CLOSE_BARGAIN_SALE_TOOL, 0x09b4);
++#endif
++#endif
++
++#if PACKETVER_SUPPORTS_SALES
++struct PACKET_ZC_CLOSE_BARGAIN_SALE_TOOL {
++	int16 packetType;
++} __attribute__((packed));
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(ZC_CLOSE_BARGAIN_SALE_TOOL, 0x0b52);
++#else
++DEFINE_PACKET_HEADER(ZC_CLOSE_BARGAIN_SALE_TOOL, 0x09bd);
++#endif
++#endif
++
++#if PACKETVER_SUPPORTS_SALES
++struct PACKET_ZC_ACK_REMOVE_BARGAIN_SALE_ITEM {
++	int16 packetType;
++	int16 result;
++} __attribute__((packed));
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(ZC_ACK_REMOVE_BARGAIN_SALE_ITEM, 0x0b4b);
++#else
++DEFINE_PACKET_HEADER(ZC_ACK_REMOVE_BARGAIN_SALE_ITEM, 0x09b1);
++#endif
++#endif
++
++#if PACKETVER_SUPPORTS_SALES
++struct PACKET_ZC_ACK_APPLY_BARGAIN_SALE_ITEM {
++	int16 packetType;
++	int16 result;
++} __attribute__((packed));
++#if PACKETVER >= 20190724
++DEFINE_PACKET_HEADER(ZC_ACK_APPLY_BARGAIN_SALE_ITEM, 0x0b49);
++#else
++DEFINE_PACKET_HEADER(ZC_ACK_APPLY_BARGAIN_SALE_ITEM, 0x09af);
++#endif
+ #endif
+ 
+ #if PACKETVER_MAIN_NUM >= 20200129 || PACKETVER_RE_NUM >= 20200205 || PACKETVER_ZERO_NUM >= 20191224
+diff --git a/src/map/pc.cpp b/src/map/pc.cpp
+index 9df4e2c..b0f6e06 100644
+--- a/src/map/pc.cpp
++++ b/src/map/pc.cpp
+@@ -35,6 +35,7 @@
+ #include "battle.hpp" // battle_config
+ #include "battleground.hpp"
+ #include "buyingstore.hpp"  // struct s_buyingstore
++#include "cashshop.hpp"
+ #include "channel.hpp"
+ #include "chat.hpp"
+ #include "chrif.hpp"
+@@ -2242,6 +2243,10 @@ bool pc_authok(map_session_data *sd, uint32 login_id2, time_t expiration_time, i
+ 	// Addon Cell PvP
+ 	sd->cellpvpHatEffectId = 0;
+ 
++#if PACKETVER_SUPPORTS_SALES
++	sale_load_pc(sd);
++#endif
++
+ 	sd->catch_target_class = PET_CATCH_FAIL;
+ 
+ 	// Check EXP overflow, since in previous revision EXP on Max Level can be more than 'official' Max EXP
+diff --git a/src/map/pc.hpp b/src/map/pc.hpp
+index c3fc5a7..d6275ee 100644
+--- a/src/map/pc.hpp
++++ b/src/map/pc.hpp
+@@ -490,6 +490,8 @@ public:
+ 	int langtype;
+ 	struct mmo_charstatus status;
+ 
++	std::vector<std::pair<int, int>> sales;
++
+ 	// Item Storages
+ 	struct s_storage storage, premiumStorage;
+ 	struct s_storage inventory;
+-- 
+2.41.0.windows.1
+

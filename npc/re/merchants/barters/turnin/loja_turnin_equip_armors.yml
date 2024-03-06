@@ -286,7 +286,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 39
         Item: ScarfOfHero_J
@@ -307,7 +307,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 42
         Item: Cylinder_Boots
@@ -316,7 +316,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 43
         Item: Booster_shoes
@@ -325,7 +325,7 @@ Body:
             Item: Celtcoin
             Amount: 5500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 44
         Item: Cvt_Physical_Wing
@@ -334,7 +334,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 45
         Item: KarduiEar
@@ -343,7 +343,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 46
         Item: Mob_Scarf
@@ -352,7 +352,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 47
         Item: FortunetellinSealed
@@ -361,7 +361,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 48
         Item: Fairy_Of_Eden
@@ -370,7 +370,7 @@ Body:
             Item: Celtcoin
             Amount: 5500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 80
       - Index: 49
         Item: Mob_Scarf
@@ -379,5 +379,80 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
+            Amount: 40
+      - Index: 50
+        Item: Sniping_Shoes_J
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 40
+      - Index: 51
+        Item: Yoichi_Muffler
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+          - Index: 1
+            Item: Mightysoul_Essence
+            Amount: 40
+      - Index: 52
+        Item: Vassalage_Necklace
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 53
+        Item: Avareco
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 55
+        Item: Heavenly_Order_
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 56
+        Item: Faith_Of_Yggdrasil
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 3500
+      - Index: 57
+        Item: Supplement_P_Income
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+      - Index: 58
+        Item: Foxtail
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 750
+      - Index: 59
+        Item: Chic_Silent_Shoes
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 60
+        Item: Imperial_Glory
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 61
+        Item: New_Wave_Sunglasses_
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+          - Index: 1
+            Item: Mightysoul_Essence
             Amount: 40

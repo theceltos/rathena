@@ -86,7 +86,7 @@ Body:
             Item: Celtcoin
             Amount: 5500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 100
       - Index: 5
         Item: Guarantee_Armor_7Up
@@ -95,7 +95,7 @@ Body:
             Item: Celtcoin
             Amount: 5500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 100
       - Index: 6
         Item: blacksmith_blessing
@@ -104,7 +104,7 @@ Body:
             Item: Celtcoin
             Amount: 1000
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 20
       - Index: 7
         Item: silvervine_fruit_box40
@@ -119,5 +119,5 @@ Body:
             Item: Celtcoin
             Amount: 1000
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 20

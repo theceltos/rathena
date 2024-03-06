@@ -106,7 +106,7 @@ Body:
             Item: Celtcoin
             Amount: 5500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 9
         Item: Paracelsus_Glove
@@ -115,7 +115,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 40
       - Index: 10
         Item: Geffenia_Magictool_Ice
@@ -136,7 +136,7 @@ Body:
             Item: Celtcoin
             Amount: 2500
           - Index: 1
-            Item: EP17_1_EVT39
+            Item: Mightysoul_Essence
             Amount: 20
       - Index: 13
         Item: RingOfAdoramus
@@ -144,3 +144,39 @@ Body:
           - Index: 0
             Item: Celtcoin
             Amount: 2500
+      - Index: 14
+        Item: Ring_Of_Ceryneian
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 15
+        Item: Dark_Ring
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 2500
+      - Index: 16
+        Item: Ring_Of_The_Abyss_King
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+      - Index: 17
+        Item: Shield_Ring
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+      - Index: 18
+        Item: Ring_Of_Phoenix
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
+      - Index: 19
+        Item: Venom_M_Ring
+        RequiredItems:
+          - Index: 0
+            Item: Celtcoin
+            Amount: 5500
