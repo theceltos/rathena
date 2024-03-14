@@ -1,4 +1,4 @@
-prontera,139,173,6	script	Cleitin#ext162	31003,{
+prontera,118,177,6	script	Cleitin#ext162	31003,{
 	mes "[Cleitin]";
 	mes "Olá.";
 	mes "Temos equipamentos ^4d4dffEspeciais Celtin^000000 que podem ser trocados por " + mesitemlink( 42015 ) + " e alguns por " + mesitemlink( 25375 ) + ".";

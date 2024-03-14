@@ -61,7 +61,6 @@ Body:
       can_trade: true
       can_party: true
       attendance: true
-      any_warp: true
   - Id: 1
     Name: Super Player
     # Can do everything Players can and more
@@ -189,6 +188,7 @@ Body:
       Player: true
     Level: 0
     Commands:
+      showexp: true
       commands: true
       noks: true
       warp: true

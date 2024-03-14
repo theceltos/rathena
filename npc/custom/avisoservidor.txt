@@ -1,0 +1,24 @@
+prontera,156,181,6	script	Aviso do Servidor#ext162	790,{
+	mes "[Informante]";
+	mes "Olá.";
+	mes "Estou aqui para informar algo muito importante!";
+	soundeffect "zherlthsh_die.wav", 0;
+	close2;
+	switch(select("^FF0000• Onde anda a comunidade?^000000:^FF0000• Sobre o Servidor^000000")){
+	case 1:
+		mes "A nossa comunidade está sendo formada em um Forum.";
+		mes "Sim, nosso discord oficial foi hackeado e deletado.";
+		mes "Acesse: forum.theceltos.com";
+		end;
+	case 2:
+		mes "O servidor no momento se encontra em fase ^FF0000BETA^000000";
+		mes "E muita coisa vai mudar até lá, como novo planejamento de progresso do jogo.";
+		end;
+	}
+	OnInit:
+	while(1) {
+        showscript "• Aviso Importante •", getnpcid(0);
+        sleep 100;
+    }
+end;
+}

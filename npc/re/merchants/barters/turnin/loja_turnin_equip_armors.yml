@@ -406,48 +406,42 @@ Body:
             Item: Celtcoin
             Amount: 2500
       - Index: 53
-        Item: Avareco
-        RequiredItems:
-          - Index: 0
-            Item: Celtcoin
-            Amount: 2500
-      - Index: 55
         Item: Heavenly_Order_
         RequiredItems:
           - Index: 0
             Item: Celtcoin
             Amount: 2500
-      - Index: 56
+      - Index: 54
         Item: Faith_Of_Yggdrasil
         RequiredItems:
           - Index: 0
             Item: Celtcoin
             Amount: 3500
-      - Index: 57
+      - Index: 55
         Item: Supplement_P_Income
         RequiredItems:
           - Index: 0
             Item: Celtcoin
             Amount: 5500
-      - Index: 58
+      - Index: 56
         Item: Foxtail
         RequiredItems:
           - Index: 0
             Item: Celtcoin
             Amount: 750
-      - Index: 59
+      - Index: 57
         Item: Chic_Silent_Shoes
         RequiredItems:
           - Index: 0
             Item: Celtcoin
             Amount: 2500
-      - Index: 60
+      - Index: 58
         Item: Imperial_Glory
         RequiredItems:
           - Index: 0
             Item: Celtcoin
             Amount: 2500
-      - Index: 61
+      - Index: 59
         Item: New_Wave_Sunglasses_
         RequiredItems:
           - Index: 0
