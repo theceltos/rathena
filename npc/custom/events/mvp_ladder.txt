@@ -12,7 +12,7 @@
 //= 1.0 First version, edited. [Euphy]
 //============================================================
 
-prontera,136,171,3	script	O Melhor do MvP	450,{
+prontera,136,171,3	script	O Melhor do MvP	3658,{
 		mes "[O Melhor do MvP]";
 		mes "Você precisa pagar uma taxa para entrar.";
 		mes "500 <ITEM>Celt Coin<INFO>42015</INFO></ITEM>.";

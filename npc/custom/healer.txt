@@ -70,42 +70,42 @@
 
 // Duplicates
 //============================================================
-alberta,25,240,6	duplicate(Curador)	Curador#alb	936
-aldebaran,135,118,6	duplicate(Curador)	Curador#alde	936
-amatsu,200,79,4	duplicate(Curador)	Curador#ama	936
-ayothaya,207,169,6	duplicate(Curador)	Curador#ayo	936
-comodo,184,158,6	duplicate(Curador)	Curador#com	936
-einbech,57,36,6	duplicate(Curador)	Curador#einbe	936
-einbroch,57,202,6	duplicate(Curador)	Curador#einbr	936
-geffen,115,72,6	duplicate(Curador)	Curador#gef	936
-gonryun,156,122,6	duplicate(Curador)	Curador#gon	936
-hugel,89,150,6	duplicate(Curador)	Curador#hug	936
-izlude,121,150,6	duplicate(Curador)	Curador#izl	936	//Pre-RE: (125,118)
-jawaii,250,139,4	duplicate(Curador)	Curador#jaw	936
-lighthalzen,152,100,6	duplicate(Curador)	Curador#lhz	936
-louyang,226,103,4	duplicate(Curador)	Curador#lou	936
-manuk,272,144,6	duplicate(Curador)	Curador#man	936
-mid_camp,203,289,6	duplicate(Curador)	Curador#mid	936
-moc_ruins,72,164,4	duplicate(Curador)	Curador#moc	936
-morocc,153,97,6	duplicate(Curador)	Curador#mor	936
-moscovia,220,191,4	duplicate(Curador)	Curador#mos	936
-niflheim,212,182,5	duplicate(Curador)	Curador#nif	936
-payon,179,106,4	duplicate(Curador)	Curador#pay	936
-prontera,162,193,4	duplicate(Curador)	Curador#prt	936
-rachel,125,116,6	duplicate(Curador)	Curador#rac	936
-splendide,201,153,4	duplicate(Curador)	Curador#spl	936
-thor_camp,249,74,4	duplicate(Curador)	Curador#thor	936
-umbala,105,148,3	duplicate(Curador)	Curador#umb	936
-veins,217,121,4	duplicate(Curador)	Curador#ve	936
-xmas,143,136,4	duplicate(Curador)	Curador#xmas	936
-yuno,164,45,4	duplicate(Curador)	Curador#yuno	936
+alberta,25,240,6	duplicate(Curador)	Curador#alb	3527
+aldebaran,135,118,6	duplicate(Curador)	Curador#alde	3527
+amatsu,200,79,4	duplicate(Curador)	Curador#ama	3527
+ayothaya,207,169,6	duplicate(Curador)	Curador#ayo	3527
+comodo,184,158,6	duplicate(Curador)	Curador#com	3527
+einbech,57,36,6	duplicate(Curador)	Curador#einbe	3527
+einbroch,57,202,6	duplicate(Curador)	Curador#einbr	3527
+geffen,115,72,6	duplicate(Curador)	Curador#gef	3527
+gonryun,156,122,6	duplicate(Curador)	Curador#gon	3527
+hugel,89,150,6	duplicate(Curador)	Curador#hug	3527
+izlude,121,150,6	duplicate(Curador)	Curador#izl	3527	//Pre-RE: (125,118)
+jawaii,250,139,4	duplicate(Curador)	Curador#jaw	3527
+lighthalzen,152,100,6	duplicate(Curador)	Curador#lhz	3527
+louyang,226,103,4	duplicate(Curador)	Curador#lou	3527
+manuk,272,144,6	duplicate(Curador)	Curador#man	3527
+mid_camp,203,289,6	duplicate(Curador)	Curador#mid	3527
+moc_ruins,72,164,4	duplicate(Curador)	Curador#moc	3527
+morocc,153,97,6	duplicate(Curador)	Curador#mor	3527
+moscovia,220,191,4	duplicate(Curador)	Curador#mos	3527
+niflheim,212,182,5	duplicate(Curador)	Curador#nif	3527
+payon,179,106,4	duplicate(Curador)	Curador#pay	3527
+prontera,162,193,4	duplicate(Curador)	Curador#prt	3527
+rachel,125,116,6	duplicate(Curador)	Curador#rac	3527
+splendide,201,153,4	duplicate(Curador)	Curador#spl	3527
+thor_camp,249,74,4	duplicate(Curador)	Curador#thor	3527
+umbala,105,148,3	duplicate(Curador)	Curador#umb	3527
+veins,217,121,4	duplicate(Curador)	Curador#ve	3527
+xmas,143,136,4	duplicate(Curador)	Curador#xmas	3527
+yuno,164,45,4	duplicate(Curador)	Curador#yuno	3527
 
 // Duplicates (Renewal)
 //============================================================
-brasilis,194,221,6	duplicate(Curador)	Curador#bra	936
-dewata,195,187,4	duplicate(Curador)	Curador#dew	936
-dicastes01,201,194,4	duplicate(Curador)	Curador#dic	936
-ecl_in01,45,60,4	duplicate(Curador)	Curador#ecl	936
-malangdo,132,114,6	duplicate(Curador)	Curador#mal	936
-malaya,227,204,6	duplicate(Curador)	Curador#ma	936
-mora,55,152,4	duplicate(Curador)	Curador#mora	936
+brasilis,194,221,6	duplicate(Curador)	Curador#bra	3527
+dewata,195,187,4	duplicate(Curador)	Curador#dew	3527
+dicastes01,201,194,4	duplicate(Curador)	Curador#dic	3527
+ecl_in01,45,60,4	duplicate(Curador)	Curador#ecl	3527
+malangdo,132,114,6	duplicate(Curador)	Curador#mal	3527
+malaya,227,204,6	duplicate(Curador)	Curador#ma	3527
+mora,55,152,4	duplicate(Curador)	Curador#mora	3527

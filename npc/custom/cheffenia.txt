@@ -8,7 +8,7 @@
 
 // Viajante - Riss
 //============================================================
-prontera,143,179,4	script	Viajante#1	4_M_PHILMAN,{
+prontera,143,179,4	script	Viajante#1	20994,{
 	mes "[Riss]";
 	mes "Existe um lugar cheio de MVPs.";
 	mes "Chama-se ^DE3163Cheffênia^000000 e";

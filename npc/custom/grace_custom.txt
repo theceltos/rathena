@@ -1,4 +1,4 @@
-prontera,115,175,6	script	Loja Grace#ext162	455,{
+prontera,115,175,6	script	Loja Grace#ext162	10425,{
 	mes "[Operadora Grace]";
 	mes "Olá.";
 	mes "Temos equipamentos ^4d4dffGrace^000000 que podem ser trocados por " + mesitemlink( 25723 ) + ".";

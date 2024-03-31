@@ -73,7 +73,7 @@
 //	v1.0 = Initial release
 //©2011-2012 Ghost
 //========================================================================================
-prontera,157,198,4	script	Arena PvP#1	810,{
+prontera,157,198,4	script	Arena PvP#1	10006,{
 	mes "Olá! O PvP é ativado em qualquer mapa, exceto cidades. Qual arena deseja entrar??";
 	mes "Qual arena deseja entrar??";
 	next;
@@ -121,7 +121,7 @@ setarray .Amount[0], 0; //How many items per kill?
 //Penalty Setting
 set .Feed, 10; //How many kills before feeding is called? (10:Recommended)
 set .Penalty, 1; //What is the penalty for the feedee? (0:Disable|1:Kill Rollback|2:Server Kick|3:Server Block)
-set .Kick, 0; //Who to kick? (0:Feedee|1:Feeder|2:Both)
+set .Kick, 2; //Who to kick? (0:Feedee|1:Feeder|2:Both)
 set .Rollback, 10; //How many times should the kill count rollback when feeding is called? (10:Recommended)
 
 //Announcer Setting
@@ -364,7 +364,7 @@ announce "[Anti-Feed] Your kill count has been rollbacked "+.Rollback+" times.",
 return;
 }
 
-prontera,155,198,3	script	PvP Status	467,{
+prontera,155,198,3	script	PvP Status	10443,{
 mes "[Loki]"; mes "O que posso fazer por você?";
 switch(select("Ranking de PvP:Minhas Estatisticas:Configuração de Anúncio")){
 case 1: //Player Ranking
